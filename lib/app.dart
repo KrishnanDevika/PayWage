@@ -10,11 +10,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Pay Wage',
       theme: ThemeData(
-
-       // primarySwatch: Colors.transparent,
+        primarySwatch: Colors.lightGreen
       ),
       home: const AttendancePage(title: 'Pay Wage'),
     );
