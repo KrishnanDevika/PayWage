@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -20,11 +19,8 @@ class _AttendancePageState extends State<AttendancePage> {
     super.initState();
   }
 
-
   void _incrementCounter() {
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -35,75 +31,78 @@ class _AttendancePageState extends State<AttendancePage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-
         title: Text(widget.title,
-            style: TextStyle(color: Color(0xff63684E),
+            style: TextStyle(
+              color: Color(0xff63684E),
               fontSize: 24,
               fontWeight: FontWeight.bold,
             )),
-        leading: Icon(Icons.settings,
+        leading: Icon(
+          Icons.settings,
           size: 42,
           color: Color(0xff7C8362),
         ),
-
         actions: [
-          Icon(Icons.account_circle,
-              size: 42,
-              color: Color(0xff7C8362)),
+          Icon(Icons.account_circle, size: 42, color: Color(0xff7C8362)),
           Padding(padding: EdgeInsets.only(right: 16))
         ],
-
       ),
-      body:  Padding(
-        padding: const EdgeInsets.only(left: 0.0, top: 10.0, right: 0.0, bottom: 10.0),
-      child: Container(
 
-        color: Color(0xff7C8362).withOpacity(0.5),
+      body: Container(
+        decoration: BoxDecoration(
+          color: Color(0xff7C8362).withOpacity(0.5),
+        ),
+        margin: EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center, //Center Row contents horizontally,
-          children: [
-            IconButton(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            new IconButton(
+              // padding: EdgeInsets.only(left: 130, top: 0, right: 30, bottom: 0),
               icon: Icon(Icons.arrow_back_ios_new),
               iconSize: 20,
               color: Colors.white,
               onPressed: () {
-                setState(() {
-                });
+                setState(() {});
               },
             ),
+            new SizedBox(
+              width: 120,
+              child: TextField(
 
-        new Flexible(
-            child : TextField(
-
-              style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
                 controller: dateinput,
                 //editing controller of this TextField
                 readOnly: true,
-              //set it true, so that user will not able to edit text
-               onTap: () async {
-                 final DateTime? date = await showDatePicker(
-                   context: context,
-                   initialDate: DateTime.now(),
-                   firstDate: DateTime.now(),
-                   lastDate: DateTime.now().add(const Duration(days: 365)),
-                   initialEntryMode: DatePickerEntryMode.calendarOnly,
-                 );
+                //set it true, so that user will not able to edit text
+                onTap: () async {
+                  final DateTime? date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(const Duration(days: 365)),
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
+                  );
 
-                 if(date != null) {
-                   dateinput.text = DateFormat.yMd().format(date!);
-                 }
-               },
+                  if (date != null) {
+                    dateinput.text = DateFormat.yMd().format(date!);
+                  }
+                },
+              ),
             ),
-        ),
           ],
         ),
       ),
-      ),
+
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff7C8362),
         onPressed: _incrementCounter,
         // tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
 
       bottomNavigationBar: BottomNavigationBar(
@@ -124,4 +123,3 @@ class _AttendancePageState extends State<AttendancePage> {
     );
   }
 }
-
