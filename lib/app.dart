@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
 
        // primarySwatch: Colors.transparent,
       ),
-      home: const AttendancePage(title: 'Pay Wage'),
+      home: const LoginPage(),
     );
   }
 }
