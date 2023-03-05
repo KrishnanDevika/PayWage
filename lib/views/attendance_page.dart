@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+
 class AttendancePage extends StatefulWidget {
   const AttendancePage({super.key, required this.title});
 
@@ -63,7 +64,16 @@ class _AttendancePageState extends State<AttendancePage> {
               iconSize: 20,
               color: Colors.white,
               onPressed: () {
-                setState(() {});
+                setState(() {
+                  DateFormat inputFormat = DateFormat('dd-MM-yyyy');
+                  DateTime date = inputFormat.parse(dateinput.text);
+                  DateTime pastDate = date.subtract(Duration(days: 1));
+                  if(pastDate!= null){
+                    String formattedDate = DateFormat('dd-MM-yyyy').format(pastDate!);
+                    dateinput.text = formattedDate;
+
+                  }
+                });
               },
             ),
             new SizedBox(
@@ -73,6 +83,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white),
                 controller: dateinput,
+
                 //editing controller of this TextField
                 readOnly: true,
                 //set it true, so that user will not able to edit text
@@ -86,7 +97,9 @@ class _AttendancePageState extends State<AttendancePage> {
                   );
 
                   if (date != null) {
-                    dateinput.text = DateFormat.yMd().format(date!);
+                    String formattedDate = DateFormat('dd-MM-yyyy').format(date!);
+                    dateinput.text = formattedDate;
+                    //dateinput.text = date!;//DateFormat.yMd().format(date!);
                   }
                 },
               ),
