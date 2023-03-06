@@ -18,6 +18,8 @@ class _AttendancePageState extends State<AttendancePage> {
 
   String dropdownvalue = 'Item 1';
 
+  //Site date tobe fetched from database
+  //TODO
   var items = [
     'Item 1',
     'Item 2',
