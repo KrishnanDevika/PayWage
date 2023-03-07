@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paywage/views/forgot_password_page.dart';
+import 'package:paywage/views/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -120,11 +121,16 @@ class _LoginPage extends State<LoginPage> {
           ),
 
           // Adding register button to this page.
-          const Padding(padding: EdgeInsets.only(top: 10),
-            child:  Center(
+           Padding(padding: const EdgeInsets.only(top: 10),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> const RegisterPage(title: 'Register')));
+              },
+            child:  const Center(
               child: Text('Register', style: (TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color.fromRGBO(124, 131, 98, 1))),
               ),
             ),
+            )
           ),
 
           // Adding login button
