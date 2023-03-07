@@ -72,7 +72,7 @@ class _RegisterPage extends State<RegisterPage> {
                 borderRadius: BorderRadius.circular(15.0),
                 boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, 1))],
               ),
-              child: const SizedBox(
+              child: SizedBox(
                 width: 300,
                 height: 50,
                 child: Padding(
@@ -82,12 +82,14 @@ class _RegisterPage extends State<RegisterPage> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Color.fromRGBO(49, 71, 58, 0.5),
-                      icon: Icon(
-                        Icons.person,
-                        color: Colors.white,
+                      icon: Image.asset(
+                        'assets/images/google.png',
+                        height: 24,
+                        width: 24,
                       ),
                       labelText: 'Google',
-                      enabledBorder: OutlineInputBorder(
+                      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      enabledBorder: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         borderSide: BorderSide(color: Colors.grey, width: 0),
                       ),
@@ -107,7 +109,7 @@ class _RegisterPage extends State<RegisterPage> {
                 borderRadius: BorderRadius.circular(15.0),
                 boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, 1))],
               ),
-              child: const SizedBox(
+              child: SizedBox(
                 width: 300,
                 height: 50,// set width to 400
                 child: Padding(
@@ -116,13 +118,15 @@ class _RegisterPage extends State<RegisterPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color.fromRGBO(49, 71, 58, 0.5),
-                      icon: Icon(
-                        Icons.key,
-                        color: Colors.white,
+                      fillColor: const Color.fromRGBO(49, 71, 58, 0.5),
+                      icon: Image.asset(
+                        'assets/images/facebook.png',
+                        height: 24,
+                        width: 24,
                       ),
                       labelText: 'Facebook',
-                      enabledBorder: OutlineInputBorder(
+                      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      enabledBorder: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         borderSide: BorderSide(color: Colors.grey, width: 0),
                       ),
@@ -141,7 +145,7 @@ class _RegisterPage extends State<RegisterPage> {
                 borderRadius: BorderRadius.circular(15.0),
                 boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, 1))],
               ),
-              child: const SizedBox(
+              child: SizedBox(
                 width: 300,
                 height: 50,// set width to 400
                 child: Padding(
@@ -150,13 +154,15 @@ class _RegisterPage extends State<RegisterPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color.fromRGBO(49, 71, 58, 0.5),
-                      icon: Icon(
-                        Icons.key,
-                        color: Colors.white,
+                      fillColor: const Color.fromRGBO(49, 71, 58, 0.5),
+                      icon: Image.asset(
+                        'assets/images/apple.png',
+                        height: 24,
+                        width: 24,
                       ),
                       labelText: 'Apple',
-                      enabledBorder: OutlineInputBorder(
+                      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                      enabledBorder: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         borderSide: BorderSide(color: Colors.grey, width: 0),
                       ),
