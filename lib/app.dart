@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 
        // primarySwatch: Colors.transparent,
       ),
-      home: const RegisterPage(title: "title")
+      home: const LoginPage()
     );
   }
 }
