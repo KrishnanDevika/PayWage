@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:paywage/views/login_page.dart';
 import 'package:paywage/views/attendance_page.dart';
+import 'package:paywage/views/register_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
 
        // primarySwatch: Colors.transparent,
       ),
-      home: const LoginPage(),
+      home: const RegisterPage(title: "Register here"),
     );
   }
 }
