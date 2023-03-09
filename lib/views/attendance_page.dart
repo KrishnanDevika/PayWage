@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paywage/views/add_employee.dart';
 import 'package:intl/intl.dart';
 
 class AttendancePage extends StatefulWidget {
@@ -39,9 +40,7 @@ class _AttendancePageState extends State<AttendancePage> {
     super.initState();
   }
 
-  void _incrementCounter() {
-    setState(() {});
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -178,8 +177,6 @@ class _AttendancePageState extends State<AttendancePage> {
                                 groupValue: groupValue,
                                 fillColor: MaterialStateColor.resolveWith(
                                     (states) => Colors.white),
-                                // TRY THIS: Try setting the toggleable value to false and
-                                // see how that changes the behavior of the widget.
                                 toggleable: true,
                                 onChanged: (int? value) {
                                   setState(() {
@@ -395,8 +392,10 @@ class _AttendancePageState extends State<AttendancePage> {
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff7C8362),
-        onPressed: _incrementCounter,
-        // tooltip: 'Increment',
+        onPressed: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AddEmployeePage(title: 'Pay Wage')));
+
+        },
         child: const Icon(
           Icons.add,
           color: Colors.white,
