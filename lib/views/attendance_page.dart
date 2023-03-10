@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:paywage/views/add_employee.dart';
 import 'package:intl/intl.dart';
+import 'package:paywage/common/myAppBar.dart';
+
 
 class AttendancePage extends StatefulWidget {
   const AttendancePage({super.key, required this.title});
@@ -45,27 +47,7 @@ class _AttendancePageState extends State<AttendancePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 80,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(widget.title,
-            style: TextStyle(
-              color: Color(0xff63684E),
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            )),
-        leading: Icon(
-          Icons.settings,
-          size: 42,
-          color: Color(0xff7C8362),
-        ),
-        actions: [
-          Icon(Icons.account_circle, size: 42, color: Color(0xff7C8362)),
-          Padding(padding: EdgeInsets.only(right: 16))
-        ],
-      ),
+      appBar: myAppBar(widget.title),
 
       body: Column(
         children: [
