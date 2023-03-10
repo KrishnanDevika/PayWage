@@ -49,6 +49,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
                     new Expanded(
                         child: new TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -76,6 +77,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
                     new Expanded(
                         child: new TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -103,6 +105,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
                     new Expanded(
                         child: new TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -130,6 +133,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
                     new Expanded(
                         child: new TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -155,7 +159,9 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                       child: Text('Street', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
+
                         child: new TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -182,6 +188,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
                     new Expanded(
                         child: new TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -208,6 +215,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
                     new Expanded(
                         child: new TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -234,6 +242,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
                     new Expanded(
                         child: new TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -260,6 +269,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
                     new Expanded(
                         child: new TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -287,6 +297,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
                     new Expanded(
                         child: new TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
