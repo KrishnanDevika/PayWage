@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:paywage/3rd%20party%20Auth/google_sign_in_button.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key, required this.title});
@@ -67,111 +68,23 @@ class _RegisterPage extends State<RegisterPage> {
           // Register with google
           Padding(
             padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 10, bottom: 0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, 1))],
-              ),
-              child: SizedBox(
-                width: 300,
-                height: 50,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Color.fromRGBO(49, 71, 58, 0.5),
-                      icon: Image.asset(
-                        'assets/images/google.png',
-                        height: 24,
-                        width: 24,
-                      ),
-                      labelText: 'Google',
-                      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                      enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        borderSide: BorderSide(color: Colors.grey, width: 0),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            child:  Center(
+              child: GoogleSignInButton(onSignIn: (GoogleSignInAccount ) {  },),
             ),
-
           ),
 
           // Register with Facebook
           Padding(
-            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20, bottom: 0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, 1))],
-              ),
-              child: SizedBox(
-                width: 300,
-                height: 50,// set width to 400
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color.fromRGBO(49, 71, 58, 0.5),
-                      icon: Image.asset(
-                        'assets/images/facebook.png',
-                        height: 24,
-                        width: 24,
-                      ),
-                      labelText: 'Facebook',
-                      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                      enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        borderSide: BorderSide(color: Colors.grey, width: 0),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 20, bottom: 0),
+            // Add Facebook sign-in button
           ),
 
           // Register with APPLE
           Padding(
             padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20, bottom: 0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, 1))],
-              ),
-              child: SizedBox(
-                width: 300,
-                height: 50,// set width to 400
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color.fromRGBO(49, 71, 58, 0.5),
-                      icon: Image.asset(
-                        'assets/images/apple.png',
-                        height: 24,
-                        width: 24,
-                      ),
-                      labelText: 'Apple',
-                      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-                      enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        borderSide: BorderSide(color: Colors.grey, width: 0),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            //Add Apple sign-in button
           ),
+
         ],
       ),
     );
