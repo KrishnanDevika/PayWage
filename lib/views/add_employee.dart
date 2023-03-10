@@ -44,7 +44,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.all(10),
+                    Padding(padding: EdgeInsets.only(left: 10, top: 10, right: 15, bottom: 10),
                       child: Text('First Name', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
@@ -71,7 +71,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.all(10),
+                    Padding(padding: EdgeInsets.only(left: 10, top: 10, right: 15, bottom: 10),
                       child: Text('Last Name', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
@@ -98,7 +98,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.all(10),
+                    Padding(padding: EdgeInsets.only(left: 10, top: 10, right: 20, bottom: 10),
                       child: Text('Start Date', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
@@ -151,7 +151,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.all(10),
+                    Padding(padding: EdgeInsets.only(left: 10, top: 10, right: 55, bottom: 10),
                       child: Text('Street', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
@@ -177,7 +177,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.all(10),
+                    Padding(padding: EdgeInsets.only(left: 10, top: 10, right: 70, bottom: 10),
                       child: Text('City', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
@@ -203,7 +203,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.all(10),
+                    Padding(padding: EdgeInsets.only(left: 10, top: 10, right: 60, bottom: 10),
                       child: Text('State', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
@@ -229,7 +229,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.all(10),
+                    Padding(padding: EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
                       child: Text('Occupation', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
@@ -255,7 +255,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.all(10),
+                    Padding(padding: EdgeInsets.only(left: 10, top: 10, right: 15, bottom: 10),
                       child: Text('Wage type', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
@@ -282,7 +282,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                 child: Row(
 
                   children: <Widget>[
-                    Padding(padding: EdgeInsets.all(10),
+                    Padding(padding: EdgeInsets.only(left: 10, top: 10, right: 30, bottom: 10),
                       child: Text('Wage/hr', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
