@@ -20,6 +20,7 @@ class _AttendancePageState extends State<AttendancePage> {
   TextEditingController timeOut = TextEditingController();
 
   String dropdownvalue = 'Item 1';
+  int _selectedIndex = 0;
 
   //Site date tobe fetched from database
   //TODO
@@ -40,6 +41,12 @@ class _AttendancePageState extends State<AttendancePage> {
     timeinput.text = "";
     timeOut.text = "";
     super.initState();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
 
@@ -386,6 +393,11 @@ class _AttendancePageState extends State<AttendancePage> {
 
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color(0xff7C8362),
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedFontSize: 20,
+        selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               activeIcon: Icon(Icons.punch_clock_rounded),
