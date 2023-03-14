@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 class GoogleSignInButton extends StatefulWidget {
   final Function(GoogleSignInAccount) onSignIn;
 
-  const GoogleSignInButton({required this.onSignIn});
+  const GoogleSignInButton({super.key, required this.onSignIn});
 
   @override
   _GoogleSignInButtonState createState() => _GoogleSignInButtonState();
