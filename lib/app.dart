@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.lightGreen
       ),
-      home: const AttendancePage(title: "title")
+      home: const LoginPage()
     );
   }
 }

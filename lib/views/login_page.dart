@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paywage/views/forgot_password_page.dart';
 import 'package:paywage/views/register_page.dart';
+import 'package:paywage/CustomTheme/CustomColors.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -33,7 +34,7 @@ class _LoginPage extends State<LoginPage> {
           // Application Name
           const Padding(padding: EdgeInsets.only(bottom: 60),
           child:  Center(
-            child: Text('Pay Wage', style: (TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Color.fromRGBO(49, 71, 58, 1))),),
+            child: Text('Pay Wage', style: (TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: CustomColors.darkGreenColour)),),
           ),
           ),
 
@@ -43,7 +44,7 @@ class _LoginPage extends State<LoginPage> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
-                boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, 1))],
+                boxShadow: const [BoxShadow(color: CustomColors.paleGreenColour)],
               ),
               child: const SizedBox(
                 width: 300,
@@ -54,12 +55,15 @@ class _LoginPage extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color.fromRGBO(49, 71, 58, 0.5),
+                      fillColor: CustomColors.darkGreenColour,
                       icon: Icon(
                         Icons.person,
                         color: Colors.white,
                       ),
                       labelText: 'User ID',
+                      labelStyle: TextStyle(
+                          color: CustomColors.lightModeTextColor
+                      ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         borderSide: BorderSide(color: Colors.grey, width: 0),
@@ -77,7 +81,8 @@ class _LoginPage extends State<LoginPage> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
-                boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, 1))],
+                //Secondary paleGreen colour
+                boxShadow: const [BoxShadow(color: CustomColors.paleGreenColour)],
               ),
               child: const SizedBox(
                 width: 300,
@@ -88,12 +93,16 @@ class _LoginPage extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color.fromRGBO(49, 71, 58, 0.5),
+                      //Primary darkGreen colour
+                      fillColor: CustomColors.darkGreenColour,
                       icon: Icon(
                         Icons.key,
                         color: Colors.white,
                       ),
                       labelText: 'Password',
+                      labelStyle: TextStyle(
+                        color: CustomColors.lightModeTextColor
+                      ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         borderSide: BorderSide(color: Colors.grey, width: 0),
@@ -114,7 +123,7 @@ class _LoginPage extends State<LoginPage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> const ForgotPassword()));
               },
             child:  const Center(
-              child: Text('Forgot password?', style: (TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color.fromRGBO(124, 131, 98, 1))),
+              child: Text('Forgot password?', style: (TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: CustomColors.paleGreenColour)),
               ),
             ),
             )
@@ -127,7 +136,7 @@ class _LoginPage extends State<LoginPage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> const RegisterPage(title: 'Register')));
               },
             child:  const Center(
-              child: Text('Register', style: (TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color.fromRGBO(124, 131, 98, 1))),
+              child: Text('Register', style: (TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: CustomColors.paleGreenColour)),
               ),
             ),
             )
@@ -146,11 +155,11 @@ class _LoginPage extends State<LoginPage> {
                   ),
                 ),
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  const Color.fromRGBO(49, 71, 58, 1),
+                  CustomColors.darkGreenColour,
                 ),
                 side: MaterialStateProperty.all<BorderSide>(
                   const BorderSide(
-                    color: Color.fromRGBO(124, 131, 98, 1), // change the color here
+                    color: CustomColors.paleGreenColour, // change the color here
                     width: 4.0, // change the width here
                   ),
                 ),
@@ -159,7 +168,8 @@ class _LoginPage extends State<LoginPage> {
                 padding: EdgeInsets.all(13.0),
                 child: Text(
                   'Login',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20,color: CustomColors.lightModeTextColor),
+
                 ),
               ),
             ),
