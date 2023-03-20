@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:paywage/views/add_employee.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
+import 'package:paywage/common/BottomNavigationBar.dart';
 
 
 class AttendancePage extends StatefulWidget {
@@ -391,7 +392,7 @@ class _AttendancePageState extends State<AttendancePage> {
         ),
       ),
 
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigation(0),/*BottomNavigationBar(
         backgroundColor: Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -410,7 +411,7 @@ class _AttendancePageState extends State<AttendancePage> {
         ],
         unselectedItemColor: Colors.white,
         selectedItemColor: Colors.white,
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ), */// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
+import 'package:paywage/common/BottomNavigationBar.dart';
 
 class AddEmployeePage extends StatefulWidget {
   const AddEmployeePage({super.key, required this.title});
@@ -327,6 +328,8 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
         ),
 
       ),
+
+      bottomNavigationBar: BottomNavigation(0),
 
     );
   }
