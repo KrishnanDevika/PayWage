@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
 import 'package:paywage/common/BottomNavigationBar.dart';
+import 'package:paywage/models/salary_type.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AddEmployeePage extends StatefulWidget {
   const AddEmployeePage({super.key, required this.title});
@@ -13,6 +16,30 @@ class AddEmployeePage extends StatefulWidget {
 }
 
 class _AddEmployeePageState extends State<AddEmployeePage> {
+  List<String> wage_type = [];
+  Future getSalaryType() async{
+    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchsalarytype.php';
+    http.Response response = await http.get(Uri.parse(url));
+    var data = response.body;
+    final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
+    setState(() {
+      final List<SalaryType> type = parsed.map<SalaryType>((json) => SalaryType.fromJson(json)).toList();
+      for(var i= 0; i <type.length; i++){
+        wage_type.add(type[i].type);
+        print(type[i].type);
+      }
+    });
+
+    print(data.toString());
+  }
+
+  @override
+  void initState() {
+  this.getSalaryType();
+  }
+
+
+  String drop_down_value = 'Daily';
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController startDate = TextEditingController();
@@ -23,6 +50,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
   TextEditingController occupation = TextEditingController();
   TextEditingController wageType = TextEditingController();
   TextEditingController baseRate = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -269,17 +297,44 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                       child: Text('Wage type', style: TextStyle(color: Colors.white, fontSize: 18),),),
 
                     new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                      child : DecoratedBox(
+                        decoration: BoxDecoration(
+                            color:Color(0xff57654E), //background color of dropdown button
+                            border: Border.all(color: Colors.black), //border of dropdown button
+                            borderRadius: BorderRadius.circular(10), //border radius of dropdown button
+
+                        ),
+
+                        child:Padding(
+                          padding: EdgeInsets.only(left:20, right:30),
+                          child: DropdownButton(
+                            dropdownColor: Color(0xff57654E),
+
+                            underline: Container(),
+                            value: drop_down_value,
+                            style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.white,
                             ),
+
+                            items: wage_type.map((String items) {
+                              return DropdownMenuItem(
+                                value: items,
+                                child: Text(
+                                  items,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                drop_down_value = newValue!;
+                              });
+                            },
                           ),
-                          controller: wageType,
-                        ))
+                    ),
+                    ),
+                    ),
                   ],
                 ),
               ),
@@ -333,4 +388,6 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
     );
   }
+
+
 }
