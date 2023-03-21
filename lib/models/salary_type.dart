@@ -8,7 +8,7 @@ class SalaryType{
   factory SalaryType.fromJson(Map<String, dynamic> parsedJson){
     return SalaryType(
         id: parsedJson['id'] as int,
-        type : parsedJson['salary_type'] as String,
+        type: parsedJson['salary_type'] as String,
     );
   }
 }
