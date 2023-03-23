@@ -3,6 +3,9 @@ import 'package:paywage/views/add_employee.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
 import 'package:paywage/common/BottomNavigationBar.dart';
+import 'package:paywage/models/employee.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AttendancePage extends StatefulWidget {
   const AttendancePage({super.key, required this.title});
@@ -14,12 +17,17 @@ class AttendancePage extends StatefulWidget {
 }
 
 class _AttendancePageState extends State<AttendancePage> {
+  List<String> employeeList = <String>[];
+  int? groupValue;
+
+
+
   TextEditingController dateinput = TextEditingController();
   TextEditingController searchController = TextEditingController();
   TextEditingController timeinput = TextEditingController();
   TextEditingController timeOut = TextEditingController();
 
-  String dropdownvalue = 'Item 1';
+  String dropdown_value = 'Item 1';
   int _selectedIndex = 0;
 
   //Site date tobe fetched from database
@@ -32,8 +40,28 @@ class _AttendancePageState extends State<AttendancePage> {
     'Item 5',
   ];
 
-  final employees = ["Raja", "Mani", "Jai"];
-  int? groupValue;
+
+  Future fetchEmployee() async {
+    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
+    try {
+      http.Response response = await http.get(Uri.parse(url));
+      var data = response.body;
+      final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
+
+      final List<Employee> employee =
+      parsed.map<Employee>((json) => Employee.fromJson(json)).toList();
+      for (var i = 0; i < employee.length; i++) {
+        employeeList.add(employee[i].firstName +" "+ employee[i].lastName);
+        print(employee[i].firstName +" "+ employee[i].lastName);
+      }
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+
+
 
   @override
   void initState() {
@@ -41,6 +69,7 @@ class _AttendancePageState extends State<AttendancePage> {
     timeinput.text = "";
     timeOut.text = "";
     super.initState();
+    this.fetchEmployee();
   }
 
   void _onItemTapped(int index) {
@@ -143,7 +172,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: employees.length,
+                  itemCount: employeeList.length,
                   itemBuilder: (context, index) {
                     return Card(
                       shape: RoundedRectangleBorder(
@@ -159,7 +188,7 @@ class _AttendancePageState extends State<AttendancePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  employees[index],
+                                  employeeList[index],
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -319,7 +348,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                     child: DropdownButton(
                                       dropdownColor: Color(0xff7C8362),
                                       underline: Container(),
-                                      value: dropdownvalue,
+                                      value: dropdown_value,
                                       style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -341,7 +370,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                       // change button value to selected value
                                       onChanged: (String? newValue) {
                                         setState(() {
-                                          dropdownvalue = newValue!;
+                                          dropdown_value = newValue!;
                                         });
                                       },
                                     ),
@@ -359,7 +388,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                    child: DropdownButton(
                                      dropdownColor: Color(0xff7C8362),
                                      underline: Container(),
-                                     value: dropdownvalue,
+                                     value: dropdown_value,
 
                                      icon: const Icon(
                                        Icons.keyboard_arrow_down,
@@ -383,7 +412,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                          fontWeight: FontWeight.bold),
                                      onChanged: (String? newValue) {
                                        setState(() {
-                                         dropdownvalue = newValue!;
+                                         dropdown_value = newValue!;
                                        });
                                      },
                                    ),
@@ -420,8 +449,7 @@ class _AttendancePageState extends State<AttendancePage> {
         ),
       ),
 
-      bottomNavigationBar: BottomNavigation(
-          0), /*BottomNavigationBar(
+      bottomNavigationBar: BottomNavigation(0), /*BottomNavigationBar(
         backgroundColor: Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
