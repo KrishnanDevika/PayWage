@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
 import 'package:paywage/common/BottomNavigationBar.dart';
 import 'package:paywage/models/salary_type.dart';
+import 'package:paywage/models/occupation.dart';
 import 'package:paywage/models/city.dart';
 import 'package:paywage/models/states.dart';
 import 'package:http/http.dart' as http;
@@ -21,12 +22,33 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
   List<String> wage_type = <String>[];
   List<String> cities = <String>[];
   List<String> states = <String>[];
+  List<String> occupationList= <String>[];
 
   @override
   void initState() {
     this.fetchSalaryType();
     this.fetchCities();
     this.fetchStates();
+    this.fetchOccupation();
+  }
+
+  Future fetchOccupation() async {
+    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchOccupation.php';
+    try {
+      http.Response response = await http.get(Uri.parse(url));
+      var data = response.body;
+      final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
+
+      final List<Occupation> type =
+      parsed.map<Occupation>((json) => Occupation.fromJson(json)).toList();
+      for (var i = 0; i < type.length; i++) {
+        occupationList.add(type[i].occupation);
+        print(type[i].occupation);
+      }
+    }
+    catch(e){
+      print(e);
+    }
   }
 
   Future fetchSalaryType() async {
@@ -87,6 +109,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
   String salaryType_value = 'Daily';
   String city_value = 'Delhi';
   String state_value = 'Gujarat';
+  String occupation_value = "Wall Protection";
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController startDate = TextEditingController();
@@ -97,6 +120,23 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
   TextEditingController occupation = TextEditingController();
   TextEditingController wageType = TextEditingController();
   TextEditingController baseRate = TextEditingController();
+
+  Future createEmployee() async{
+    final response = await http.post(Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertEmployee.php'), body:{
+      "first_name": firstName.text,
+      "last_name": lastName.text,
+      "start_date": startDate.text,
+      "phone":contact.text,
+      "salary_type": salaryType_value,
+      "street": street.text,
+      "city": city_value,
+      "state": state_value,
+      "occupation_type":occupation_value,
+      "pay_rate": baseRate.text,
+    });
+
+    print((response.body));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +265,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
                         if (date != null) {
                           String formattedDate =
-                              DateFormat('dd-MM-yyyy').format(date!);
+                              DateFormat('yyyy-MM-dd').format(date!);
                           startDate.text = formattedDate;
                         }
                       },
@@ -441,17 +481,48 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                       ),
                     ),
                     new Expanded(
-                        child: new TextField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        fillColor: Color(0xff57654E),
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                      child: new DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: Color(0xff57654E),
+                          //background color of dropdown button
+                          border: Border.all(color: Colors.black),
+                          //border of dropdown button
+                          borderRadius: BorderRadius.circular(
+                              10), //border radius of dropdown button
+                        ),
+
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 20),
+                          child: DropdownButton(
+                            dropdownColor: Color(0xff57654E),
+                            underline: Container(),
+                            value: occupation_value,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.white,
+                            ),
+
+                            items: occupationList.map((String occupation) {
+                              return DropdownMenuItem(
+                                value: occupation,
+                                child: Text(
+                                  occupation,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                occupation_value = newValue!;
+                              });
+                            },
+                          ),
                         ),
                       ),
-                      controller: occupation,
-                    ))
+                    ),
                   ],
                 ),
               ),
@@ -555,7 +626,10 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xff31473A),
                       foregroundColor: Colors.white),
-                  onPressed: () => print('created'),
+                  onPressed: () {
+                    createEmployee();
+                    print("Created");
+                  },
                   child: new Text('Create'),
                 ),
               ),
