@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
 import 'package:paywage/common/BottomNavigationBar.dart';
 import 'package:paywage/models/employee.dart';
+import 'package:paywage/models/job_site.dart';
+import 'package:paywage/models/occupation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -18,28 +20,19 @@ class AttendancePage extends StatefulWidget {
 
 class _AttendancePageState extends State<AttendancePage> {
   List<String> employeeList = <String>[];
+  List<String> sitesList = <String>[];
+  List<String> occupationList = <String>[];
   int? groupValue;
-
+ List<String> selectedSiteValue = <String>[];
+ List<String> selectedOccupationValue = <String>[];
 
 
   TextEditingController dateinput = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  TextEditingController timeinput = TextEditingController();
-  TextEditingController timeOut = TextEditingController();
+  List<TextEditingController> _timeinput = [];
+  List<TextEditingController> _timeOut= [];
 
-  String dropdown_value = 'Item 1';
   int _selectedIndex = 0;
-
-  //Site date tobe fetched from database
-  //TODO
-  var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
-
 
   Future fetchEmployee() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
@@ -60,16 +53,50 @@ class _AttendancePageState extends State<AttendancePage> {
     }
   }
 
+  Future fetchJobSites() async {
+    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchSites.php';
+    try {
+      http.Response response = await http.get(Uri.parse(url));
+      var data = response.body;
+      final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
 
+      final List<JobSite> sites =
+      parsed.map<JobSite>((json) => JobSite.fromJson(json)).toList();
+      for (var i = 0; i < sites.length; i++) {
+        sitesList.add(sites[i].siteName);
+        print(sites[i].siteName);
+      }
+    }
+    catch(e){
+      print(e);
+    }
+  }
+  Future fetchOccupation() async {
+    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchOccupation.php';
+    try {
+      http.Response response = await http.get(Uri.parse(url));
+      var data = response.body;
+      final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
 
+      final List<Occupation> type =
+      parsed.map<Occupation>((json) => Occupation.fromJson(json)).toList();
+      for (var i = 0; i < type.length; i++) {
+        occupationList.add(type[i].occupation);
+        print(type[i].occupation);
+      }
+    }
+    catch(e){
+      print(e);
+    }
+  }
 
   @override
   void initState() {
     dateinput.text = "";
-    timeinput.text = "";
-    timeOut.text = "";
     super.initState();
     this.fetchEmployee();
+    this.fetchJobSites();
+    this.fetchOccupation();
   }
 
   void _onItemTapped(int index) {
@@ -139,7 +166,6 @@ class _AttendancePageState extends State<AttendancePage> {
                             String formattedDate =
                                 DateFormat('dd-MM-yyyy').format(date!);
                             dateinput.text = formattedDate;
-                            //dateinput.text = date!;//DateFormat.yMd().format(date!);
                           }
                         },
                       ),
@@ -174,6 +200,13 @@ class _AttendancePageState extends State<AttendancePage> {
                   shrinkWrap: true,
                   itemCount: employeeList.length,
                   itemBuilder: (context, index) {
+                    _timeOut.add(new TextEditingController());
+                    _timeinput.add(new TextEditingController());
+                    for(int i = 0; i < employeeList.length; i++){
+                      selectedSiteValue.add("Karur");
+                      selectedOccupationValue.add("Roofing");
+
+                    }
                     return Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
@@ -195,6 +228,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                       fontSize: 20),
                                 ),
                                 Radio<int>(
+
                                     value: index,
                                     groupValue: groupValue,
                                     fillColor: MaterialStateColor.resolveWith(
@@ -220,7 +254,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20),
+                                      fontSize: 16),
                                 ),
 
                                 SizedBox(
@@ -238,7 +272,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
                                     style: TextStyle(color: Colors.white),
                                     textAlign: TextAlign.center,
-                                    controller: timeinput,
+                                    controller: _timeinput[index],
                                     //editing controller of this TextField
                                     readOnly: true,
                                     //set it true, so that user will not able to edit text
@@ -264,20 +298,21 @@ class _AttendancePageState extends State<AttendancePage> {
                                         //print(formattedTime); //output 14:59:00
                                         //DateFormat() is from intl package, you can format the time on any pattern you need.
 
-                                        timeinput.text =
+                                        _timeinput[index].text =
                                             formattedTime; //set the value of text field.
                                       }
                                       ;
                                     },
                                   ),
                                 ),
+                                SizedBox(width: 10),
 
                                 Text(
                                   "Out",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20),
+                                      fontSize: 16),
                                 ),
                                 SizedBox(
                                   width: 100,
@@ -294,7 +329,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
                                     style: TextStyle(color: Colors.white),
                                     textAlign: TextAlign.center,
-                                    controller: timeOut,
+                                    controller: _timeOut[index],
                                     //editing controller of this TextField
                                     readOnly: true,
                                     //set it true, so that user will not able to edit text
@@ -317,10 +352,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                         String formattedTime =
                                             DateFormat('HH:mm')
                                                 .format(parsedTime);
-                                        //print(formattedTime); //output 14:59:00
-                                        //DateFormat() is from intl package, you can format the time on any pattern you need.
-
-                                        timeOut.text =
+                                        _timeOut[index].text =
                                             formattedTime; //set the value of text field.
                                       }
                                       ;
@@ -337,6 +369,7 @@ class _AttendancePageState extends State<AttendancePage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
+
                                 new Expanded(child:  DecoratedBox(
                                   decoration: BoxDecoration(
                                     color: Color(0xff7C8362),
@@ -344,20 +377,20 @@ class _AttendancePageState extends State<AttendancePage> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.only(left: 30, right: 30),
+                                    padding: EdgeInsets.only(left: 30),
                                     child: DropdownButton(
                                       dropdownColor: Color(0xff7C8362),
                                       underline: Container(),
-                                      value: dropdown_value,
+                                      value: selectedSiteValue[index],
                                       style: const TextStyle(
                                           color: Colors.white,
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.bold),
                                       icon: const Icon(
                                         Icons.keyboard_arrow_down,
                                         color: Colors.white,
                                       ),
-                                      items: items.map((String items) {
+                                      items: sitesList.map((String items) {
                                         return DropdownMenuItem(
                                           value: items,
                                           child: Text(
@@ -370,12 +403,13 @@ class _AttendancePageState extends State<AttendancePage> {
                                       // change button value to selected value
                                       onChanged: (String? newValue) {
                                         setState(() {
-                                          dropdown_value = newValue!;
+                                          selectedSiteValue[index] = newValue!;
                                         });
                                       },
                                     ),
                                   ),
                                 ),),
+                               SizedBox(width: 10),
                                new Expanded(child:   DecoratedBox(
                                  decoration: BoxDecoration(
                                    color: Color(0xff7C8362),
@@ -384,17 +418,18 @@ class _AttendancePageState extends State<AttendancePage> {
                                  ),
                                  child: Padding(
                                    padding:
-                                   EdgeInsets.only(left: 30, right: 30),
+                                   EdgeInsets.only(left: 20),
+
                                    child: DropdownButton(
                                      dropdownColor: Color(0xff7C8362),
                                      underline: Container(),
-                                     value: dropdown_value,
+                                     value: selectedOccupationValue[index],
 
                                      icon: const Icon(
                                        Icons.keyboard_arrow_down,
                                        color: Colors.white,
                                      ),
-                                     items: items.map((String items) {
+                                     items: occupationList.map((String items) {
                                        return DropdownMenuItem(
                                          value: items,
                                          child: Text(
@@ -408,14 +443,15 @@ class _AttendancePageState extends State<AttendancePage> {
                                      // change button value to selected value
                                      style: const TextStyle(
                                          color: Colors.white,
-                                         fontSize: 16,
+                                         fontSize:14,
                                          fontWeight: FontWeight.bold),
                                      onChanged: (String? newValue) {
                                        setState(() {
-                                         dropdown_value = newValue!;
+                                         selectedOccupationValue[index] = newValue!;
                                        });
                                      },
                                    ),
+
                                  ),
                                ),),
 
@@ -424,10 +460,6 @@ class _AttendancePageState extends State<AttendancePage> {
                           )
                         ],
                       ),
-
-                      // child: ListTile(
-                      //   title: Text(employees[index], style: TextStyle(color: Colors.white),),
-                      // ),
                     );
                   },
                 ),
