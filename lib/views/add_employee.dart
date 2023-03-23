@@ -138,6 +138,16 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
     print((response.body));
   }
 
+  void reset(){
+    firstName.clear();
+    lastName.clear();
+    startDate.clear();
+    contact.clear();
+    street.clear();
+    baseRate.clear();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -628,7 +638,16 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                       foregroundColor: Colors.white),
                   onPressed: () {
                     createEmployee();
-                    print("Created");
+                    final snackBar = SnackBar(
+                        content:  Text('Employee Created', style: TextStyle(color: Colors.white),),
+                    backgroundColor:  Color(0xff31473A),
+                    action: SnackBarAction(
+                    label: 'dismiss',
+                    onPressed: () {},
+                    ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                   reset();
                   },
                   child: new Text('Create'),
                 ),
