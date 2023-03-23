@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
 import 'package:paywage/common/BottomNavigationBar.dart';
+import 'package:paywage/views/attendance_page.dart';
 import 'package:paywage/models/salary_type.dart';
 import 'package:paywage/models/occupation.dart';
 import 'package:paywage/models/city.dart';
@@ -118,7 +119,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
   TextEditingController city = TextEditingController();
   TextEditingController state = TextEditingController();
   TextEditingController occupation = TextEditingController();
-  TextEditingController wageType = TextEditingController();
+ // TextEditingController wageType = TextEditingController();
   TextEditingController baseRate = TextEditingController();
 
   Future createEmployee() async{
@@ -643,13 +644,16 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     backgroundColor:  Color(0xff31473A),
                     action: SnackBarAction(
                     label: 'dismiss',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => AttendancePage(title: 'Pay Wage')));
+                    },
                     ),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                    reset();
                   },
-                  child: new Text('Create'),
+                  child: new Text('Create Employee'),
                 ),
               ),
             ],
