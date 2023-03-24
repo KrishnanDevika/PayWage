@@ -33,7 +33,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
     this.fetchOccupation();
   }
 
-  Future fetchOccupation() async {
+  void fetchOccupation() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchOccupation.php';
     try {
       http.Response response = await http.get(Uri.parse(url));
@@ -42,17 +42,20 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
       final List<Occupation> type =
       parsed.map<Occupation>((json) => Occupation.fromJson(json)).toList();
-      for (var i = 0; i < type.length; i++) {
-        occupationList.add(type[i].occupation);
-        print(type[i].occupation);
-      }
+      setState(() {
+        for (var i = 0; i < type.length; i++) {
+          occupationList.add(type[i].occupation);
+          print(type[i].occupation);
+        }
+      });
+
     }
     catch(e){
       print(e);
     }
   }
 
-  Future fetchSalaryType() async {
+  void fetchSalaryType() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/wageType.php';
     try {
       http.Response response = await http.get(Uri.parse(url));
@@ -61,17 +64,20 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
       final List<SalaryType> type =
       parsed.map<SalaryType>((json) => SalaryType.fromJson(json)).toList();
-      for (var i = 0; i < type.length; i++) {
-        wage_type.add(type[i].type);
-        print(type[i].type);
-      }
+      setState(() {
+        for (var i = 0; i < type.length; i++) {
+          wage_type.add(type[i].type);
+          print(type[i].type);
+        }
+      });
+
     }
     catch(e){
       print(e);
     }
   }
 
-  Future fetchCities() async {
+  void fetchCities() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchCities.php';
     try {
       http.Response response = await http.get(Uri.parse(url));
@@ -80,16 +86,19 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
       final List<City> city =
       parsed.map<City>((json) => City.fromJson(json)).toList();
-      for (var i = 0; i < city.length; i++) {
-        cities.add(city[i].cityName);
-        print(city[i].cityName);
-      }
+      setState(() {
+        for (var i = 0; i < city.length; i++) {
+          cities.add(city[i].cityName);
+          print(city[i].cityName);
+        }
+      });
+
     }catch(e){
       print(e);
     }
   }
 
-  Future fetchStates() async {
+  void fetchStates() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/state.php';
     try {
       http.Response response = await http.get(Uri.parse(url));
@@ -97,10 +106,13 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
       final List<States> state =
       parsed.map<States>((json) => States.fromJson(json)).toList();
-      for (var i = 0; i < state.length; i++) {
-        states.add(state[i].stateName);
-        print(state[i].stateName);
-      }
+      setState(() {
+        for (var i = 0; i < state.length; i++) {
+          states.add(state[i].stateName);
+          print(state[i].stateName);
+        }
+      });
+
     }
     catch(e){
       print(e);
@@ -119,7 +131,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
   TextEditingController city = TextEditingController();
   TextEditingController state = TextEditingController();
   TextEditingController occupation = TextEditingController();
- // TextEditingController wageType = TextEditingController();
+  TextEditingController wageType = TextEditingController();
   TextEditingController baseRate = TextEditingController();
 
   Future createEmployee() async{
@@ -645,8 +657,9 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     action: SnackBarAction(
                     label: 'dismiss',
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AttendancePage(title: 'Pay Wage')));
+                      Navigator.pop(context);
+                     /* Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => AttendancePage(title: 'Pay Wage')));*/
                     },
                     ),
                     );
