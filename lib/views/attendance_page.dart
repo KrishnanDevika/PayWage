@@ -22,19 +22,26 @@ class _AttendancePageState extends State<AttendancePage> {
   List<String> employeeList = <String>[];
   List<String> sitesList = <String>[];
   List<String> occupationList = <String>[];
-  int? groupValue;
- List<String> selectedSiteValue = <String>[];
- List<String> selectedOccupationValue = <String>[];
-
-
+  List<bool> _isChecked = [];
+  List<String> selectedSiteValue = <String>[];
+  List<String> selectedOccupationValue = <String>[];
   TextEditingController dateinput = TextEditingController();
   TextEditingController searchController = TextEditingController();
   List<TextEditingController> _timeinput = [];
   List<TextEditingController> _timeOut= [];
 
-  int _selectedIndex = 0;
 
-  Future fetchEmployee() async {
+  @override
+  void initState() {
+    dateinput.text = "";
+    this.fetchEmployee();
+    this.fetchJobSites();
+    this.fetchOccupation();
+    super.initState();
+  }
+
+
+  void fetchEmployee() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
     try {
       http.Response response = await http.get(Uri.parse(url));
@@ -43,17 +50,21 @@ class _AttendancePageState extends State<AttendancePage> {
 
       final List<Employee> employee =
       parsed.map<Employee>((json) => Employee.fromJson(json)).toList();
-      for (var i = 0; i < employee.length; i++) {
-        employeeList.add(employee[i].firstName +" "+ employee[i].lastName);
-        print(employee[i].firstName +" "+ employee[i].lastName);
-      }
+      setState(() {
+        for (var i = 0; i < employee.length; i++) {
+          employeeList.add(employee[i].firstName +" "+ employee[i].lastName);
+          print(employee[i].firstName +" "+ employee[i].lastName);
+        }
+        _isChecked = List<bool>.filled(employeeList.length, false);
+      });
+
     }
     catch(e){
       print(e);
     }
   }
 
-  Future fetchJobSites() async {
+  void fetchJobSites() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchSites.php';
     try {
       http.Response response = await http.get(Uri.parse(url));
@@ -62,16 +73,19 @@ class _AttendancePageState extends State<AttendancePage> {
 
       final List<JobSite> sites =
       parsed.map<JobSite>((json) => JobSite.fromJson(json)).toList();
-      for (var i = 0; i < sites.length; i++) {
-        sitesList.add(sites[i].siteName);
-        print(sites[i].siteName);
-      }
+      setState(() {
+        for (var i = 0; i < sites.length; i++) {
+          sitesList.add(sites[i].siteName);
+          print(sites[i].siteName);
+        }
+      });
+
     }
     catch(e){
       print(e);
     }
   }
-  Future fetchOccupation() async {
+  void fetchOccupation() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchOccupation.php';
     try {
       http.Response response = await http.get(Uri.parse(url));
@@ -80,30 +94,27 @@ class _AttendancePageState extends State<AttendancePage> {
 
       final List<Occupation> type =
       parsed.map<Occupation>((json) => Occupation.fromJson(json)).toList();
-      for (var i = 0; i < type.length; i++) {
-        occupationList.add(type[i].occupation);
-        print(type[i].occupation);
-      }
+      setState(() {
+        for (var i = 0; i < type.length; i++) {
+          occupationList.add(type[i].occupation);
+          print(type[i].occupation);
+        }
+      });
+
     }
     catch(e){
       print(e);
     }
   }
 
-  @override
-  void initState() {
-    dateinput.text = "";
-    super.initState();
-    this.fetchEmployee();
-    this.fetchJobSites();
-    this.fetchOccupation();
-  }
 
+/*
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+*/
 
   @override
   Widget build(BuildContext context) {
@@ -200,11 +211,14 @@ class _AttendancePageState extends State<AttendancePage> {
                   shrinkWrap: true,
                   itemCount: employeeList.length,
                   itemBuilder: (context, index) {
+                   // _isChecked = List<bool>.filled(employeeList.length, false);
+
                     _timeOut.add(new TextEditingController());
                     _timeinput.add(new TextEditingController());
                     for(int i = 0; i < employeeList.length; i++){
                       selectedSiteValue.add("Karur");
                       selectedOccupationValue.add("Roofing");
+
 
                     }
                     return Card(
@@ -227,18 +241,19 @@ class _AttendancePageState extends State<AttendancePage> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),
                                 ),
-                                Radio<int>(
-
-                                    value: index,
-                                    groupValue: groupValue,
-                                    fillColor: MaterialStateColor.resolveWith(
-                                        (states) => Colors.white),
-                                    toggleable: true,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        groupValue = value;
-                                      });
-                                    }),
+                                Checkbox(
+                                  checkColor: MaterialStateColor.resolveWith(
+                                          (states) => Colors.white),
+                                  activeColor:  Color(0xff7C8362),
+                                  fillColor: MaterialStateColor.resolveWith(
+                                          (states) =>  Color(0xff7C8362)),
+                                  value: _isChecked[index],
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _isChecked[index] = val!;
+                                    });
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -473,7 +488,7 @@ class _AttendancePageState extends State<AttendancePage> {
         backgroundColor: Color(0xff7C8362),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AddEmployeePage(title: 'Pay Wage')));
+              builder: (context) => AddEmployeePage(title: 'Pay Wage'))).then((value) => setState(() {}));
         },
         child: const Icon(
           Icons.add,
