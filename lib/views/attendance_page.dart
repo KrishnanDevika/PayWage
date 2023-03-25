@@ -34,6 +34,24 @@ class _AttendancePageState extends State<AttendancePage> {
 
   int _selectedIndex = 0;
 
+  bool isSwitch = false;
+  var presentAbsent = 'Absent';
+
+  void toggleSwitch(bool value){
+    if(isSwitch == false){
+      setState(() {
+        isSwitch = true;
+        presentAbsent = 'present';
+      });
+    }else{
+      setState(() {
+        isSwitch = false;
+        presentAbsent = 'absent';
+      });
+    }
+
+  }
+
   Future fetchEmployee() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
     try {
@@ -227,18 +245,8 @@ class _AttendancePageState extends State<AttendancePage> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),
                                 ),
-                                Radio<int>(
-
-                                    value: index,
-                                    groupValue: groupValue,
-                                    fillColor: MaterialStateColor.resolveWith(
-                                        (states) => Colors.white),
-                                    toggleable: true,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        groupValue = value;
-                                      });
-                                    }),
+                                Switch(value: isSwitch, onChanged: toggleSwitch),
+                                  Text('$presentAbsent',),
                               ],
                             ),
                           ),
