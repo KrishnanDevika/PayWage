@@ -30,8 +30,8 @@ class _AttendancePageState extends State<AttendancePage> {
   TextEditingController dateinput = TextEditingController();
   TextEditingController searchController = TextEditingController();
   List<TextEditingController> _timeinput = [];
-  List<TextEditingController> _timeOut= [];
-
+  List<TextEditingController> _timeOut = [];
+  List<String> textValue = <String>[];
 
   @override
   void initState() {
@@ -42,7 +42,6 @@ class _AttendancePageState extends State<AttendancePage> {
     super.initState();
   }
 
-
   void fetchEmployee() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
     try {
@@ -51,19 +50,17 @@ class _AttendancePageState extends State<AttendancePage> {
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
 
       final List<Employee> employee =
-      parsed.map<Employee>((json) => Employee.fromJson(json)).toList();
+          parsed.map<Employee>((json) => Employee.fromJson(json)).toList();
       setState(() {
         for (var i = 0; i < employee.length; i++) {
-          employeeList.add(employee[i].firstName +" "+ employee[i].lastName);
+          employeeList.add(employee[i].firstName + " " + employee[i].lastName);
           firstname.add(employee[i].firstName);
           lastName.add(employee[i].lastName);
-       //   print(employee[i].firstName +" "+ employee[i].lastName);
         }
         _isChecked = List<bool>.filled(employeeList.length, false);
+        textValue = List<String>.filled(employeeList.length, 'Absent');
       });
-
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
   }
@@ -76,19 +73,17 @@ class _AttendancePageState extends State<AttendancePage> {
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
 
       final List<JobSite> sites =
-      parsed.map<JobSite>((json) => JobSite.fromJson(json)).toList();
+          parsed.map<JobSite>((json) => JobSite.fromJson(json)).toList();
       setState(() {
         for (var i = 0; i < sites.length; i++) {
           sitesList.add(sites[i].siteName);
-       //   print(sites[i].siteName);
         }
       });
-
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
   }
+
   void fetchOccupation() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchOccupation.php';
     try {
@@ -97,43 +92,47 @@ class _AttendancePageState extends State<AttendancePage> {
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
 
       final List<Occupation> type =
-      parsed.map<Occupation>((json) => Occupation.fromJson(json)).toList();
+          parsed.map<Occupation>((json) => Occupation.fromJson(json)).toList();
       setState(() {
         for (var i = 0; i < type.length; i++) {
           occupationList.add(type[i].occupation);
-          //print(type[i].occupation);
         }
       });
-
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
-  Future createAttendance(String fName, String lName, bool present, String time_in, String time_out, String site_name, String occupation) async{
+  Future createAttendance(
+      String fName,
+      String lName,
+      bool present,
+      String time_in,
+      String time_out,
+      String site_name,
+      String occupation) async {
     String attendance = 'false';
-    if(present == true){
+    if (present == true) {
       attendance = 'true';
-    }else{
+    } else {
       attendance = 'false';
     }
 
-    final response = await http.post(Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertAttendance.php'), body:{
-      "first_name": fName,
-      "last_name": lName,
-      "date": dateinput.text,
-      "site_name": site_name,
-      "occupation_type": occupation,
-      "start_time": time_in,
-      "end_time": time_out,
-      "present": attendance
-    });
+    final response = await http.post(
+        Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertAttendance.php'),
+        body: {
+          "first_name": fName,
+          "last_name": lName,
+          "date": dateinput.text,
+          "site_name": site_name,
+          "occupation_type": occupation,
+          "start_time": time_in,
+          "end_time": time_out,
+          "present": attendance
+        });
 
     print((response.body));
   }
-
-
 
 /*
   void _onItemTapped(int index) {
@@ -151,7 +150,7 @@ class _AttendancePageState extends State<AttendancePage> {
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20),
-          child :Column(
+          child: Column(
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -238,11 +237,9 @@ class _AttendancePageState extends State<AttendancePage> {
                   shrinkWrap: true,
                   itemCount: employeeList.length,
                   itemBuilder: (context, index) {
-                   // _isChecked = List<bool>.filled(employeeList.length, false);
-
                     _timeOut.add(new TextEditingController());
                     _timeinput.add(new TextEditingController());
-                    for(int i = 0; i < employeeList.length; i++){
+                    for (int i = 0; i < employeeList.length; i++) {
                       selectedSiteValue.add("Karur");
                       selectedOccupationValue.add("Roofing");
                     }
@@ -254,32 +251,43 @@ class _AttendancePageState extends State<AttendancePage> {
                       child: Column(
                         children: [
                           Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              employeeList[index],
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
+                          ),
+                          Padding(
                             padding: EdgeInsets.only(
-                                left: 10, top: 4, right: 10, bottom: 2),
+                                left: 10, top: 0, right: 10, bottom: 2),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text(
-                                  employeeList[index],
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                Checkbox(
-                                  checkColor: MaterialStateColor.resolveWith(
-                                          (states) => Colors.white),
-                                  activeColor:  Color(0xff7C8362),
-                                  fillColor: MaterialStateColor.resolveWith(
-                                          (states) =>  Color(0xff7C8362)),
+                                Switch(
                                   value: _isChecked[index],
+                                  activeColor: Color(0xff7C8362),
+                                  activeTrackColor: Colors.white,
+                                  inactiveThumbColor: Color(0xff7C8362),
+                                  inactiveTrackColor: Color(0xff7C8362).withOpacity(0.5),
                                   onChanged: (val) {
-                                    setState(() {
-                                      _isChecked[index] = val!;
-                                      print(_isChecked[index]);
-                                    });
+                                    if (_isChecked[index] == false) {
+                                      setState(() {
+                                        _isChecked[index] = true;
+                                        textValue[index] = 'Present';
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _isChecked[index] = false;
+                                        textValue[index] = 'Absent';
+                                      });
+                                    }
                                   },
                                 ),
+                                Text(textValue[index],
+                                    style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ),
@@ -325,7 +333,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                       );
 
                                       if (pickedTime != null) {
-                                       // print(pickedTime.format(context)); //output 10:51 PM
+                                        // print(pickedTime.format(context)); //output 10:51 PM
                                         DateTime parsedTime = DateFormat.jm()
                                             .parse(pickedTime
                                                 .format(context)
@@ -381,7 +389,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                       );
 
                                       if (pickedTime != null) {
-                                    //    print(pickedTime.format(context)); //output 10:51 PM
+                                        //    print(pickedTime.format(context)); //output 10:51 PM
                                         DateTime parsedTime = DateFormat.jm()
                                             .parse(pickedTime
                                                 .format(context)
@@ -408,106 +416,104 @@ class _AttendancePageState extends State<AttendancePage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-
-                                new Expanded(child:  DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff7C8362),
-                                    border: Border.all(color: Colors.black38),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 30),
-                                    child: DropdownButton(
-                                      dropdownColor: Color(0xff7C8362),
-                                      underline: Container(),
-                                      value: selectedSiteValue[index],
-                                      style: const TextStyle(
+                                new Expanded(
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: Color(0xff7C8362),
+                                      border: Border.all(color: Colors.black38),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 30),
+                                      child: DropdownButton(
+                                        dropdownColor: Color(0xff7C8362),
+                                        underline: Container(),
+                                        value: selectedSiteValue[index],
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                        icon: const Icon(
+                                          Icons.keyboard_arrow_down,
                                           color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: Colors.white,
+                                        ),
+                                        items: sitesList.map((String items) {
+                                          return DropdownMenuItem(
+                                            value: items,
+                                            child: Text(
+                                              items,
+                                            ),
+                                            alignment: Alignment.center,
+                                          );
+                                        }).toList(),
+                                        // After selecting the desired option,it will
+                                        // change button value to selected value
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            selectedSiteValue[index] =
+                                                newValue!;
+                                          });
+                                        },
                                       ),
-                                      items: sitesList.map((String items) {
-                                        return DropdownMenuItem(
-                                          value: items,
-                                          child: Text(
-                                            items,
-                                          ),
-                                          alignment: Alignment.center,
-                                        );
-                                      }).toList(),
-                                      // After selecting the desired option,it will
-                                      // change button value to selected value
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          selectedSiteValue[index] = newValue!;
-                                        });
-                                      },
                                     ),
                                   ),
-                                ),),
-                               SizedBox(width: 10),
-                               new Expanded(child:   DecoratedBox(
-                                 decoration: BoxDecoration(
-                                   color: Color(0xff7C8362),
-                                   border: Border.all(color: Colors.black38),
-                                   borderRadius: BorderRadius.circular(20),
-                                 ),
-                                 child: Padding(
-                                   padding:
-                                   EdgeInsets.only(left: 20),
+                                ),
+                                SizedBox(width: 10),
+                                new Expanded(
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: Color(0xff7C8362),
+                                      border: Border.all(color: Colors.black38),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 20),
+                                      child: DropdownButton(
+                                        dropdownColor: Color(0xff7C8362),
+                                        underline: Container(),
+                                        value: selectedOccupationValue[index],
 
-                                   child: DropdownButton(
-                                     dropdownColor: Color(0xff7C8362),
-                                     underline: Container(),
-                                     value: selectedOccupationValue[index],
-
-                                     icon: const Icon(
-                                       Icons.keyboard_arrow_down,
-                                       color: Colors.white,
-                                     ),
-                                     items: occupationList.map((String items) {
-                                       return DropdownMenuItem(
-                                         value: items,
-                                         child: Text(
-                                           items,
-
-                                         ),
-                                         alignment: Alignment.center,
-                                       );
-                                     }).toList(),
-                                     // After selecting the desired option,it will
-                                     // change button value to selected value
-                                     style: const TextStyle(
-                                         color: Colors.white,
-                                         fontSize:14,
-                                         fontWeight: FontWeight.bold),
-                                     onChanged: (String? newValue) {
-                                       setState(() {
-                                         selectedOccupationValue[index] = newValue!;
-                                       });
-                                     },
-                                   ),
-
-                                 ),
-                               ),),
-
+                                        icon: const Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: Colors.white,
+                                        ),
+                                        items:
+                                            occupationList.map((String items) {
+                                          return DropdownMenuItem(
+                                            value: items,
+                                            child: Text(
+                                              items,
+                                            ),
+                                            alignment: Alignment.center,
+                                          );
+                                        }).toList(),
+                                        // After selecting the desired option,it will
+                                        // change button value to selected value
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            selectedOccupationValue[index] =
+                                                newValue!;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           )
                         ],
                       ),
                     );
-                  //  for(int i = 0; i < employeeList.length; i++){
-                  //    createAttendance(firstname[index], lastName[index], _isChecked[index], _timeinput[index].text, _timeOut[index].text, selectedSiteValue[index], selectedOccupationValue[index]);
-                  //  }
                   },
                 ),
               ),
               Container(
-                child : Padding(
+                child: Padding(
                   padding: new EdgeInsets.all(64.0),
                   //onPressed will show login with the username typed on terminal
                   child: ElevatedButton(
@@ -515,7 +521,9 @@ class _AttendancePageState extends State<AttendancePage> {
                         backgroundColor: Color(0xff31473A),
                         foregroundColor: Colors.white),
                     onPressed: () {
-                      for(int index = 0; index < employeeList.length; index++) {
+                      for (int index = 0;
+                          index < employeeList.length;
+                          index++) {
                         createAttendance(
                             firstname[index],
                             lastName[index],
@@ -526,15 +534,14 @@ class _AttendancePageState extends State<AttendancePage> {
                             selectedOccupationValue[index]);
                       }
                       final snackBar = SnackBar(
-                        content:  Text('Attendance marked', style: TextStyle(color: Colors.white),),
-                        backgroundColor:  Color(0xff31473A),
+                        content: Text(
+                          'Attendance marked',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Color(0xff31473A),
                         action: SnackBarAction(
                           label: 'dismiss',
-                          onPressed: () {
-                            //  Navigator.pop(context);
-                            /* Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AttendancePage(title: 'Pay Wage')));*/
-                          },
+                          onPressed: () {},
                         ),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -543,18 +550,20 @@ class _AttendancePageState extends State<AttendancePage> {
                   ),
                 ),
               ),
-
             ],
-
+          ),
         ),
-      ),
       ),
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff7C8362),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AddEmployeePage(title: 'Pay Wage'))).then((value) => setState(() {fetchEmployee();}));
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (context) => AddEmployeePage(title: 'Pay Wage')))
+              .then((value) => setState(() {
+                    fetchEmployee();
+                  }));
         },
         child: const Icon(
           Icons.add,
@@ -562,7 +571,8 @@ class _AttendancePageState extends State<AttendancePage> {
         ),
       ),
 
-      bottomNavigationBar: BottomNavigation(0), /*BottomNavigationBar(
+      bottomNavigationBar: BottomNavigation(
+          0), /*BottomNavigationBar(
         backgroundColor: Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
