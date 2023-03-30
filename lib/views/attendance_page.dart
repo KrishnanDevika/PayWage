@@ -20,6 +20,8 @@ class AttendancePage extends StatefulWidget {
 
 class _AttendancePageState extends State<AttendancePage> {
   List<String> employeeList = <String>[];
+  List<String> firstname = <String>[];
+  List<String> lastName = <String>[];
   List<String> sitesList = <String>[];
   List<String> occupationList = <String>[];
   List<bool> _isChecked = [];
@@ -53,7 +55,9 @@ class _AttendancePageState extends State<AttendancePage> {
       setState(() {
         for (var i = 0; i < employee.length; i++) {
           employeeList.add(employee[i].firstName +" "+ employee[i].lastName);
-          print(employee[i].firstName +" "+ employee[i].lastName);
+          firstname.add(employee[i].firstName);
+          lastName.add(employee[i].lastName);
+       //   print(employee[i].firstName +" "+ employee[i].lastName);
         }
         _isChecked = List<bool>.filled(employeeList.length, false);
       });
@@ -76,7 +80,7 @@ class _AttendancePageState extends State<AttendancePage> {
       setState(() {
         for (var i = 0; i < sites.length; i++) {
           sitesList.add(sites[i].siteName);
-          print(sites[i].siteName);
+       //   print(sites[i].siteName);
         }
       });
 
@@ -97,7 +101,7 @@ class _AttendancePageState extends State<AttendancePage> {
       setState(() {
         for (var i = 0; i < type.length; i++) {
           occupationList.add(type[i].occupation);
-          print(type[i].occupation);
+          //print(type[i].occupation);
         }
       });
 
@@ -106,6 +110,29 @@ class _AttendancePageState extends State<AttendancePage> {
       print(e);
     }
   }
+
+  Future createAttendance(String fName, String lName, bool present, String time_in, String time_out, String site_name, String occupation) async{
+    String attendance = 'false';
+    if(present == true){
+      attendance = 'true';
+    }else{
+      attendance = 'false';
+    }
+
+    final response = await http.post(Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertAttendance.php'), body:{
+      "first_name": fName,
+      "last_name": lName,
+      "date": dateinput.text,
+      "site_name": site_name,
+      "occupation_type": occupation,
+      "start_time": time_in,
+      "end_time": time_out,
+      "present": attendance
+    });
+
+    print((response.body));
+  }
+
 
 
 /*
@@ -175,7 +202,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
                           if (date != null) {
                             String formattedDate =
-                                DateFormat('dd-MM-yyyy').format(date!);
+                                DateFormat('yyyy-MM-dd').format(date!);
                             dateinput.text = formattedDate;
                           }
                         },
@@ -218,8 +245,6 @@ class _AttendancePageState extends State<AttendancePage> {
                     for(int i = 0; i < employeeList.length; i++){
                       selectedSiteValue.add("Karur");
                       selectedOccupationValue.add("Roofing");
-
-
                     }
                     return Card(
                       shape: RoundedRectangleBorder(
@@ -251,6 +276,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                   onChanged: (val) {
                                     setState(() {
                                       _isChecked[index] = val!;
+                                      print(_isChecked[index]);
                                     });
                                   },
                                 ),
@@ -299,8 +325,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                       );
 
                                       if (pickedTime != null) {
-                                        print(pickedTime
-                                            .format(context)); //output 10:51 PM
+                                       // print(pickedTime.format(context)); //output 10:51 PM
                                         DateTime parsedTime = DateFormat.jm()
                                             .parse(pickedTime
                                                 .format(context)
@@ -356,8 +381,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                       );
 
                                       if (pickedTime != null) {
-                                        print(pickedTime
-                                            .format(context)); //output 10:51 PM
+                                    //    print(pickedTime.format(context)); //output 10:51 PM
                                         DateTime parsedTime = DateFormat.jm()
                                             .parse(pickedTime
                                                 .format(context)
@@ -476,19 +500,61 @@ class _AttendancePageState extends State<AttendancePage> {
                         ],
                       ),
                     );
+                  //  for(int i = 0; i < employeeList.length; i++){
+                  //    createAttendance(firstname[index], lastName[index], _isChecked[index], _timeinput[index].text, _timeOut[index].text, selectedSiteValue[index], selectedOccupationValue[index]);
+                  //  }
                   },
                 ),
               ),
+              Container(
+                child : Padding(
+                  padding: new EdgeInsets.all(64.0),
+                  //onPressed will show login with the username typed on terminal
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xff31473A),
+                        foregroundColor: Colors.white),
+                    onPressed: () {
+                      for(int index = 0; index < employeeList.length; index++) {
+                        createAttendance(
+                            firstname[index],
+                            lastName[index],
+                            _isChecked[index],
+                            _timeinput[index].text,
+                            _timeOut[index].text,
+                            selectedSiteValue[index],
+                            selectedOccupationValue[index]);
+                      }
+                      final snackBar = SnackBar(
+                        content:  Text('Attendance marked', style: TextStyle(color: Colors.white),),
+                        backgroundColor:  Color(0xff31473A),
+                        action: SnackBarAction(
+                          label: 'dismiss',
+                          onPressed: () {
+                            //  Navigator.pop(context);
+                            /* Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => AttendancePage(title: 'Pay Wage')));*/
+                          },
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    child: new Text('MARK ATTENDANCE'),
+                  ),
+                ),
+              ),
+
             ],
-          ),
+
         ),
+      ),
       ),
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff7C8362),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AddEmployeePage(title: 'Pay Wage'))).then((value) => setState(() {}));
+              builder: (context) => AddEmployeePage(title: 'Pay Wage'))).then((value) => setState(() {fetchEmployee();}));
         },
         child: const Icon(
           Icons.add,
