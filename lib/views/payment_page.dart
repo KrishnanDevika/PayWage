@@ -22,19 +22,17 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
   List<String> employeeList = <String>[];
-  List<String> sitesList = <String>[];
-  List<String> occupationList = <String>[];
-  int? groupValue;
-  List<String> selectedSiteValue = <String>[];
-  List<String> selectedOccupationValue = <String>[];
 
+  int? groupValue;
+
+  bool isSwitched = false;
 
   TextEditingController dateinput = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  List<TextEditingController> _timeinput = [];
-  List<TextEditingController> _timeOut= [];
 
   int _selectedIndex = 0;
+
+
 
   Future fetchEmployee() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
@@ -55,50 +53,13 @@ class _PaymentPageState extends State<PaymentPage> {
     }
   }
 
-  Future fetchJobSites() async {
-    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchSites.php';
-    try {
-      http.Response response = await http.get(Uri.parse(url));
-      var data = response.body;
-      final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
-
-      final List<JobSite> sites =
-      parsed.map<JobSite>((json) => JobSite.fromJson(json)).toList();
-      for (var i = 0; i < sites.length; i++) {
-        sitesList.add(sites[i].siteName);
-        print(sites[i].siteName);
-      }
-    }
-    catch(e){
-      print(e);
-    }
-  }
-  Future fetchOccupation() async {
-    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchOccupation.php';
-    try {
-      http.Response response = await http.get(Uri.parse(url));
-      var data = response.body;
-      final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
-
-      final List<Occupation> type =
-      parsed.map<Occupation>((json) => Occupation.fromJson(json)).toList();
-      for (var i = 0; i < type.length; i++) {
-        occupationList.add(type[i].occupation);
-        print(type[i].occupation);
-      }
-    }
-    catch(e){
-      print(e);
-    }
-  }
 
   @override
   void initState() {
     dateinput.text = "";
     super.initState();
     this.fetchEmployee();
-    this.fetchJobSites();
-    this.fetchOccupation();
+
   }
 
   void _onItemTapped(int index) {
@@ -121,12 +82,12 @@ class _PaymentPageState extends State<PaymentPage> {
                 decoration: BoxDecoration(
                   color: Color(0xff7C8362).withOpacity(0.5),
                 ),
-                margin: EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
+                margin: const EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    new IconButton(
+                    IconButton(
                       // padding: EdgeInsets.only(left: 130, top: 0, right: 30, bottom: 0),
                       icon: Icon(Icons.arrow_back_ios_new),
                       iconSize: 20,
@@ -144,7 +105,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         });
                       },
                     ),
-                    new SizedBox(
+                    SizedBox(
                       width: 120,
                       child: TextField(
                         textAlign: TextAlign.center,
@@ -184,7 +145,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       filled: true,
                       fillColor: Color(0xff7C8362),
                       prefixIcon: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.search,
                           color: Colors.white,
                         ),
@@ -202,13 +163,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   shrinkWrap: true,
                   itemCount: employeeList.length,
                   itemBuilder: (context, index) {
-                    _timeOut.add(new TextEditingController());
-                    _timeinput.add(new TextEditingController());
-                    for(int i = 0; i < employeeList.length; i++){
-                      selectedSiteValue.add("Karur");
-                      selectedOccupationValue.add("Roofing");
 
-                    }
                     return Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
@@ -241,129 +196,61 @@ class _PaymentPageState extends State<PaymentPage> {
                                       ),
                                       borderRadius: BorderRadius.circular(13)
                                     ),
-                                    child: const Center(
-                                      child: Text(
-                                        '\$ 300',style: TextStyle(color: CustomColors.lightModeTextColor, fontSize: 20),
-                                      ),
-                                    ),
+                                    child: Center(
+                                      child: Text('\$ 100', style: TextStyle(
+                                        fontWeight: FontWeight.bold
+                                      ),),
                                   ),
+                                )
                                 )
                               ],
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 left: 30, top: 5, right: 30, bottom: 4),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               mainAxisSize: MainAxisSize.max,
                               children: <Widget>[
+
                                 ToggleSwitch(
-                                  minWidth: 90.0,
-                                  cornerRadius: 20,
-                                  initialLabelIndex: 1,
-                                  // totalSwitches: ,
-                                  // ],
+                                  minHeight: 30,
+                                  minWidth: 50,
+                                  labels: ['adv', 'reg'],
+                                  onToggle: (index){
+                                    print('$index');
+                                  }
+                                ),
+
+                                Container(
+                                  width: 150,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      color: CustomColors.paleGreenColour,
+                                      border: Border.all(
+                                          width: 2
+                                      ),
+                                      borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  child: TextField(
+
+                    style: TextStyle(color: CustomColors.lightModeTextColor, fontSize: 20),
+                    decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0xff7C8362),
+                    enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    )
+
+                    ),
+                    ),
                                 )
+
                                 // TextField()
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 10, top: 10, right: 10, bottom: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-
-                                new Expanded(child:  DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff7C8362),
-                                    border: Border.all(color: Colors.black38),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 30),
-                                    child: DropdownButton(
-                                      dropdownColor: Color(0xff7C8362),
-                                      underline: Container(),
-                                      value: selectedSiteValue[index],
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: Colors.white,
-                                      ),
-                                      items: sitesList.map((String items) {
-                                        return DropdownMenuItem(
-                                          value: items,
-                                          child: Text(
-                                            items,
-                                          ),
-                                          alignment: Alignment.center,
-                                        );
-                                      }).toList(),
-                                      // After selecting the desired option,it will
-                                      // change button value to selected value
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          selectedSiteValue[index] = newValue!;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),),
-                                SizedBox(width: 10),
-                                new Expanded(child:   DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff7C8362),
-                                    border: Border.all(color: Colors.black38),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                    EdgeInsets.only(left: 20),
-
-                                    child: DropdownButton(
-                                      dropdownColor: Color(0xff7C8362),
-                                      underline: Container(),
-                                      value: selectedOccupationValue[index],
-
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: Colors.white,
-                                      ),
-                                      items: occupationList.map((String items) {
-                                        return DropdownMenuItem(
-                                          value: items,
-                                          child: Text(
-                                            items,
-
-                                          ),
-                                          alignment: Alignment.center,
-                                        );
-                                      }).toList(),
-                                      // After selecting the desired option,it will
-                                      // change button value to selected value
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize:14,
-                                          fontWeight: FontWeight.bold),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          selectedOccupationValue[index] = newValue!;
-                                        });
-                                      },
-                                    ),
-
-                                  ),
-                                ),),
-
-                              ],
-                            ),
-                          )
                         ],
                       ),
                     );

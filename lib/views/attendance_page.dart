@@ -124,7 +124,7 @@ class _AttendancePageState extends State<AttendancePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    new IconButton(
+                     IconButton(
                       // padding: EdgeInsets.only(left: 130, top: 0, right: 30, bottom: 0),
                       icon: Icon(Icons.arrow_back_ios_new),
                       iconSize: 20,
@@ -142,7 +142,7 @@ class _AttendancePageState extends State<AttendancePage> {
                         });
                       },
                     ),
-                    new SizedBox(
+                     SizedBox(
                       width: 120,
                       child: TextField(
                         textAlign: TextAlign.center,
@@ -370,7 +370,7 @@ class _AttendancePageState extends State<AttendancePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
 
-                                new Expanded(child:  DecoratedBox(
+                                Expanded(child:  DecoratedBox(
                                   decoration: BoxDecoration(
                                     color: Color(0xff7C8362),
                                     border: Border.all(color: Colors.black38),
@@ -410,7 +410,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                   ),
                                 ),),
                                SizedBox(width: 10),
-                               new Expanded(child:   DecoratedBox(
+                               Expanded(child:   DecoratedBox(
                                  decoration: BoxDecoration(
                                    color: Color(0xff7C8362),
                                    border: Border.all(color: Colors.black38),
