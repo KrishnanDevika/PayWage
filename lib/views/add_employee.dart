@@ -11,9 +11,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AddEmployeePage extends StatefulWidget {
-  const AddEmployeePage({super.key, required this.title});
+  const AddEmployeePage({super.key, required this.title, required this.buttonText});
 
   final String title;
+  final String buttonText;
 
   @override
   State<AddEmployeePage> createState() => _AddEmployeePageState();
@@ -666,7 +667,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                    reset();
                   },
-                  child: new Text('Create Employee'),
+                  child: new Text(widget.buttonText),
                 ),
               ),
             ],
