@@ -562,6 +562,7 @@ class _AttendancePageState extends State<AttendancePage> {
               .push(MaterialPageRoute(
                   builder: (context) => AddEmployeePage(title: 'Pay Wage')))
               .then((value) => setState(() {
+                employeeList = [];
                     fetchEmployee();
                   }));
         },
