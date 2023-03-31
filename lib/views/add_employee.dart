@@ -11,10 +11,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AddEmployeePage extends StatefulWidget {
-  const AddEmployeePage({super.key, required this.title, required this.buttonText});
 
   final String title;
-  final String buttonText;
+
+  AddEmployeePage({
+        super.key,
+        required this.title,
+      });
+
 
   @override
   State<AddEmployeePage> createState() => _AddEmployeePageState();
@@ -25,6 +29,35 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
   List<String> cities = <String>[];
   List<String> states = <String>[];
   List<String> occupationList= <String>[];
+  String salaryType_value = 'Daily';
+  String city_value = 'Delhi';
+  String state_value = 'Gujarat';
+  String occupation_value = "Wall Protection";
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController startDate = TextEditingController();
+  TextEditingController contact = TextEditingController();
+  TextEditingController street = TextEditingController();
+  TextEditingController baseRate = TextEditingController();
+  bool editMode = false;
+
+  Future createEmployee() async{
+      final response = await http.post(
+          Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertEmployee.php'),
+          body: {
+            "first_name": firstName.text,
+            "last_name": lastName.text,
+            "start_date": startDate.text,
+            "phone": contact.text,
+            "salary_type": salaryType_value,
+            "street": street.text,
+            "city": city_value,
+            "state": state_value,
+            "occupation_type": occupation_value,
+            "pay_rate": baseRate.text,
+          });
+  print((response.body));
+  }
 
   @override
   void initState() {
@@ -32,6 +65,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
     this.fetchCities();
     this.fetchStates();
     this.fetchOccupation();
+    super.initState();
   }
 
   void fetchOccupation() async {
@@ -46,7 +80,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
       setState(() {
         for (var i = 0; i < type.length; i++) {
           occupationList.add(type[i].occupation);
-          print(type[i].occupation);
+        //  print(type[i].occupation);
         }
       });
 
@@ -68,7 +102,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
       setState(() {
         for (var i = 0; i < type.length; i++) {
           wage_type.add(type[i].type);
-          print(type[i].type);
+        //  print(type[i].type);
         }
       });
 
@@ -90,7 +124,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
       setState(() {
         for (var i = 0; i < city.length; i++) {
           cities.add(city[i].cityName);
-          print(city[i].cityName);
+         // print(city[i].cityName);
         }
       });
 
@@ -110,7 +144,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
       setState(() {
         for (var i = 0; i < state.length; i++) {
           states.add(state[i].stateName);
-          print(state[i].stateName);
+       //   print(state[i].stateName);
         }
       });
 
@@ -120,37 +154,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
     }
   }
 
-  String salaryType_value = 'Daily';
-  String city_value = 'Delhi';
-  String state_value = 'Gujarat';
-  String occupation_value = "Wall Protection";
-  TextEditingController firstName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
-  TextEditingController startDate = TextEditingController();
-  TextEditingController contact = TextEditingController();
-  TextEditingController street = TextEditingController();
-  TextEditingController city = TextEditingController();
-  TextEditingController state = TextEditingController();
-  TextEditingController occupation = TextEditingController();
-  TextEditingController wageType = TextEditingController();
-  TextEditingController baseRate = TextEditingController();
 
-  Future createEmployee() async{
-    final response = await http.post(Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertEmployee.php'), body:{
-      "first_name": firstName.text,
-      "last_name": lastName.text,
-      "start_date": startDate.text,
-      "phone":contact.text,
-      "salary_type": salaryType_value,
-      "street": street.text,
-      "city": city_value,
-      "state": state_value,
-      "occupation_type":occupation_value,
-      "pay_rate": baseRate.text,
-    });
-
-    print((response.body));
-  }
 
   void reset(){
     firstName.clear();
@@ -667,7 +671,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                    reset();
                   },
-                  child: new Text(widget.buttonText),
+                  child: new Text('CREATE EMPLOYEE'),
                 ),
               ),
             ],
