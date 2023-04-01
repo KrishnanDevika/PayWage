@@ -13,22 +13,16 @@ import 'dart:convert';
 class UpdateEmployeePage extends StatefulWidget {
 
   final String title;
-  final List employee_flist;
-  final List employee_llist;
-  final List contactList;
-  final List dateList;
   final int index;
-  final List occupation_list;
-  // final List list;
+  final List occupation;
+  final List list;
+
   UpdateEmployeePage(
       {
         super.key,
         required this.title,
-        required this.employee_flist,
-        required this.employee_llist,
-        required this.dateList,
-        required this.contactList,
-        required this.occupation_list,
+        required this.list,
+        required this.occupation,
         required this.index,
       });
 
@@ -54,12 +48,13 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
   TextEditingController baseRate = TextEditingController();
   bool editMode = false;
 
-  Future createEmployee() async{
-
+  Future updateEmployee() async{
+    print(widget.list[widget.index]['id']);
+    String id = widget.list[widget.index]['id'].toString();
     final response = await http.post(
-        Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertEmployee.php'),
+        Uri.parse('https://dkrishnan.scweb.ca/Paywage/updateEmployee.php'),
         body: {
-
+          'id': id,
           "first_name": firstName.text,
           "last_name": lastName.text,
           "start_date": startDate.text,
@@ -71,9 +66,7 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
           "occupation_type": occupation_value,
           "pay_rate": baseRate.text,
         });
-
-
-    print((response.body));
+   print((response.body));
   }
 
   @override
@@ -84,14 +77,13 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
     this.fetchOccupation();
     if(widget.index != null){
       editMode = true;
-      firstName.text = widget.employee_flist[widget.index];
-      lastName.text =  widget.employee_llist[widget.index];
-      startDate.text = widget.dateList[widget.index];
-      contact.text = widget.contactList[widget.index];
-      occupation_value = widget.occupation_list[widget.index];
+      firstName.text = widget.list[widget.index]['first_name'];
+      lastName.text = widget.list[widget.index]['last_name'];
+      startDate.text = widget.list[widget.index]['start_date'];
+      contact.text = widget.list[widget.index]['phone'];
 
-      //street.text = widget.list[widget.index]['street'];
-      //baseRate.text = widget.list[widget.index]['pay_rate'];
+  /*    street.text = widget.list[widget.index]['street'];
+      baseRate.text = widget.list[widget.index]['pay_rate'];*/
     }
 
     super.initState();
@@ -109,7 +101,6 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
       setState(() {
         for (var i = 0; i < type.length; i++) {
           occupationList.add(type[i].occupation);
-          //  print(type[i].occupation);
         }
       });
 
@@ -131,7 +122,6 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
       setState(() {
         for (var i = 0; i < type.length; i++) {
           wage_type.add(type[i].type);
-          //  print(type[i].type);
         }
       });
 
@@ -153,7 +143,6 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
       setState(() {
         for (var i = 0; i < city.length; i++) {
           cities.add(city[i].cityName);
-          // print(city[i].cityName);
         }
       });
 
@@ -173,7 +162,6 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
       setState(() {
         for (var i = 0; i < state.length; i++) {
           states.add(state[i].stateName);
-          //   print(state[i].stateName);
         }
       });
 
@@ -182,9 +170,6 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
       print(e);
     }
   }
-
-
-
   void reset(){
     firstName.clear();
     lastName.clear();
@@ -192,7 +177,6 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
     contact.clear();
     street.clear();
     baseRate.clear();
-
   }
 
   @override
@@ -684,9 +668,9 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                       backgroundColor: Color(0xff31473A),
                       foregroundColor: Colors.white),
                   onPressed: () {
-                    createEmployee();
+                    updateEmployee();
                     final snackBar = SnackBar(
-                      content:  Text('Employee Created', style: TextStyle(color: Colors.white),),
+                      content:  Text('Employee Updated', style: TextStyle(color: Colors.white),),
                       backgroundColor:  Color(0xff31473A),
                       action: SnackBarAction(
                         label: 'dismiss',
