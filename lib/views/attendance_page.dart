@@ -72,8 +72,7 @@ class _AttendancePageState extends State<AttendancePage> {
           contactList.add(employee[i].contactNo);
 
         }
-        _isChecked = List<bool>.filled(employeeList.length, false);
-        textValue = List<String>.filled(employeeList.length, 'Absent');
+
       });
     } catch (e) {
       print(e);
@@ -183,12 +182,12 @@ class _AttendancePageState extends State<AttendancePage> {
                       color: Colors.white,
                       onPressed: () {
                         setState(() {
-                          DateFormat inputFormat = DateFormat('dd-MM-yyyy');
+                          DateFormat inputFormat = DateFormat('yyyy-MM-dd');
                           DateTime date = inputFormat.parse(dateinput.text);
                           DateTime pastDate = date.subtract(Duration(days: 1));
                           if (pastDate != null) {
                             String formattedDate =
-                                DateFormat('dd-MM-yyyy').format(pastDate!);
+                                DateFormat('yyyy-MM-dd').format(pastDate!);
                             dateinput.text = formattedDate;
                           }
                         });
@@ -245,7 +244,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       )),
                 ),
               ),
-         /*   FutureBuilder(
+            FutureBuilder(
                 future: getData(),
                 builder: (context, snapshot){
                   if(snapshot.hasError) print(snapshot.error);
@@ -256,6 +255,9 @@ class _AttendancePageState extends State<AttendancePage> {
                         itemCount: snapshot.data.length,
                           itemBuilder: (context, index){
                           List list = snapshot.data;
+                          String name = list[index]['first_name'] +' '+ list[index]['last_name'];
+                          _isChecked = List<bool>.filled(list.length, false);
+                          textValue = List<String>.filled(list.length, 'Absent');
                           _timeOut.add(new TextEditingController());
                           _timeinput.add(new TextEditingController());
                           for (int i = 0; i < list.length; i++) {
@@ -264,15 +266,12 @@ class _AttendancePageState extends State<AttendancePage> {
                           }
                           return InkWell(
                             onTap: (){
-                             */
-              /* Navigator.of(context)
+                            Navigator.of(context)
                                   .push(MaterialPageRoute(
-                                  builder: (context) => AddEmployeePage(title: 'Pay Wage', buttonText: 'Update Employee', list: list, occupation: occupationList, index: index)))
+                                  builder: (context) => UpdateEmployeePage(title: 'Pay Wage', list: list, occupation: occupationList, index: index)))
                                   .then((value) => setState(() {
-                                employeeList = [];
-                                fetchEmployee();
-                              }));*/
-              /*
+                                    getData();
+                              }));
 
                             },
                             child: Card(
@@ -285,7 +284,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                   Padding(
                                     padding: EdgeInsets.all(10),
                                     child: Text(
-                                      employeeList[index],
+                                      name,
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -542,18 +541,14 @@ class _AttendancePageState extends State<AttendancePage> {
                               ),
                             ),
                           );
-                       */
-              /*   return ListTile(
-                            title: Text(list[index]['first_name']),
-                          );*/
-              /*
-                          }
+
+                      }
                       ): CircularProgressIndicator();
 
                 },
-                ),*/
+                ),
 
-              Container(
+           /*   Container(
                 margin: const EdgeInsets.all(10.0),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
@@ -850,7 +845,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
                   },
                 ),
-              ),
+              ),*/
               Container(
                 child: Padding(
                   padding: new EdgeInsets.all(64.0),
@@ -901,8 +896,9 @@ class _AttendancePageState extends State<AttendancePage> {
               .push(MaterialPageRoute(
                   builder: (context) => AddEmployeePage(title: 'Pay Wage')))
               .then((value) => setState(() {
-                employeeList = [];
-                    fetchEmployee();
+                getData();
+              /*  employeeList = [];
+                    fetchEmployee();*/
                   }));
         },
         child: const Icon(
