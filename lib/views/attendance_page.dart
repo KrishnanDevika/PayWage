@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paywage/views/add_employee.dart';
+import 'package:paywage/views/payment_page.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
 import 'package:paywage/common/BottomNavigationBar.dart';
@@ -31,6 +32,7 @@ class _AttendancePageState extends State<AttendancePage> {
   List<TextEditingController> _timeinput = [];
   List<TextEditingController> _timeOut = [];
   List<String> textValue = <String>[];
+  int _selectedIndex = 0;
 
   List<String> firstname = <String>[];
   List<String> lastName = <String>[];
@@ -148,13 +150,19 @@ class _AttendancePageState extends State<AttendancePage> {
     print((response.body));
   }
 
-/*
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    switch(index){
+      case 0:
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AttendancePage(title: 'PayWage'),),);
+        break;
+      case 1:
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PaymentPage(title: 'PayWage'),),);
+        break;
+    }
   }
-*/
 
   @override
   Widget build(BuildContext context) {
@@ -905,8 +913,7 @@ class _AttendancePageState extends State<AttendancePage> {
         ),
       ),
 
-      bottomNavigationBar: BottomNavigation(
-          0), /*BottomNavigationBar(
+      bottomNavigationBar:  BottomNavigationBar(
         backgroundColor: Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -925,7 +932,7 @@ class _AttendancePageState extends State<AttendancePage> {
         ],
         unselectedItemColor: Colors.white,
         selectedItemColor: Colors.white,
-      ), */ // This trailing comma makes auto-formatting nicer for build methods.
+      ),  // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
