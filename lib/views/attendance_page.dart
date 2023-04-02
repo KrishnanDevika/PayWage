@@ -45,13 +45,13 @@ class _AttendancePageState extends State<AttendancePage> {
     this.fetchJobSites();
     this.fetchOccupation();
     super.initState();
+
   }
 
   Future getData() async{
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
     var response = await http.get(Uri.parse(url));
     return json.decode(response.body);
-
   }
 
   void fetchEmployee() async {
@@ -70,9 +70,9 @@ class _AttendancePageState extends State<AttendancePage> {
           lastName.add(employee[i].lastName);
           dateList.add(employee[i].startDate);
           contactList.add(employee[i].contactNo);
-
         }
-
+        _isChecked = List<bool>.filled(employeeList.length, false);
+        textValue = List<String>.filled(employeeList.length, 'Absent');
       });
     } catch (e) {
       print(e);
@@ -256,8 +256,6 @@ class _AttendancePageState extends State<AttendancePage> {
                           itemBuilder: (context, index){
                           List list = snapshot.data;
                           String name = list[index]['first_name'] +' '+ list[index]['last_name'];
-                          _isChecked = List<bool>.filled(list.length, false);
-                          textValue = List<String>.filled(list.length, 'Absent');
                           _timeOut.add(new TextEditingController());
                           _timeinput.add(new TextEditingController());
                           for (int i = 0; i < list.length; i++) {
@@ -897,8 +895,8 @@ class _AttendancePageState extends State<AttendancePage> {
                   builder: (context) => AddEmployeePage(title: 'Pay Wage')))
               .then((value) => setState(() {
                 getData();
-              /*  employeeList = [];
-                    fetchEmployee();*/
+                employeeList = [];
+                fetchEmployee();
                   }));
         },
         child: const Icon(
