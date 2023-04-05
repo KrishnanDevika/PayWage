@@ -97,9 +97,23 @@ class _AttendancePageState extends State<AttendancePage> {
     );
   }
 
+  Future fetchAttendance(String date) async{
+    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchAttendance.php';
+    final res = await http.post(Uri.parse(url), body: {
+      'date': date,
+    });
+    print(date);
+    print(res.body);
+    return json.decode(res.body);
+  }
+
   Future getData() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
-    var response = await http.get(Uri.parse(url));
+    var response = await http.get(Uri.parse(url),
+    headers: {
+      "Accept": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    });
     return json.decode(response.body);
   }
 
@@ -254,6 +268,7 @@ class _AttendancePageState extends State<AttendancePage> {
                             dateinput.text = formattedDate;
                           }
                         });
+                        fetchAttendance(dateinput.text);
                       },
                     ),
                     new SizedBox(

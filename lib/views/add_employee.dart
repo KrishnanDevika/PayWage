@@ -46,6 +46,10 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
   Future createEmployee() async{
       final response = await http.post(
           Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertEmployee.php'),
+          headers: {
+            "Accept": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          },
           body: {
             "first_name": firstName.text,
             "last_name": lastName.text,
