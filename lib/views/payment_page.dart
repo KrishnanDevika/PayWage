@@ -5,6 +5,7 @@ import 'package:paywage/common/myAppBar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:paywage/models/employee.dart';
+import 'package:paywage/models/pay_type.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key, required this.title});
@@ -23,13 +24,39 @@ class _PaymentPageState extends State<PaymentPage> {
   List<TextEditingController> _totalAmount = [];
   List<TextEditingController> _paidAmount = [];
   List<bool> _isSelected = [false, false];
+  List<List<bool>> _isToggle = <List<bool>>[];
+  List<String> pay_type = <String>[];
+  List<String> selectedPayType = <String>[];
 
   @override
   void initState() {
     dateinput.text = "";
     this.fetchEmployee();
+    this.fetchPayType();
     super.initState();
   }
+
+  void fetchPayType() async {
+    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchPayType.php';
+    try {
+      http.Response response = await http.get(Uri.parse(url));
+      var data = response.body;
+      final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
+
+      final List<PayType> type =
+      parsed.map<PayType>((json) => PayType.fromJson(json)).toList();
+      setState(() {
+        for (var i = 0; i < type.length; i++) {
+          pay_type.add(type[i].type);
+        }
+      });
+
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
 
   Future getData() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
@@ -52,6 +79,7 @@ class _PaymentPageState extends State<PaymentPage> {
       setState(() {
         for (var i = 0; i < employee.length; i++) {
           employeeList.add(employee[i].firstName + " " + employee[i].lastName);
+          _isToggle.add(_isSelected);
         }
       });
     } catch (e) {
@@ -173,7 +201,10 @@ class _PaymentPageState extends State<PaymentPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasError) print(snapshot.error);
                   return snapshot.hasData
-                      ? ListView.builder(
+                      ?
+                      /*  Container(
+    margin: const EdgeInsets.all(10.0),*/
+                      ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           itemCount: snapshot.data.length,
@@ -185,6 +216,9 @@ class _PaymentPageState extends State<PaymentPage> {
                             _totalAmount.add(new TextEditingController());
                             _totalAmount[index].text = "0";
                             _paidAmount.add(new TextEditingController());
+                            for (int i = 0; i < list.length; i++) {
+                              selectedPayType.add("Regular");
+                            }
 
                             return Card(
                               shape: RoundedRectangleBorder(
@@ -260,8 +294,52 @@ class _PaymentPageState extends State<PaymentPage> {
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
+
                                       children: <Widget>[
-                                        Container(
+                                      /*  new Expanded(
+                                          child:*/ new DecoratedBox(
+                                            decoration: BoxDecoration(
+                                              color: Color(0xff7C8362),
+                                              //background color of dropdown button
+                                              border: Border.all(color: Colors.white),
+                                              //border of dropdown button
+                                              borderRadius: BorderRadius.circular(
+                                                  10), //border radius of dropdown button
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: 15, right: 15),
+                                              child: DropdownButton(
+                                                dropdownColor: Color(0xff7C8362),
+                                                underline: Container(),
+                                                value: selectedPayType[index],
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold),
+                                                icon: const Icon(
+                                                  Icons.keyboard_arrow_down,
+                                                  color: Colors.white,
+                                                ),
+
+                                                items: pay_type.map((String type) {
+                                                  return DropdownMenuItem(
+                                                    value: type,
+                                                    child: Text(
+                                                      type,
+                                                    ),
+                                                  );
+                                                }).toList(),
+                                                onChanged: (String? newValue) {
+                                                  setState(() {
+                                                    selectedPayType[index] = newValue!;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                      //  ),
+
+                                        /*   Container(
                                           padding: EdgeInsets.zero,
                                           decoration: BoxDecoration(
                                             color: Color(0xff7C8362),
@@ -271,7 +349,20 @@ class _PaymentPageState extends State<PaymentPage> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(12.0)),
                                           ),
+
                                           child: ToggleButtons(
+
+                                            isSelected: _isToggle[index],
+                                            onPressed: (int pos) {
+                                              setState(() {
+                                                print(_isToggle.length);
+                                                print(index);
+                                                print(pos);
+                                             for (int i = 0; i < _isToggle[index].length; i++) {
+                                                  _isToggle[index][i] = i == pos;
+                                                }
+                                              });
+                                            },
                                             color: Colors.white,
                                             selectedColor: Colors.black,
                                             fillColor: Colors.white,
@@ -282,7 +373,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                                   "Advance",
                                                   style: TextStyle(
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                       fontSize: 16),
                                                 ),
                                               ),
@@ -292,26 +383,16 @@ class _PaymentPageState extends State<PaymentPage> {
                                                   "Regular",
                                                   style: TextStyle(
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                       fontSize: 16),
                                                 ),
                                               ),
                                             ],
-                                            isSelected: _isSelected,
-                                            onPressed: (int pos) {
-                                              setState(() {
-                                                for (int i = 0;
-                                                    i < _isSelected.length;
-                                                    i++) {
-                                                  _isSelected[i] = i == pos;
-                                                }
-                                              });
-                                            },
                                           ),
                                           // ) ,
-                                        ),
+                                        ),*/
                                         SizedBox(
-                                          width: 150,
+                                          width: 180,
                                           height: 50,
                                           child: TextField(
                                             decoration: InputDecoration(
