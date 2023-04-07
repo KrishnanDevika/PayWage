@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:paywage/models/employee.dart';
 import 'package:paywage/models/pay_type.dart';
+import 'package:paywage/models/attendance.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key, required this.title});
@@ -27,12 +28,15 @@ class _PaymentPageState extends State<PaymentPage> {
   List<List<bool>> _isToggle = <List<bool>>[];
   List<String> pay_type = <String>[];
   List<String> selectedPayType = <String>[];
+  List<int> daysWorked = <int>[];
+  List<int> payAmount = <int>[];
 
   @override
   void initState() {
     dateinput.text = "";
-    this.fetchEmployee();
+   // this.fetchEmployee();
     this.fetchPayType();
+  //  this.fetchWorkingDetails();
     super.initState();
   }
 
@@ -59,32 +63,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
 
   Future getData() async {
-    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
-    var response = await http.get(Uri.parse(url), headers: {
-      "Accept": "application/json",
-      "Access-Control-Allow-Origin": "*"
-    });
+    var url = 'https://dkrishnan.scweb.ca/Paywage/calculatePay.php';
+    var response = await http.get(Uri.parse(url));
     return json.decode(response.body);
-  }
-
-  void fetchEmployee() async {
-    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
-    try {
-      http.Response response = await http.get(Uri.parse(url));
-      var data = response.body;
-      final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
-
-      final List<Employee> employee =
-          parsed.map<Employee>((json) => Employee.fromJson(json)).toList();
-      setState(() {
-        for (var i = 0; i < employee.length; i++) {
-          employeeList.add(employee[i].firstName + " " + employee[i].lastName);
-          _isToggle.add(_isSelected);
-        }
-      });
-    } catch (e) {
-      print(e);
-    }
   }
 
   void _onItemTapped(int index) {
@@ -214,10 +195,23 @@ class _PaymentPageState extends State<PaymentPage> {
                                 ' ' +
                                 list[index]['last_name'];
                             _totalAmount.add(new TextEditingController());
-                            _totalAmount[index].text = "0";
+                            if(list[index]['salary_type'] == 2) {
+                              int end = int.parse(list[index]['end_time'].replaceAll(RegExp(r'[^0-9]'),''));
+                              int start = int.parse(list[index]['start_time'].replaceAll(RegExp(r'[^0-9]'),''));
+                              int diff = end - start;
+                              int pay = list[index]['pay_rate'];
+                              double amount =(diff/100) * pay * list[index]['WorkedDays'] ;
+                              _totalAmount[index].text = '\u0024 ${amount.round()}';
+                            }
+                            if(list[index]['salary_type'] == 1) {
+                              _totalAmount[index].text =
+                              '\u0024 ${list[index]['WorkedDays'] *
+                                  list[index]['pay_rate']}';
+                            }
                             _paidAmount.add(new TextEditingController());
                             for (int i = 0; i < list.length; i++) {
                               selectedPayType.add("Regular");
+
                             }
 
                             return Card(
