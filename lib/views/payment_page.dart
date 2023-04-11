@@ -143,7 +143,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   controller: searchController,
                   decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color(0xff7C8362),
+                      fillColor: CustomColors.paleGreenColour,
                       prefixIcon: IconButton(
                         icon: const Icon(
                           Icons.search,
@@ -238,7 +238,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     style: TextStyle(color: CustomColors.lightModeTextColor, fontSize: 20),
                     decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xff7C8362),
+                    fillColor: CustomColors.paleGreenColour,
                     enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     )
@@ -263,7 +263,7 @@ class _PaymentPageState extends State<PaymentPage> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff7C8362),
+        backgroundColor: CustomColors.paleGreenColour,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => AddEmployeePage(title: 'Pay Wage')));

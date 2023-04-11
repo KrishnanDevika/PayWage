@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../CustomTheme/CustomColors.dart';
+
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
 
@@ -31,7 +33,7 @@ class _ForgotPasswordPage extends State<ForgotPassword> {
           // Application Name
           const Padding(padding: EdgeInsets.only(bottom: 60),
             child:  Center(
-              child: Text('Pay Wage', style: (TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Color.fromRGBO(49, 71, 58, 1))),),
+              child: Text('Pay Wage', style: (TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: CustomColors.darkGreenColour)),),
             ),
           ),
 
@@ -43,7 +45,7 @@ class _ForgotPasswordPage extends State<ForgotPassword> {
                 height: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, .5))],
+                  boxShadow: const [BoxShadow(color: CustomColors.paleGreenColour)],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10, right: 20, left: 20),
@@ -67,9 +69,9 @@ class _ForgotPasswordPage extends State<ForgotPassword> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
-                boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, 1))],
+                boxShadow: [BoxShadow(color: CustomColors.paleGreenColour.withOpacity(1))],
               ),
-              child: const SizedBox(
+              child: SizedBox(
                 width: 300,
                 height: 50,
                 child: Padding(
@@ -78,10 +80,10 @@ class _ForgotPasswordPage extends State<ForgotPassword> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color.fromRGBO(49, 71, 58, 0.5),
+                      fillColor: CustomColors.darkGreenColour.withOpacity(0.5),
                       icon: Icon(
                         Icons.email,
-                        color: Colors.white,
+                        color: CustomColors.lightModeTextColor,
                       ),
                       labelText: 'Email',
                       enabledBorder: OutlineInputBorder(
@@ -108,11 +110,11 @@ class _ForgotPasswordPage extends State<ForgotPassword> {
                   ),
                 ),
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  const Color.fromRGBO(49, 71, 58, 1),
+                   CustomColors.darkGreenColour,
                 ),
                 side: MaterialStateProperty.all<BorderSide>(
                   const BorderSide(
-                    color: Color.fromRGBO(124, 131, 98, 1), // change the color here
+                    color: CustomColors.paleGreenColour, // change the color here
                     width: 4.0, // change the width here
                   ),
                 ),

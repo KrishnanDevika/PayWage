@@ -36,7 +36,8 @@ dependencies:
   firebase_core: ^1.10.6
   flutter_facebook_auth: '^3.5.0'
   toggle_switch: ^2.0.1
-
+  provider:
+  shared_preferences:
   intl: ^0.17.0
   http: ^0.13.5
 
@@ -46,7 +47,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  ff_navigation_bar: ^0.1.5
 
 dev_dependencies:
   flutter_test:

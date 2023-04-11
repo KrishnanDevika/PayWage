@@ -9,6 +9,8 @@ import 'package:paywage/models/occupation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../CustomTheme/CustomColors.dart';
+
 class AttendancePage extends StatefulWidget {
   const AttendancePage({super.key, required this.title});
 
@@ -117,7 +119,7 @@ class _AttendancePageState extends State<AttendancePage> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xff7C8362).withOpacity(0.5),
+                  color: CustomColors.paleGreenColour.withOpacity(0.5),
                 ),
                 margin: EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
                 child: Row(
@@ -128,7 +130,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       // padding: EdgeInsets.only(left: 130, top: 0, right: 30, bottom: 0),
                       icon: Icon(Icons.arrow_back_ios_new),
                       iconSize: 20,
-                      color: Colors.white,
+                      color: CustomColors.lightModeTextColor,
                       onPressed: () {
                         setState(() {
                           DateFormat inputFormat = DateFormat('dd-MM-yyyy');
@@ -146,7 +148,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       width: 120,
                       child: TextField(
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: CustomColors.lightModeTextColor),
                         controller: dateinput,
 
                         //editing controller of this TextField
@@ -180,11 +182,11 @@ class _AttendancePageState extends State<AttendancePage> {
                   controller: searchController,
                   decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color(0xff7C8362),
+                      fillColor: CustomColors.paleGreenColour,
                       prefixIcon: IconButton(
                         icon: Icon(
                           Icons.search,
-                          color: Colors.white,
+                          color: CustomColors.lightModeTextColor,
                         ),
                         onPressed: () {},
                       ),
@@ -211,7 +213,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
                       ),
-                      color: Color(0xff31473A),
+                      color: CustomColors.darkGreenColour,
                       child: Column(
                         children: [
                           Padding(
@@ -223,7 +225,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                 Text(
                                   employeeList[index],
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: CustomColors.lightModeTextColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),
                                 ),
@@ -232,7 +234,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                     value: index,
                                     groupValue: groupValue,
                                     fillColor: MaterialStateColor.resolveWith(
-                                        (states) => Colors.white),
+                                        (states) => CustomColors.lightModeTextColor),
                                     toggleable: true,
                                     onChanged: (int? value) {
                                       setState(() {
@@ -252,7 +254,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                 Text(
                                   "In",
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: CustomColors.lightModeTextColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16),
                                 ),
@@ -263,14 +265,14 @@ class _AttendancePageState extends State<AttendancePage> {
                                   child: TextField(
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: Color(0xff7C8362),
+                                      fillColor: CustomColors.paleGreenColour,
                                       border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(20.0),
                                       ),
                                     ),
 
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: CustomColors.lightModeTextColor),
                                     textAlign: TextAlign.center,
                                     controller: _timeinput[index],
                                     //editing controller of this TextField
@@ -310,7 +312,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                 Text(
                                   "Out",
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: CustomColors.lightModeTextColor,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16),
                                 ),
@@ -320,14 +322,14 @@ class _AttendancePageState extends State<AttendancePage> {
                                   child: TextField(
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: Color(0xff7C8362),
+                                      fillColor: CustomColors.paleGreenColour,
                                       border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(20.0),
                                       ),
                                     ),
 
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: CustomColors.lightModeTextColor),
                                     textAlign: TextAlign.center,
                                     controller: _timeOut[index],
                                     //editing controller of this TextField
@@ -372,23 +374,23 @@ class _AttendancePageState extends State<AttendancePage> {
 
                                 Expanded(child:  DecoratedBox(
                                   decoration: BoxDecoration(
-                                    color: Color(0xff7C8362),
+                                    color: CustomColors.paleGreenColour,
                                     border: Border.all(color: Colors.black38),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 30),
                                     child: DropdownButton(
-                                      dropdownColor: Color(0xff7C8362),
+                                      dropdownColor: CustomColors.paleGreenColour,
                                       underline: Container(),
                                       value: selectedSiteValue[index],
                                       style: const TextStyle(
-                                          color: Colors.white,
+                                          color: CustomColors.lightModeTextColor,
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold),
                                       icon: const Icon(
                                         Icons.keyboard_arrow_down,
-                                        color: Colors.white,
+                                        color: CustomColors.lightModeTextColor,
                                       ),
                                       items: sitesList.map((String items) {
                                         return DropdownMenuItem(
@@ -412,7 +414,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                SizedBox(width: 10),
                                Expanded(child:   DecoratedBox(
                                  decoration: BoxDecoration(
-                                   color: Color(0xff7C8362),
+                                   color: CustomColors.paleGreenColour,
                                    border: Border.all(color: Colors.black38),
                                    borderRadius: BorderRadius.circular(20),
                                  ),
@@ -421,13 +423,13 @@ class _AttendancePageState extends State<AttendancePage> {
                                    EdgeInsets.only(left: 20),
 
                                    child: DropdownButton(
-                                     dropdownColor: Color(0xff7C8362),
+                                     dropdownColor: CustomColors.paleGreenColour,
                                      underline: Container(),
                                      value: selectedOccupationValue[index],
 
                                      icon: const Icon(
                                        Icons.keyboard_arrow_down,
-                                       color: Colors.white,
+                                       color: CustomColors.lightModeTextColor,
                                      ),
                                      items: occupationList.map((String items) {
                                        return DropdownMenuItem(
@@ -442,7 +444,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                      // After selecting the desired option,it will
                                      // change button value to selected value
                                      style: const TextStyle(
-                                         color: Colors.white,
+                                         color: CustomColors.lightModeTextColor,
                                          fontSize:14,
                                          fontWeight: FontWeight.bold),
                                      onChanged: (String? newValue) {
@@ -470,14 +472,14 @@ class _AttendancePageState extends State<AttendancePage> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff7C8362),
+        backgroundColor: CustomColors.paleGreenColour,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => AddEmployeePage(title: 'Pay Wage')));
         },
         child: const Icon(
           Icons.add,
-          color: Colors.white,
+          color: CustomColors.lightModeTextColor,
         ),
       ),
 

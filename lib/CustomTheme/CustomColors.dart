@@ -6,3 +6,4 @@ class CustomColors{
   static const Color lightModeTextColor = Colors.white;
   static const Color darkModeTextColor = Colors.black;
 }
+

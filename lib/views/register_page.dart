@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:paywage/3rd%20party%20Auth/google_sign_in_button.dart';
+import 'package:paywage/CustomTheme/CustomColors.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key, required this.title});
@@ -35,7 +36,7 @@ class _RegisterPage extends State<RegisterPage> {
           // Application Name
           const Padding(padding: EdgeInsets.only(bottom: 60),
             child:  Center(
-              child: Text('Pay Wage', style: (TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Color.fromRGBO(49, 71, 58, 1))),),
+              child: Text('Pay Wage', style: (TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: CustomColors.darkGreenColour)),),
             ),
           ),
 
@@ -47,7 +48,7 @@ class _RegisterPage extends State<RegisterPage> {
                 height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, .5))],
+                  boxShadow: [BoxShadow(color: CustomColors.paleGreenColour.withOpacity(0.5))],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10, right: 20, left: 20),

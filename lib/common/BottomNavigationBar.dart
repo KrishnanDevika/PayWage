@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paywage/CustomTheme/CustomColors.dart';
 
 // class BottomNavigation extends StatefulWidget {
 //   const BottomNavigation({super.key});
@@ -23,7 +24,7 @@ Widget BottomNavigation(int index) {
 
   int _selectedIndex = index;
     return BottomNavigationBar(
-      backgroundColor: Color(0xff7C8362),
+      backgroundColor: CustomColors.paleGreenColour,
       currentIndex: _selectedIndex,
      onTap: (index){
         setState(){

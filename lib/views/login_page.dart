@@ -58,7 +58,7 @@ class _LoginPage extends State<LoginPage> {
                       fillColor: CustomColors.darkGreenColour,
                       icon: Icon(
                         Icons.person,
-                        color: Colors.white,
+                        color: CustomColors.lightModeTextColor,
                       ),
                       labelText: 'User ID',
                       labelStyle: TextStyle(
@@ -97,7 +97,7 @@ class _LoginPage extends State<LoginPage> {
                       fillColor: CustomColors.darkGreenColour,
                       icon: Icon(
                         Icons.key,
-                        color: Colors.white,
+                        color: CustomColors.lightModeTextColor,
                       ),
                       labelText: 'Password',
                       labelStyle: TextStyle(
