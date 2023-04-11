@@ -18,7 +18,7 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  List<String> employeeList = <String>[];
+  List<int> employeeList = <int>[];
   int _selectedIndex = 1;
   TextEditingController dateinput = TextEditingController();
   TextEditingController searchController = TextEditingController();
@@ -30,13 +30,15 @@ class _PaymentPageState extends State<PaymentPage> {
   List<String> selectedPayType = <String>[];
   List<int> daysWorked = <int>[];
   List<int> payAmount = <int>[];
+  List<String> firstname = <String>[];
+  List<String> lastName = <String>[];
 
   @override
   void initState() {
     dateinput.text = "";
-   // this.fetchEmployee();
+    this.fetchEmployee();
     this.fetchPayType();
-  //  this.fetchWorkingDetails();
+    //  this.fetchWorkingDetails();
     super.initState();
   }
 
@@ -48,24 +50,55 @@ class _PaymentPageState extends State<PaymentPage> {
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
 
       final List<PayType> type =
-      parsed.map<PayType>((json) => PayType.fromJson(json)).toList();
+          parsed.map<PayType>((json) => PayType.fromJson(json)).toList();
       setState(() {
         for (var i = 0; i < type.length; i++) {
           pay_type.add(type[i].type);
         }
       });
-
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
+  void fetchEmployee() async {
+    var url = 'https://dkrishnan.scweb.ca/Paywage/calculatePay.php';
+    try {
+      http.Response response = await http.get(Uri.parse(url));
+      var data = response.body;
+      final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
+
+      final List<Attendance> list =
+          parsed.map<Attendance>((json) => Attendance.fromJson(json)).toList();
+      setState(() {
+        for (var i = 0; i < list.length; i++) {
+          employeeList.add(list[i].empId);
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future getData() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/calculatePay.php';
     var response = await http.get(Uri.parse(url));
     return json.decode(response.body);
+  }
+
+  Future insertPayment(String fName, String lName, String date, String payType,
+      int amount) async {
+    final response = await http.post(
+        Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertPayment.php'),
+        body: {
+          "first_name": fName,
+          "last_name": lName,
+          "date": date,
+          "pay_type": payType,
+          "payment_amount": amount.toString(),
+        });
+
+    print((response.body));
   }
 
   void _onItemTapped(int index) {
@@ -182,10 +215,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasError) print(snapshot.error);
                   return snapshot.hasData
-                      ?
-                      /*  Container(
-    margin: const EdgeInsets.all(10.0),*/
-                      ListView.builder(
+                      ? ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           itemCount: snapshot.data.length,
@@ -195,23 +225,28 @@ class _PaymentPageState extends State<PaymentPage> {
                                 ' ' +
                                 list[index]['last_name'];
                             _totalAmount.add(new TextEditingController());
-                            if(list[index]['salary_type'] == 2) {
-                              int end = int.parse(list[index]['end_time'].replaceAll(RegExp(r'[^0-9]'),''));
-                              int start = int.parse(list[index]['start_time'].replaceAll(RegExp(r'[^0-9]'),''));
+                            if (list[index]['salary_type'] == 2) {
+                              int end = int.parse(list[index]['end_time']
+                                  .replaceAll(RegExp(r'[^0-9]'), ''));
+                              int start = int.parse(list[index]['start_time']
+                                  .replaceAll(RegExp(r'[^0-9]'), ''));
                               int diff = end - start;
                               int pay = list[index]['pay_rate'];
-                              double amount =(diff/100) * pay * list[index]['WorkedDays'] ;
-                              _totalAmount[index].text = '\u0024 ${amount.round()}';
-                            }
-                            if(list[index]['salary_type'] == 1) {
+                              double amount = (diff / 100) *
+                                  pay *
+                                  list[index]['WorkedDays'];
                               _totalAmount[index].text =
-                              '\u0024 ${list[index]['WorkedDays'] *
-                                  list[index]['pay_rate']}';
+                                  '\u0024 ${amount.round()}';
+                            }
+                            if (list[index]['salary_type'] == 1) {
+                              _totalAmount[index].text =
+                                  '\u0024 ${list[index]['WorkedDays'] * list[index]['pay_rate']}';
                             }
                             _paidAmount.add(new TextEditingController());
                             for (int i = 0; i < list.length; i++) {
+                              firstname.add(list[i]['first_name']);
+                              lastName.add(list[i]['last_name']);
                               selectedPayType.add("Regular");
-
                             }
 
                             return Card(
@@ -288,50 +323,53 @@ class _PaymentPageState extends State<PaymentPage> {
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
-
                                       children: <Widget>[
-                                      /*  new Expanded(
-                                          child:*/ new DecoratedBox(
-                                            decoration: BoxDecoration(
-                                              color: Color(0xff7C8362),
-                                              //background color of dropdown button
-                                              border: Border.all(color: Colors.white),
-                                              //border of dropdown button
-                                              borderRadius: BorderRadius.circular(
-                                                  10), //border radius of dropdown button
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.only(left: 15, right: 15),
-                                              child: DropdownButton(
-                                                dropdownColor: Color(0xff7C8362),
-                                                underline: Container(),
-                                                value: selectedPayType[index],
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold),
-                                                icon: const Icon(
-                                                  Icons.keyboard_arrow_down,
+                                        /*  new Expanded(
+                                          child:*/
+                                        new DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff7C8362),
+                                            //background color of dropdown button
+                                            border:
+                                                Border.all(color: Colors.white),
+                                            //border of dropdown button
+                                            borderRadius: BorderRadius.circular(
+                                                10), //border radius of dropdown button
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 15, right: 15),
+                                            child: DropdownButton(
+                                              dropdownColor: Color(0xff7C8362),
+                                              underline: Container(),
+                                              value: selectedPayType[index],
+                                              style: const TextStyle(
                                                   color: Colors.white,
-                                                ),
-
-                                                items: pay_type.map((String type) {
-                                                  return DropdownMenuItem(
-                                                    value: type,
-                                                    child: Text(
-                                                      type,
-                                                    ),
-                                                  );
-                                                }).toList(),
-                                                onChanged: (String? newValue) {
-                                                  setState(() {
-                                                    selectedPayType[index] = newValue!;
-                                                  });
-                                                },
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                              icon: const Icon(
+                                                Icons.keyboard_arrow_down,
+                                                color: Colors.white,
                                               ),
+                                              items:
+                                                  pay_type.map((String type) {
+                                                return DropdownMenuItem(
+                                                  value: type,
+                                                  child: Text(
+                                                    type,
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              onChanged: (String? newValue) {
+                                                setState(() {
+                                                  selectedPayType[index] =
+                                                      newValue!;
+                                                });
+                                              },
                                             ),
                                           ),
-                                      //  ),
+                                        ),
+                                        //  ),
 
                                         /*   Container(
                                           padding: EdgeInsets.zero,
@@ -441,6 +479,37 @@ class _PaymentPageState extends State<PaymentPage> {
                         backgroundColor: Color(0xff31473A),
                         foregroundColor: Colors.white),
                     onPressed: () {
+                      // print(employeeList.length);
+                      for (int index = 0;
+                          index < employeeList.length;
+                          index++) {
+
+                        int pendingAmount = 0;
+                        if (selectedPayType[index] == "Regular") {
+                          pendingAmount = int.parse(_totalAmount[index]
+                                  .text
+                                  .replaceAll(RegExp(r'[^0-9]'), '')) -
+                              int.parse(_paidAmount[index]
+                                  .text
+                                  .replaceAll(RegExp(r'[^0-9]'), ''));
+                        }
+                        if (selectedPayType[index] == "Advance") {
+                          pendingAmount = int.parse(_totalAmount[index]
+                                  .text
+                                  .replaceAll(RegExp(r'[^0-9]'), '')) -
+                              int.parse(_paidAmount[index]
+                                  .text
+                                  .replaceAll(RegExp(r'[^0-9]'), ''));
+                        }
+
+                        insertPayment(
+                            firstname[index],
+                            lastName[index],
+                            dateinput.text,
+                            selectedPayType[index],
+                            pendingAmount);
+
+                      }
                       final snackBar = SnackBar(
                         content: Text(
                           'Payment Updated',
@@ -449,7 +518,8 @@ class _PaymentPageState extends State<PaymentPage> {
                         backgroundColor: Color(0xff31473A),
                         action: SnackBarAction(
                           label: 'dismiss',
-                          onPressed: () {},
+                          onPressed: () {
+                          },
                         ),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
