@@ -8,6 +8,7 @@ import 'package:paywage/models/employee.dart';
 import 'package:paywage/models/job_site.dart';
 import 'package:paywage/models/occupation.dart';
 import 'package:paywage/views/update_employee.dart';
+import 'package:paywage/views/view_employee.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -45,6 +46,7 @@ class _AttendancePageState extends State<AttendancePage> {
     this.fetchEmployee();
     this.fetchJobSites();
     this.fetchOccupation();
+
     super.initState();
   }
 
@@ -134,8 +136,7 @@ class _AttendancePageState extends State<AttendancePage> {
           dateList.add(employee[i].startDate);
           contactList.add(employee[i].contactNo);
         }
-        _isChecked = List<bool>.filled(employeeList.length, false);
-        textValue = List<String>.filled(employeeList.length, 'Absent');
+
       });
     } catch (e) {
       print(e);
@@ -341,10 +342,23 @@ class _AttendancePageState extends State<AttendancePage> {
                             for (int i = 0; i < list.length; i++) {
                               selectedSiteValue.add("Karur");
                               selectedOccupationValue.add("Roofing");
+                              _isChecked.add(false);
+                              textValue.add('Absent');
                             }
                             return InkWell(
                               onTap: () {
+
                                 Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        ViewEmployeePage(
+                                            title: 'Pay Wage',
+                                            list: list,
+                                            index: index)))
+                                    .then((value) => setState(() {
+                                  getData();
+                                }));
+                               /* Navigator.of(context)
                                     .push(MaterialPageRoute(
                                         builder: (context) =>
                                             UpdateEmployeePage(
@@ -354,7 +368,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                                 index: index)))
                                     .then((value) => setState(() {
                                           getData();
-                                        }));
+                                        }));*/
                               },
                               onLongPress: () {
                                 setState(() {
