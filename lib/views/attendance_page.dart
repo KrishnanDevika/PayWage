@@ -99,7 +99,7 @@ class _AttendancePageState extends State<AttendancePage> {
     );
   }
 
-  Future fetchAttendance(String date) async{
+  Future fetchAttendance(String date) async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchAttendance.php';
     final res = await http.post(Uri.parse(url), body: {
       'date': date,
@@ -111,8 +111,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
   Future getData() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
-    var response = await http.get(Uri.parse(url),
-    headers: {
+    var response = await http.get(Uri.parse(url), headers: {
       "Accept": "application/json",
       "Access-Control-Allow-Origin": "*"
     });
@@ -136,7 +135,6 @@ class _AttendancePageState extends State<AttendancePage> {
           dateList.add(employee[i].startDate);
           contactList.add(employee[i].contactNo);
         }
-
       });
     } catch (e) {
       print(e);
@@ -157,9 +155,7 @@ class _AttendancePageState extends State<AttendancePage> {
           sitesList.add(sites[i].siteName);
         }
       });
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   void fetchOccupation() async {
@@ -326,366 +322,368 @@ class _AttendancePageState extends State<AttendancePage> {
               FutureBuilder(
                 future: getData(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasError) print(snapshot.error);
-                  return snapshot.hasData
-                      ? ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, index) {
-                            List list = snapshot.data;
-                            String name = list[index]['first_name'] +
-                                ' ' +
-                                list[index]['last_name'];
-                            _timeOut.add(new TextEditingController());
-                            _timeinput.add(new TextEditingController());
-                            for (int i = 0; i < list.length; i++) {
-                              selectedSiteValue.add("Karur");
-                              selectedOccupationValue.add("Roofing");
-                              _isChecked.add(false);
-                              textValue.add('Absent');
-                            }
-                            return InkWell(
-                              onTap: () {
-
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        ViewEmployeePage(
-                                            title: 'Pay Wage',
-                                            list: list,
-                                            index: index)))
-                                    .then((value) => setState(() {
-                                  getData();
-                                }));
-                               /* Navigator.of(context)
-                                    .push(MaterialPageRoute(
-                                        builder: (context) =>
-                                            UpdateEmployeePage(
-                                                title: 'Pay Wage',
-                                                list: list,
-                                                occupation: occupationList,
-                                                index: index)))
-                                    .then((value) => setState(() {
-                                          getData();
-                                        }));*/
-                              },
-                              onLongPress: () {
-                                setState(() {
-                                  showAlert(context, list[index]['id']);
-                                });
-                              },
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                color: Color(0xff31473A),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Text(
-                                        name,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: Text(
+                        'Add Employee data',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    );
+                  } else {
+                    return snapshot.hasData
+                        ? ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context, index) {
+                              List list = snapshot.data;
+                              String name = list[index]['first_name'] +
+                                  ' ' +
+                                  list[index]['last_name'];
+                              _timeOut.add(new TextEditingController());
+                              _timeinput.add(new TextEditingController());
+                              for (int i = 0; i < list.length; i++) {
+                                selectedSiteValue.add("Karur");
+                                selectedOccupationValue.add("Roofing");
+                                _isChecked.add(false);
+                                textValue.add('Absent');
+                              }
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              ViewEmployeePage(
+                                                  title: 'Pay Wage',
+                                                  list: list,
+                                                  index: index)))
+                                      .then((value) => setState(() {
+                                            getData();
+                                          }));
+                                },
+                                onLongPress: () {
+                                  setState(() {
+                                    showAlert(context, list[index]['id']);
+                                  });
+                                },
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  color: Color(0xff31473A),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Text(
+                                          name,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 10,
-                                          top: 0,
-                                          right: 10,
-                                          bottom: 2),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Switch(
-                                            value: _isChecked[index],
-                                            activeColor: Color(0xff7C8362),
-                                            activeTrackColor: Colors.white,
-                                            inactiveThumbColor:
-                                                Color(0xff7C8362),
-                                            inactiveTrackColor:
-                                                Color(0xff7C8362)
-                                                    .withOpacity(0.5),
-                                            onChanged: (val) {
-                                              if (_isChecked[index] == false) {
-                                                setState(() {
-                                                  _isChecked[index] = true;
-                                                  textValue[index] = 'Present';
-                                                });
-                                              } else {
-                                                setState(() {
-                                                  _isChecked[index] = false;
-                                                  textValue[index] = 'Absent';
-                                                });
-                                              }
-                                            },
-                                          ),
-                                          Text(textValue[index],
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 10,
+                                            top: 0,
+                                            right: 10,
+                                            bottom: 2),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Switch(
+                                              value: _isChecked[index],
+                                              activeColor: Color(0xff7C8362),
+                                              activeTrackColor: Colors.white,
+                                              inactiveThumbColor:
+                                                  Color(0xff7C8362),
+                                              inactiveTrackColor:
+                                                  Color(0xff7C8362)
+                                                      .withOpacity(0.5),
+                                              onChanged: (val) {
+                                                if (_isChecked[index] ==
+                                                    false) {
+                                                  setState(() {
+                                                    _isChecked[index] = true;
+                                                    textValue[index] =
+                                                        'Present';
+                                                  });
+                                                } else {
+                                                  setState(() {
+                                                    _isChecked[index] = false;
+                                                    textValue[index] = 'Absent';
+                                                  });
+                                                }
+                                              },
+                                            ),
+                                            Text(textValue[index],
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 30,
+                                            top: 0,
+                                            right: 30,
+                                            bottom: 4),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            Text(
+                                              "In",
                                               style: TextStyle(
-                                                  fontSize: 20,
                                                   color: Colors.white,
-                                                  fontWeight: FontWeight.bold)),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 30,
-                                          top: 0,
-                                          right: 30,
-                                          bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text(
-                                            "In",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16),
-                                          ),
-
-                                          SizedBox(
-                                            width: 100,
-                                            height: 40,
-                                            child: TextField(
-                                              decoration: InputDecoration(
-                                                filled: true,
-                                                fillColor: Color(0xff7C8362),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                ),
-                                              ),
-
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                              textAlign: TextAlign.center,
-                                              controller: _timeinput[index],
-                                              //editing controller of this TextField
-                                              readOnly: true,
-                                              //set it true, so that user will not able to edit text
-                                              onTap: () async {
-                                                final TimeOfDay? pickedTime =
-                                                    await showTimePicker(
-                                                  initialTime: TimeOfDay.now(),
-                                                  context: context,
-                                                );
-
-                                                if (pickedTime != null) {
-                                                  // print(pickedTime.format(context)); //output 10:51 PM
-                                                  DateTime parsedTime =
-                                                      DateFormat.jm().parse(
-                                                          pickedTime
-                                                              .format(context)
-                                                              .toString());
-                                                  //converting to DateTime so that we can further format on different pattern.
-                                                  //print(parsedTime); //output 1970-01-01 22:53:00.000
-                                                  String formattedTime =
-                                                      DateFormat('HH:mm')
-                                                          .format(parsedTime);
-                                                  //print(formattedTime); //output 14:59:00
-                                                  //DateFormat() is from intl package, you can format the time on any pattern you need.
-
-                                                  _timeinput[index].text =
-                                                      formattedTime; //set the value of text field.
-                                                }
-                                                ;
-                                              },
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
                                             ),
-                                          ),
-                                          SizedBox(width: 10),
 
-                                          Text(
-                                            "Out",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16),
-                                          ),
-                                          SizedBox(
-                                            width: 100,
-                                            height: 40,
-                                            child: TextField(
-                                              decoration: InputDecoration(
-                                                filled: true,
-                                                fillColor: Color(0xff7C8362),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                ),
-                                              ),
-
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                              textAlign: TextAlign.center,
-                                              controller: _timeOut[index],
-                                              //editing controller of this TextField
-                                              readOnly: true,
-                                              //set it true, so that user will not able to edit text
-                                              onTap: () async {
-                                                final TimeOfDay? pickedTime =
-                                                    await showTimePicker(
-                                                  initialTime: TimeOfDay.now(),
-                                                  context: context,
-                                                );
-
-                                                if (pickedTime != null) {
-                                                  //    print(pickedTime.format(context)); //output 10:51 PM
-                                                  DateTime parsedTime =
-                                                      DateFormat.jm().parse(
-                                                          pickedTime
-                                                              .format(context)
-                                                              .toString());
-                                                  //converting to DateTime so that we can further format on different pattern.
-                                                  //print(parsedTime); //output 1970-01-01 22:53:00.000
-                                                  String formattedTime =
-                                                      DateFormat('HH:mm')
-                                                          .format(parsedTime);
-                                                  _timeOut[index].text =
-                                                      formattedTime; //set the value of text field.
-                                                }
-                                                ;
-                                              },
-                                            ),
-                                          ),
-                                          // TextField()
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 10,
-                                          top: 10,
-                                          right: 10,
-                                          bottom: 10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          new Expanded(
-                                            child: DecoratedBox(
-                                              decoration: BoxDecoration(
-                                                color: Color(0xff7C8362),
-                                                border: Border.all(
-                                                    color: Colors.black38),
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 30),
-                                                child: DropdownButton(
-                                                  dropdownColor:
-                                                      Color(0xff7C8362),
-                                                  underline: Container(),
-                                                  value:
-                                                      selectedSiteValue[index],
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  icon: const Icon(
-                                                    Icons.keyboard_arrow_down,
-                                                    color: Colors.white,
+                                            SizedBox(
+                                              width: 100,
+                                              height: 40,
+                                              child: TextField(
+                                                decoration: InputDecoration(
+                                                  filled: true,
+                                                  fillColor: Color(0xff7C8362),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0),
                                                   ),
-                                                  items: sitesList
-                                                      .map((String items) {
-                                                    return DropdownMenuItem(
-                                                      value: items,
-                                                      child: Text(
-                                                        items,
-                                                      ),
-                                                      alignment:
-                                                          Alignment.center,
-                                                    );
-                                                  }).toList(),
-                                                  // After selecting the desired option,it will
-                                                  // change button value to selected value
-                                                  onChanged:
-                                                      (String? newValue) {
-                                                    setState(() {
-                                                      selectedSiteValue[index] =
-                                                          newValue!;
-                                                    });
-                                                  },
                                                 ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 10),
-                                          new Expanded(
-                                            child: DecoratedBox(
-                                              decoration: BoxDecoration(
-                                                color: Color(0xff7C8362),
-                                                border: Border.all(
-                                                    color: Colors.black38),
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 20),
-                                                child: DropdownButton(
-                                                  dropdownColor:
-                                                      Color(0xff7C8362),
-                                                  underline: Container(),
-                                                  value:
-                                                      selectedOccupationValue[
-                                                          index],
 
-                                                  icon: const Icon(
-                                                    Icons.keyboard_arrow_down,
-                                                    color: Colors.white,
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                                controller: _timeinput[index],
+                                                //editing controller of this TextField
+                                                readOnly: true,
+                                                //set it true, so that user will not able to edit text
+                                                onTap: () async {
+                                                  final TimeOfDay? pickedTime =
+                                                      await showTimePicker(
+                                                    initialTime:
+                                                        TimeOfDay.now(),
+                                                    context: context,
+                                                  );
+
+                                                  if (pickedTime != null) {
+                                                    // print(pickedTime.format(context)); //output 10:51 PM
+                                                    DateTime parsedTime =
+                                                        DateFormat.jm().parse(
+                                                            pickedTime
+                                                                .format(context)
+                                                                .toString());
+                                                    //converting to DateTime so that we can further format on different pattern.
+                                                    //print(parsedTime); //output 1970-01-01 22:53:00.000
+                                                    String formattedTime =
+                                                        DateFormat('HH:mm')
+                                                            .format(parsedTime);
+                                                    //print(formattedTime); //output 14:59:00
+                                                    //DateFormat() is from intl package, you can format the time on any pattern you need.
+
+                                                    _timeinput[index].text =
+                                                        formattedTime; //set the value of text field.
+                                                  }
+                                                  ;
+                                                },
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+
+                                            Text(
+                                              "Out",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
+                                            ),
+                                            SizedBox(
+                                              width: 100,
+                                              height: 40,
+                                              child: TextField(
+                                                decoration: InputDecoration(
+                                                  filled: true,
+                                                  fillColor: Color(0xff7C8362),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0),
                                                   ),
-                                                  items: occupationList
-                                                      .map((String items) {
-                                                    return DropdownMenuItem(
-                                                      value: items,
-                                                      child: Text(
-                                                        items,
-                                                      ),
-                                                      alignment:
-                                                          Alignment.center,
-                                                    );
-                                                  }).toList(),
-                                                  // After selecting the desired option,it will
-                                                  // change button value to selected value
-                                                  style: const TextStyle(
+                                                ),
+
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                                controller: _timeOut[index],
+                                                //editing controller of this TextField
+                                                readOnly: true,
+                                                //set it true, so that user will not able to edit text
+                                                onTap: () async {
+                                                  final TimeOfDay? pickedTime =
+                                                      await showTimePicker(
+                                                    initialTime:
+                                                        TimeOfDay.now(),
+                                                    context: context,
+                                                  );
+
+                                                  if (pickedTime != null) {
+                                                    //    print(pickedTime.format(context)); //output 10:51 PM
+                                                    DateTime parsedTime =
+                                                        DateFormat.jm().parse(
+                                                            pickedTime
+                                                                .format(context)
+                                                                .toString());
+                                                    //converting to DateTime so that we can further format on different pattern.
+                                                    //print(parsedTime); //output 1970-01-01 22:53:00.000
+                                                    String formattedTime =
+                                                        DateFormat('HH:mm')
+                                                            .format(parsedTime);
+                                                    _timeOut[index].text =
+                                                        formattedTime; //set the value of text field.
+                                                  }
+                                                  ;
+                                                },
+                                              ),
+                                            ),
+                                            // TextField()
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 10,
+                                            top: 10,
+                                            right: 10,
+                                            bottom: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: <Widget>[
+                                            new Expanded(
+                                              child: DecoratedBox(
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xff7C8362),
+                                                  border: Border.all(
+                                                      color: Colors.black38),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 30),
+                                                  child: DropdownButton(
+                                                    dropdownColor:
+                                                        Color(0xff7C8362),
+                                                    underline: Container(),
+                                                    value: selectedSiteValue[
+                                                        index],
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    icon: const Icon(
+                                                      Icons.keyboard_arrow_down,
                                                       color: Colors.white,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  onChanged:
-                                                      (String? newValue) {
-                                                    setState(() {
-                                                      selectedOccupationValue[
-                                                          index] = newValue!;
-                                                    });
-                                                  },
+                                                    ),
+                                                    items: sitesList
+                                                        .map((String items) {
+                                                      return DropdownMenuItem(
+                                                        value: items,
+                                                        child: Text(
+                                                          items,
+                                                        ),
+                                                        alignment:
+                                                            Alignment.center,
+                                                      );
+                                                    }).toList(),
+                                                    // After selecting the desired option,it will
+                                                    // change button value to selected value
+                                                    onChanged:
+                                                        (String? newValue) {
+                                                      setState(() {
+                                                        selectedSiteValue[
+                                                            index] = newValue!;
+                                                      });
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                            SizedBox(width: 10),
+                                            new Expanded(
+                                              child: DecoratedBox(
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xff7C8362),
+                                                  border: Border.all(
+                                                      color: Colors.black38),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 20),
+                                                  child: DropdownButton(
+                                                    dropdownColor:
+                                                        Color(0xff7C8362),
+                                                    underline: Container(),
+                                                    value:
+                                                        selectedOccupationValue[
+                                                            index],
+
+                                                    icon: const Icon(
+                                                      Icons.keyboard_arrow_down,
+                                                      color: Colors.white,
+                                                    ),
+                                                    items: occupationList
+                                                        .map((String items) {
+                                                      return DropdownMenuItem(
+                                                        value: items,
+                                                        child: Text(
+                                                          items,
+                                                        ),
+                                                        alignment:
+                                                            Alignment.center,
+                                                      );
+                                                    }).toList(),
+                                                    // After selecting the desired option,it will
+                                                    // change button value to selected value
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    onChanged:
+                                                        (String? newValue) {
+                                                      setState(() {
+                                                        selectedOccupationValue[
+                                                            index] = newValue!;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          })
-                      : CircularProgressIndicator();
+                              );
+                            })
+                        : CircularProgressIndicator();
+                  }
                 },
               ),
 
@@ -996,6 +994,8 @@ class _AttendancePageState extends State<AttendancePage> {
                         backgroundColor: Color(0xff31473A),
                         foregroundColor: Colors.white),
                     onPressed: () {
+                      this.fetchEmployee();
+                      print(employeeList.length);
                       for (int index = 0;
                           index < employeeList.length;
                           index++) {
