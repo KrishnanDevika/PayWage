@@ -50,7 +50,7 @@ android {
 
         //step 2 change to Avoid the 64 limit : minSdkVersion 16
 
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -80,3 +80,5 @@ dependencies {
     implementation "androidx.multidex:multidex:$multidex_version"
     implementation "androidx.multidex:multidex:2.0.1"
 }
+
+apply plugin: 'com.google.gms.google-services'
