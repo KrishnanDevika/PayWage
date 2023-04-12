@@ -158,6 +158,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                             ),
                           ),
                           controller: firstName,
+                          readOnly: true,
                         ))
                   ],
                 ),
@@ -190,6 +191,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                             ),
                           ),
                           controller: lastName,
+                          readOnly: true,
                         ))
                   ],
                 ),
@@ -215,10 +217,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                         child: TextField(
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.calendar_month_sharp,
-                              color: Colors.white,
-                            ),
+
                             fillColor: Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
@@ -242,6 +241,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                             }
                           },*/
                           controller: startDate,
+                          readOnly: true,
                         ))
                   ],
                 ),
@@ -274,6 +274,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                             ),
                           ),
                           controller: contact,
+                          readOnly: true,
                         ))
                   ],
                 ),
@@ -306,6 +307,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                             ),
                           ),
                           controller: street,
+                          readOnly: true,
                         ))
                   ],
                 ),
@@ -338,6 +340,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                             ),
                           ),
                           controller: city,
+                          readOnly: true,
                         ))
                   ],
                 ),
@@ -370,6 +373,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                             ),
                           ),
                           controller: state,
+                          readOnly: true,
                         ))
                   ],
                 ),
@@ -402,6 +406,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                             ),
                           ),
                           controller: occupation,
+                          readOnly: true,
                         ))
                   ],
                 ),
@@ -434,6 +439,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                             ),
                           ),
                           controller: wageType,
+                          readOnly: true,
                         ))
                   ],
                 ),
@@ -466,6 +472,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                             ),
                           ),
                           controller: baseRate,
+                          readOnly: true,
                         ))
                   ],
                 ),
