@@ -57,7 +57,7 @@ class _PaymentPageState extends State<PaymentPage> {
         }
       });
     } catch (e) {
-      print(e);
+
     }
   }
 
@@ -76,7 +76,7 @@ class _PaymentPageState extends State<PaymentPage> {
         }
       });
     } catch (e) {
-      print(e);
+
     }
   }
 
@@ -213,165 +213,170 @@ class _PaymentPageState extends State<PaymentPage> {
               FutureBuilder(
                 future: getData(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasError) print(snapshot.error);
+                  if(snapshot.hasError) print(snapshot.error);
+              /*  if(!snapshot.hasData){
+                return Center(child: Text('No Employee data Found', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),);
+                }*/
+              //  else {
                   return snapshot.hasData
                       ? ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, index) {
-                            List list = snapshot.data;
-                            String name = list[index]['first_name'] +
-                                ' ' +
-                                list[index]['last_name'];
-                            _totalAmount.add(new TextEditingController());
-                            if (list[index]['salary_type'] == 2) {
-                              int end = int.parse(list[index]['end_time']
-                                  .replaceAll(RegExp(r'[^0-9]'), ''));
-                              int start = int.parse(list[index]['start_time']
-                                  .replaceAll(RegExp(r'[^0-9]'), ''));
-                              int diff = end - start;
-                              int pay = list[index]['pay_rate'];
-                              double amount = (diff / 100) *
-                                  pay *
-                                  list[index]['WorkedDays'];
-                              _totalAmount[index].text =
-                                  '\u0024 ${amount.round()}';
-                            }
-                            if (list[index]['salary_type'] == 1) {
-                              _totalAmount[index].text =
-                                  '\u0024 ${list[index]['WorkedDays'] * list[index]['pay_rate']}';
-                            }
-                            _paidAmount.add(new TextEditingController());
-                            for (int i = 0; i < list.length; i++) {
-                              firstname.add(list[i]['first_name']);
-                              lastName.add(list[i]['last_name']);
-                              selectedPayType.add("Regular");
-                            }
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        List list = snapshot.data;
+                        String name = list[index]['first_name'] +
+                            ' ' +
+                            list[index]['last_name'];
+                        _totalAmount.add(new TextEditingController());
+                        if (list[index]['salary_type'] == 2) {
+                          int end = int.parse(list[index]['end_time']
+                              .replaceAll(RegExp(r'[^0-9]'), ''));
+                          int start = int.parse(list[index]['start_time']
+                              .replaceAll(RegExp(r'[^0-9]'), ''));
+                          int diff = end - start;
+                          int pay = list[index]['pay_rate'];
+                          double amount = (diff / 100) *
+                              pay *
+                              list[index]['WorkedDays'];
+                          _totalAmount[index].text =
+                          '\u0024 ${amount.round()}';
+                        }
+                        if (list[index]['salary_type'] == 1) {
+                          _totalAmount[index].text =
+                          '\u0024 ${list[index]['WorkedDays'] *
+                              list[index]['pay_rate']}';
+                        }
+                        _paidAmount.add(new TextEditingController());
+                        for (int i = 0; i < list.length; i++) {
+                          firstname.add(list[i]['first_name']);
+                          lastName.add(list[i]['last_name']);
+                          selectedPayType.add("Regular");
+                        }
 
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              color: Color(0xff31473A),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 0,
-                                              top: 0,
-                                              right: 15,
-                                              bottom: 0),
-                                          child: Text(
-                                            name,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 75,
-                                          height: 35,
-                                          child: TextField(
-                                            decoration: InputDecoration(
-                                              filled: true,
-                                              fillColor: Color(0xff7C8362),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.white),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.white),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.white),
-                                                borderRadius:
-                                                    BorderRadius.circular(15.0),
-                                              ),
-                                            ),
-
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                            textAlign: TextAlign.center,
-                                            controller: _totalAmount[index],
-                                            //editing controller of this TextField
-                                            readOnly: true,
-                                          ),
-                                        ),
-                                      ],
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          color: Color(0xff31473A),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 0,
+                                          top: 0,
+                                          right: 15,
+                                          bottom: 0),
+                                      child: Text(
+                                        name,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 0, top: 0, right: 0, bottom: 15),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        /*  new Expanded(
-                                          child:*/
-                                        new DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            color: Color(0xff7C8362),
-                                            //background color of dropdown button
-                                            border:
-                                                Border.all(color: Colors.white),
-                                            //border of dropdown button
-                                            borderRadius: BorderRadius.circular(
-                                                10), //border radius of dropdown button
+                                    SizedBox(
+                                      width: 75,
+                                      height: 35,
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: Color(0xff7C8362),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(12.0),
                                           ),
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 15, right: 15),
-                                            child: DropdownButton(
-                                              dropdownColor: Color(0xff7C8362),
-                                              underline: Container(),
-                                              value: selectedPayType[index],
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                              icon: const Icon(
-                                                Icons.keyboard_arrow_down,
-                                                color: Colors.white,
-                                              ),
-                                              items:
-                                                  pay_type.map((String type) {
-                                                return DropdownMenuItem(
-                                                  value: type,
-                                                  child: Text(
-                                                    type,
-                                                  ),
-                                                );
-                                              }).toList(),
-                                              onChanged: (String? newValue) {
-                                                setState(() {
-                                                  selectedPayType[index] =
-                                                      newValue!;
-                                                });
-                                              },
-                                            ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(12.0),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(15.0),
                                           ),
                                         ),
-                                        //  ),
 
-                                        /*   Container(
+                                        style:
+                                        TextStyle(color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                        controller: _totalAmount[index],
+                                        //editing controller of this TextField
+                                        readOnly: true,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 0, top: 0, right: 0, bottom: 15),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    /*  new Expanded(
+                                          child:*/
+                                    new DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: Color(0xff7C8362),
+                                        //background color of dropdown button
+                                        border:
+                                        Border.all(color: Colors.white),
+                                        //border of dropdown button
+                                        borderRadius: BorderRadius.circular(
+                                            10), //border radius of dropdown button
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 15, right: 15),
+                                        child: DropdownButton(
+                                          dropdownColor: Color(0xff7C8362),
+                                          underline: Container(),
+                                          value: selectedPayType[index],
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                          icon: const Icon(
+                                            Icons.keyboard_arrow_down,
+                                            color: Colors.white,
+                                          ),
+                                          items:
+                                          pay_type.map((String type) {
+                                            return DropdownMenuItem(
+                                              value: type,
+                                              child: Text(
+                                                type,
+                                              ),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              selectedPayType[index] =
+                                              newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    //  ),
+
+                                    /*   Container(
                                           padding: EdgeInsets.zero,
                                           decoration: BoxDecoration(
                                             color: Color(0xff7C8362),
@@ -423,51 +428,52 @@ class _PaymentPageState extends State<PaymentPage> {
                                           ),
                                           // ) ,
                                         ),*/
-                                        SizedBox(
-                                          width: 180,
-                                          height: 50,
-                                          child: TextField(
-                                            decoration: InputDecoration(
-                                              filled: true,
-                                              fillColor: Color(0xff7C8362),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.white),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.white),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.white),
-                                                borderRadius:
-                                                    BorderRadius.circular(15.0),
-                                              ),
-                                            ),
-
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                            textAlign: TextAlign.center,
-                                            controller: _paidAmount[index],
-                                            //editing controller of this TextField
+                                    SizedBox(
+                                      width: 180,
+                                      height: 50,
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: Color(0xff7C8362),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(12.0),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(12.0),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(15.0),
                                           ),
                                         ),
-                                      ],
+
+                                        style:
+                                        TextStyle(color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                        controller: _paidAmount[index],
+                                        //editing controller of this TextField
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            );
-                          })
+                            ],
+                          ),
+                        );
+                      })
                       : CircularProgressIndicator();
+              //  }
                 },
               ),
               Container(
