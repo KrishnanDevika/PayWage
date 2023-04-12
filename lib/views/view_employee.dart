@@ -49,7 +49,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
 
   @override
   void initState() {
-    this.fetchEmployee();
+    this.getData();
     super.initState();
     if(widget.index != null){
       firstName.text = widget.list[widget.index]['first_name'];
@@ -487,7 +487,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                       list: widget.list,
                       index: widget.index)))
               .then((value) => setState(() {
-            getData();
+                getData();
           }));
         },
         child: const Icon(

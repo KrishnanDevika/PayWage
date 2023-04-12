@@ -14,7 +14,6 @@ class UpdateEmployeePage extends StatefulWidget {
 
   final String title;
   final int index;
-  final List occupation;
   final List list;
 
   UpdateEmployeePage(
@@ -22,7 +21,6 @@ class UpdateEmployeePage extends StatefulWidget {
         super.key,
         required this.title,
         required this.list,
-        required this.occupation,
         required this.index,
       });
 
@@ -46,6 +44,7 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
   TextEditingController contact = TextEditingController();
   TextEditingController street = TextEditingController();
   TextEditingController baseRate = TextEditingController();
+
   bool editMode = false;
 
   Future updateEmployee() async{
@@ -81,9 +80,12 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
       lastName.text = widget.list[widget.index]['last_name'];
       startDate.text = widget.list[widget.index]['start_date'];
       contact.text = widget.list[widget.index]['phone'];
-
-  /*    street.text = widget.list[widget.index]['street'];
-      baseRate.text = widget.list[widget.index]['pay_rate'];*/
+      street.text = widget.list[widget.index]['street'];
+      baseRate.text = '${widget.list[widget.index]['pay_rate']}';
+      city_value = widget.list[widget.index]['city'];
+      state_value = widget.list[widget.index]['state'];
+      salaryType_value = widget.list[widget.index]['salary_type'];
+      occupation_value = widget.list[widget.index]['occupation_type'];
     }
 
     super.initState();
@@ -169,14 +171,6 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
     catch(e){
       print(e);
     }
-  }
-  void reset(){
-    firstName.clear();
-    lastName.clear();
-    startDate.clear();
-    contact.clear();
-    street.clear();
-    baseRate.clear();
   }
 
   @override
@@ -675,12 +669,16 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                       action: SnackBarAction(
                         label: 'dismiss',
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => AttendancePage(title: 'PayWage'),
+                              ),
+                          );
+                          //Navigator.pop(context);
                         },
                       ),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    reset();
                   },
                   child: new Text('UPDATE EMPLOYEE'),
                 ),
