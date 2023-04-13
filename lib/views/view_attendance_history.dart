@@ -153,11 +153,18 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                             DateFormat('yyyy-MM-dd').format(pastDate!);
                             dateinput.text = formattedDate;
                           }
+                          if(pastDate.isAfter(DateTime.now())){
+                            String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(DateTime.now());
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewAttendanceHistory(
+                                    title: 'Pay Wage', date: formattedDate)));
+                          }else{
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewAttendanceHistory(
+                                    title: 'Pay Wage', date: dateinput.text)));
+                          }
                         });
-
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ViewAttendanceHistory(
-                                title: 'Pay Wage', date: dateinput.text)));
                       },
                     ),
                   ],
