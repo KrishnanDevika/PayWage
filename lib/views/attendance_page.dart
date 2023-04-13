@@ -10,6 +10,7 @@ import 'package:paywage/models/occupation.dart';
 import 'package:paywage/views/update_employee.dart';
 import 'package:paywage/views/view_employee.dart';
 import 'package:paywage/views/view_attendance_history.dart';
+import 'package:paywage/views/serach_employee.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -101,6 +102,8 @@ class _AttendancePageState extends State<AttendancePage> {
       },
     );
   }
+
+
 
 
   Future getData() async {
@@ -305,6 +308,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 margin: const EdgeInsets.all(10.0),
                 child: TextField(
                   controller: searchController,
+                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
                       filled: true,
                       fillColor: Color(0xff7C8362),
@@ -313,7 +317,12 @@ class _AttendancePageState extends State<AttendancePage> {
                           Icons.search,
                           color: Colors.white,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                              builder: (context) => SearchEmployeePage(title: 'Pay Wage', name: searchController.text)));
+
+                        },
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
