@@ -38,7 +38,6 @@ class _PaymentPageState extends State<PaymentPage> {
     DateTime now = DateTime.now();
     String formattedDate =
     DateFormat('yyyy-MM-dd').format(now);
-    print(formattedDate);
     dateinput.text = formattedDate;
     this.fetchEmployee();
     this.fetchPayType();
@@ -254,7 +253,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         }
 
 
-                        else if (list[index]['salary_type'] == 2 && list[index]['payment_amount']) {
+                       if (list[index]['salary_type'] == 2 && list[index]['payment_amount']!= null) {
                           double remainingBalance = (double.parse(list[index]['payment_amount']));
                           print(remainingBalance);
                           int end = int.parse(list[index]['end_time']
@@ -265,7 +264,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           int pay = list[index]['pay_rate'];
                            double amount = ((diff / 100) *
                               pay *
-                              list[index]['WorkedDays']) + remainingBalance;
+                               (list[index]['WorkedDays'] - 1)) + remainingBalance;
                           _totalAmount[index].text =
                           '\u0024 ${amount.round()}';
                         }
@@ -278,11 +277,11 @@ class _PaymentPageState extends State<PaymentPage> {
                                 list[index]['pay_rate'] )}';
                           }
                         }
-                       else if(list[index]['salary_type'] == 1 && list[index]['payment_amount']) {
+                      if(list[index]['salary_type'] == 1 && list[index]['payment_amount']!= null) {
                           double remainingBalance = (double.parse(list[index]['payment_amount']));
                           print(remainingBalance);
                           _totalAmount[index].text =
-                          '\u0024 ${(list[index]['WorkedDays'] *
+                          '\u0024 ${((list[index]['WorkedDays'] - 1) *
 
                               list[index]['pay_rate'] )+ remainingBalance}';
                         }
