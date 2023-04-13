@@ -9,6 +9,7 @@ import 'package:paywage/models/job_site.dart';
 import 'package:paywage/models/occupation.dart';
 import 'package:paywage/views/update_employee.dart';
 import 'package:paywage/views/view_employee.dart';
+import 'package:paywage/views/view_attendance_history.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -42,11 +43,13 @@ class _AttendancePageState extends State<AttendancePage> {
 
   @override
   void initState() {
-    dateinput.text = "";
+    DateTime now = DateTime.now();   //current date
+    String formattedDate =
+    DateFormat('yyyy-MM-dd').format(now);
+    dateinput.text = formattedDate;
     this.fetchEmployee();
     this.fetchJobSites();
     this.fetchOccupation();
-
     super.initState();
   }
 
@@ -99,15 +102,6 @@ class _AttendancePageState extends State<AttendancePage> {
     );
   }
 
-  Future fetchAttendance(String date) async {
-    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchAttendance.php';
-    final res = await http.post(Uri.parse(url), body: {
-      'date': date,
-    });
-    print(date);
-    print(res.body);
-    return json.decode(res.body);
-  }
 
   Future getData() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
@@ -218,7 +212,11 @@ class _AttendancePageState extends State<AttendancePage> {
           MaterialPageRoute(
             builder: (context) => AttendancePage(title: 'PayWage'),
           ),
-        );
+        ).then((value) => setState(() {
+          getData();
+          employeeList = [];
+          fetchEmployee();
+        }));
         break;
       case 1:
         Navigator.of(context).push(
@@ -265,7 +263,10 @@ class _AttendancePageState extends State<AttendancePage> {
                             dateinput.text = formattedDate;
                           }
                         });
-                        fetchAttendance(dateinput.text);
+
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                            builder: (context) => ViewAttendanceHistory(title: 'Pay Wage', date: dateinput.text)));
                       },
                     ),
                     new SizedBox(
