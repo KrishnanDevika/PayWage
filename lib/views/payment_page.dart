@@ -35,10 +35,13 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   void initState() {
-    dateinput.text = "";
+    DateTime now = DateTime.now();
+    String formattedDate =
+    DateFormat('yyyy-MM-dd').format(now);
+    print(formattedDate);
+    dateinput.text = formattedDate;
     this.fetchEmployee();
     this.fetchPayType();
-    //  this.fetchWorkingDetails();
     super.initState();
   }
 
@@ -81,9 +84,15 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Future getData() async {
+
     var url = 'https://dkrishnan.scweb.ca/Paywage/calculatePay.php';
-    var response = await http.get(Uri.parse(url));
-    return json.decode(response.body);
+    try {
+      var response = await http.get(Uri.parse(url));
+      return json.decode(response.body);
+    }
+    catch(e){
+      print(e);
+    }
   }
 
   Future insertPayment(String fName, String lName, String date, String payType,
@@ -229,24 +238,55 @@ class _PaymentPageState extends State<PaymentPage> {
                             ' ' +
                             list[index]['last_name'];
                         _totalAmount.add(new TextEditingController());
-                        if (list[index]['salary_type'] == 2) {
+
+                        if(list[index]['salary_type'] == 2 ){
                           int end = int.parse(list[index]['end_time']
                               .replaceAll(RegExp(r'[^0-9]'), ''));
                           int start = int.parse(list[index]['start_time']
                               .replaceAll(RegExp(r'[^0-9]'), ''));
                           int diff = end - start;
                           int pay = list[index]['pay_rate'];
-                          double amount = (diff / 100) *
+                          double amount = ((diff / 100) *
                               pay *
-                              list[index]['WorkedDays'];
+                              list[index]['WorkedDays']);
                           _totalAmount[index].text =
                           '\u0024 ${amount.round()}';
                         }
-                        if (list[index]['salary_type'] == 1) {
+
+
+                        else if (list[index]['salary_type'] == 2 && list[index]['payment_amount']) {
+                          double remainingBalance = (double.parse(list[index]['payment_amount']));
+                          print(remainingBalance);
+                          int end = int.parse(list[index]['end_time']
+                              .replaceAll(RegExp(r'[^0-9]'), ''));
+                          int start = int.parse(list[index]['start_time']
+                              .replaceAll(RegExp(r'[^0-9]'), ''));
+                          int diff = end - start;
+                          int pay = list[index]['pay_rate'];
+                           double amount = ((diff / 100) *
+                              pay *
+                              list[index]['WorkedDays']) + remainingBalance;
                           _totalAmount[index].text =
-                          '\u0024 ${list[index]['WorkedDays'] *
-                              list[index]['pay_rate']}';
+                          '\u0024 ${amount.round()}';
                         }
+
+
+                        if(list[index]['salary_type'] == 1){
+                          {
+                            _totalAmount[index].text =
+                            '\u0024 ${(list[index]['WorkedDays'] *
+                                list[index]['pay_rate'] )}';
+                          }
+                        }
+                       else if(list[index]['salary_type'] == 1 && list[index]['payment_amount']) {
+                          double remainingBalance = (double.parse(list[index]['payment_amount']));
+                          print(remainingBalance);
+                          _totalAmount[index].text =
+                          '\u0024 ${(list[index]['WorkedDays'] *
+
+                              list[index]['pay_rate'] )+ remainingBalance}';
+                        }
+
                         _paidAmount.add(new TextEditingController());
                         for (int i = 0; i < list.length; i++) {
                           firstname.add(list[i]['first_name']);
@@ -282,7 +322,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 75,
+                                      width: 100,
                                       height: 35,
                                       child: TextField(
                                         decoration: InputDecoration(
@@ -485,7 +525,6 @@ class _PaymentPageState extends State<PaymentPage> {
                         backgroundColor: Color(0xff31473A),
                         foregroundColor: Colors.white),
                     onPressed: () {
-                      // print(employeeList.length);
                       for (int index = 0;
                           index < employeeList.length;
                           index++) {
@@ -525,6 +564,14 @@ class _PaymentPageState extends State<PaymentPage> {
                         action: SnackBarAction(
                           label: 'dismiss',
                           onPressed: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(
+                                builder: (context) => PaymentPage(title: 'Pay Wage')))
+                                .then((value) => setState(() {
+                              getData();
+                              employeeList = [];
+                              fetchEmployee();
+                            }));
                           },
                         ),
                       );
