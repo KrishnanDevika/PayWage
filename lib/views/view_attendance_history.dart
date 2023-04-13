@@ -34,8 +34,6 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
     final res = await http.post(Uri.parse(url), body: {
       'date': widget.date,
     });
-    print(widget.date);
-    print(res.body);
     return json.decode(res.body);
   }
 
@@ -101,12 +99,18 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                 DateFormat('yyyy-MM-dd').format(pastDate!);
                             dateinput.text = formattedDate;
                           }
-                        });
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ViewAttendanceHistory(
-                                title: 'Pay Wage', date: dateinput.text)));
-                        // fetchAttendance(dateinput.text);
+                          if(dateinput.text.compareTo('2023-04-11') < 0){
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewAttendanceHistory(
+                                    title: 'Pay Wage', date: '2023-04-11')));
+                          }else{
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewAttendanceHistory(
+                                    title: 'Pay Wage', date: dateinput.text)));
+                          }
+                        });
+                        
                       },
                     ),
                     new SizedBox(
@@ -153,9 +157,10 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                             DateFormat('yyyy-MM-dd').format(pastDate!);
                             dateinput.text = formattedDate;
                           }
-                          if(pastDate.isAfter(DateTime.now())){
+
+                          if(((DateFormat('yyyy-MM-dd').format(pastDate)).compareTo(DateFormat('yyyy-MM-dd').format(DateTime.now()))  == 0) || pastDate.isAfter(DateTime.now())){
                             String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(DateTime.now());
+                            DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 1)));
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ViewAttendanceHistory(
                                     title: 'Pay Wage', date: formattedDate)));
@@ -173,7 +178,234 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
               FutureBuilder(
                 future: fetchAttendance(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
+                  if(snapshot.hasData){
+                    if(snapshot.data != null){
+                      return  ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            List list = snapshot.data;
+                            String name = list[index]['first_name'] +
+                                ' ' +
+                                list[index]['last_name'];
+                            _timeOut.add(new TextEditingController());
+                            _timeinput.add(new TextEditingController());
+                            _site.add(new TextEditingController());
+                            _occupation.add(new TextEditingController());
+
+                            _timeinput[index].text = list[index]['start_time'];
+                            _timeOut[index].text =list[index]['end_time'];
+                            _site[index].text = list[index]['site_name'];
+                            _occupation[index].text = list[index]['occupation_type'];
+
+
+                            if(list[index]['present'] == 'true') {
+                              _isChecked.add(true);
+                              textValue.add('Present');
+                            }else{
+                              _isChecked.add(false);
+                              textValue.add('Absent');
+                            }
+
+
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              color: Color(0xff31473A),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Text(
+                                      name,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 10,
+                                        top: 0,
+                                        right: 10,
+                                        bottom: 2),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Switch(
+                                          value: _isChecked[index],
+                                          activeColor: Color(0xff7C8362),
+                                          activeTrackColor: Colors.white,
+                                          inactiveThumbColor:
+                                          Color(0xff7C8362),
+                                          inactiveTrackColor:
+                                          Color(0xff7C8362)
+                                              .withOpacity(0.5),
+                                          onChanged: (val) {
+                                          },
+                                        ),
+                                        Text(textValue[index],
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white,
+                                                fontWeight:
+                                                FontWeight.bold)),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 30,
+                                        top: 0,
+                                        right: 30,
+                                        bottom: 4),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(
+                                          "In",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
+
+                                        SizedBox(
+                                          width: 100,
+                                          height: 40,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Color(0xff7C8362),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    20.0),
+                                              ),
+                                            ),
+
+
+                                            style: TextStyle(
+                                                color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                            controller: _timeinput[index],
+                                            //editing controller of this TextField
+                                            readOnly: true,
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+
+                                        Text(
+                                          "Out",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
+                                        SizedBox(
+                                          width: 100,
+                                          height: 40,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Color(0xff7C8362),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    20.0),
+                                              ),
+                                            ),
+
+                                            style: TextStyle(
+                                                color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                            controller: _timeOut[index],
+                                            //editing controller of this TextField
+                                            readOnly: true,
+                                          ),
+                                        ),
+                                        // TextField()
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 10,
+                                        top: 10,
+                                        right: 10,
+                                        bottom: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        SizedBox(
+                                          width: 150,
+                                          height: 40,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Color(0xff7C8362),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    15.0),
+                                              ),
+                                            ),
+
+                                            style: TextStyle(
+                                                color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                            controller: _site[index],
+                                            //editing controller of this TextField
+                                            readOnly: true,
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        SizedBox(
+                                          width: 150,
+                                          height: 40,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Color(0xff7C8362),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    15.0),
+                                              ),
+                                            ),
+
+                                            style: TextStyle(
+                                                color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                            controller: _occupation[index],
+                                            //editing controller of this TextField
+                                            readOnly: true,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+
+                            );
+                          });
+                         // : CircularProgressIndicator();
+                    } else{
+                      return Text("No widget to build");
+                    }
+
+
+                  }
+                 else
+                 {
                     return Center(
                       child: Text(
                         'No Data Found',
@@ -181,227 +413,9 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     );
-                  } else {
-                    return snapshot.hasData
-                        ? ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, index) {
-                              List list = snapshot.data;
-                              String name = list[index]['first_name'] +
-                                  ' ' +
-                                  list[index]['last_name'];
-                              _timeOut.add(new TextEditingController());
-                              _timeinput.add(new TextEditingController());
-                              _site.add(new TextEditingController());
-                              _occupation.add(new TextEditingController());
-
-                             _timeinput[index].text = list[index]['start_time'];
-                             _timeOut[index].text =list[index]['end_time'];
-                             _site[index].text = list[index]['site_name'];
-                             _occupation[index].text = list[index]['occupation_type'];
-
-
-                                if(list[index]['present'] == 'true') {
-                                  _isChecked.add(true);
-                                  textValue.add('Present');
-                                }else{
-                                  _isChecked.add(false);
-                                  textValue.add('Absent');
-                                }
-
-
-                              return Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  color: Color(0xff31473A),
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.all(10),
-                                        child: Text(
-                                          name,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 10,
-                                            top: 0,
-                                            right: 10,
-                                            bottom: 2),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Switch(
-                                              value: _isChecked[index],
-                                              activeColor: Color(0xff7C8362),
-                                              activeTrackColor: Colors.white,
-                                              inactiveThumbColor:
-                                                  Color(0xff7C8362),
-                                              inactiveTrackColor:
-                                                  Color(0xff7C8362)
-                                                      .withOpacity(0.5),
-                                              onChanged: (val) {
-                                              },
-                                            ),
-                                            Text(textValue[index],
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 30,
-                                            top: 0,
-                                            right: 30,
-                                            bottom: 4),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            Text(
-                                              "In",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16),
-                                            ),
-
-                                            SizedBox(
-                                              width: 100,
-                                              height: 40,
-                                              child: TextField(
-                                                decoration: InputDecoration(
-                                                  filled: true,
-                                                  fillColor: Color(0xff7C8362),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20.0),
-                                                  ),
-                                                ),
-
-
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                                controller: _timeinput[index],
-                                                //editing controller of this TextField
-                                                readOnly: true,
-                                              ),
-                                            ),
-                                            SizedBox(width: 10),
-
-                                            Text(
-                                              "Out",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16),
-                                            ),
-                                            SizedBox(
-                                              width: 100,
-                                              height: 40,
-                                              child: TextField(
-                                                decoration: InputDecoration(
-                                                  filled: true,
-                                                  fillColor: Color(0xff7C8362),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20.0),
-                                                  ),
-                                                ),
-
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                                controller: _timeOut[index],
-                                                //editing controller of this TextField
-                                                readOnly: true,
-                                              ),
-                                            ),
-                                            // TextField()
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 10,
-                                            top: 10,
-                                            right: 10,
-                                            bottom: 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: <Widget>[
-                                            SizedBox(
-                                              width: 150,
-                                              height: 40,
-                                              child: TextField(
-                                                decoration: InputDecoration(
-                                                  filled: true,
-                                                  fillColor: Color(0xff7C8362),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                    BorderRadius.circular(
-                                                        15.0),
-                                                  ),
-                                                ),
-
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                                controller: _site[index],
-                                                //editing controller of this TextField
-                                                readOnly: true,
-                                              ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            SizedBox(
-                                              width: 150,
-                                              height: 40,
-                                              child: TextField(
-                                                decoration: InputDecoration(
-                                                  filled: true,
-                                                  fillColor: Color(0xff7C8362),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                    BorderRadius.circular(
-                                                        15.0),
-                                                  ),
-                                                ),
-
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                                controller: _occupation[index],
-                                                //editing controller of this TextField
-                                                readOnly: true,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-
-                              );
-                            })
-                        : CircularProgressIndicator();
                   }
+
+
                 },
               ),
             ],
