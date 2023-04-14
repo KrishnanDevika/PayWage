@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
 import 'package:paywage/common/BottomNavigationBar.dart';
+import 'package:paywage/views/payment_page.dart';
 import 'package:paywage/views/attendance_page.dart';
 import 'package:paywage/models/salary_type.dart';
 import 'package:paywage/models/occupation.dart';
@@ -44,6 +45,7 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
   TextEditingController contact = TextEditingController();
   TextEditingController street = TextEditingController();
   TextEditingController baseRate = TextEditingController();
+  int _selectedIndex = 0;
 
   bool editMode = false;
 
@@ -170,6 +172,21 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
     }
     catch(e){
       print(e);
+    }
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    switch(index){
+      case 0:
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AttendancePage(title: 'PayWage'),),);
+        break;
+      case 1:
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PaymentPage(title: 'PayWage'),),);
+
+        break;
     }
   }
 
@@ -687,7 +704,26 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigation(0),
+      bottomNavigationBar:  BottomNavigationBar(
+        backgroundColor: Color(0xff7C8362),
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedFontSize: 20,
+        selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              activeIcon: Icon(Icons.punch_clock_rounded),
+              icon: Icon(Icons.calendar_month_outlined),
+              label: 'Attendance'),
+          BottomNavigationBarItem(
+              activeIcon: Icon(Icons.payment_rounded),
+              icon: Icon(Icons.payments),
+              label: 'Payment'),
+        ],
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.white,
+      ),
     );
   }
 }
