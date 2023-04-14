@@ -6,6 +6,8 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+
+
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
@@ -28,11 +30,12 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion 33
     ndkVersion flutter.ndkVersion
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+//
+//    compileOptions {
+//        coreLibraryDesugaringEnabled true
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
 
     kotlinOptions {
         jvmTarget = '1.8'
@@ -57,7 +60,20 @@ android {
         //step 3 change to Avoid the 64 limit
         multiDexEnabled true
 
+//        FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//                FlutterLocalNotificationsPlugin();
+//        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+//                AndroidFlutterLocalNotificationsPlugin>().requestPermission();
+
     }
+
+//    compileOptions {
+//        // Flag to enable support for the new language APIs
+//        coreLibraryDesugaringEnabled true
+//        // Sets Java compatibility to Java 8
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
 
     buildTypes {
         release {
@@ -79,6 +95,10 @@ dependencies {
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"
     implementation "androidx.multidex:multidex:2.0.1"
+//    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+//    implementation 'androidx.window:window:1.0.0'
+//    implementation 'androidx.window:window-java:1.0.0'
+//    classpath 'com.android.tools.build:gradle:4.2.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

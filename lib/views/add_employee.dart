@@ -154,7 +154,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(widget.title),
+      appBar: myAppBar(widget.title, context),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20),

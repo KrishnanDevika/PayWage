@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:paywage/3rd%20party%20Auth/google_sign_in_button.dart';
 import 'package:paywage/views/add_employee.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
@@ -35,6 +37,25 @@ class _AttendancePageState extends State<AttendancePage> {
   List<TextEditingController> _timeOut= [];
 
   int _selectedIndex = 0;
+
+  bool isSwitch = false;
+  var presentAbsent = 'Absent';
+
+
+  void toggleSwitch(bool value){
+    if(isSwitch == false){
+      setState(() {
+        isSwitch = true;
+        presentAbsent = 'present';
+      });
+    }else{
+      setState(() {
+        isSwitch = false;
+        presentAbsent = 'absent';
+      });
+    }
+
+  }
 
   Future fetchEmployee() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
@@ -110,7 +131,7 @@ class _AttendancePageState extends State<AttendancePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(widget.title),
+      appBar: myAppBar(widget.title, context),
 
       body: SingleChildScrollView(
         child: Container(
@@ -229,18 +250,8 @@ class _AttendancePageState extends State<AttendancePage> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),
                                 ),
-                                Radio<int>(
-
-                                    value: index,
-                                    groupValue: groupValue,
-                                    fillColor: MaterialStateColor.resolveWith(
-                                        (states) => CustomColors.lightModeTextColor),
-                                    toggleable: true,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        groupValue = value;
-                                      });
-                                    }),
+                                Switch(value: isSwitch, onChanged: toggleSwitch),
+                                  Text('$presentAbsent',),
                               ],
                             ),
                           ),

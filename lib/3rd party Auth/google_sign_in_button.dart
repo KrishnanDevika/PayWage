@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:paywage/views/attendance_page.dart';
 
 Future<UserCredential> signInWithGoogle() async {
   // Trigger the authentication flow
@@ -19,6 +20,10 @@ Future<UserCredential> signInWithGoogle() async {
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
 
+
+
+
+
 class GoogleSignInButton extends StatefulWidget {
   final Function(GoogleSignInAccount) onSignIn;
 
@@ -27,8 +32,20 @@ class GoogleSignInButton extends StatefulWidget {
   @override
   _GoogleSignInButtonState createState() => _GoogleSignInButtonState();
 }
+String? _userName;
+String? _userProfileImage;
+String? _userEmail;
+
+class AuthenticatedUserInfo{
+  static String? userName = _userName;
+  static String? userProfileImage = _userProfileImage;
+  static String? userEmail = _userEmail;
+}
+
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
+
+
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
@@ -37,8 +54,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
     clientId: '',
   );
 
-  String? _userName;
-  String? _userProfileImage;
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +76,14 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
               setState(() {
                 _userName = account.displayName;
                 _userProfileImage = account.photoUrl;
+                _userEmail = account.email;
               });
 
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> AttendancePage(title: "Paywage")));
+              
               print("User name: $_userName");
+              print("User name: $_userEmail");
+              print("User name: $_userProfileImage");
             } catch (error) {
               print(error);
             }
@@ -98,22 +119,6 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                           textAlign: TextAlign.start,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        if (_userName != null && _userProfileImage != null) SizedBox(height: 8),
-                        if (_userName != null && _userProfileImage != null)
-                          Row(
-                            children: [
-                              CircleAvatar(
-
-                                backgroundImage: NetworkImage(_userProfileImage!),
-                                radius: 12,
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                _userName!,
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ],
-                          ),
                       ],
                     ),
                     )

@@ -74,18 +74,6 @@ class _RegisterPage extends State<RegisterPage> {
             ),
           ),
 
-          // Register with Facebook
-          Padding(
-            padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 20, bottom: 0),
-            // Add Facebook sign-in button
-          ),
-
-          // Register with APPLE
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 20, bottom: 0),
-            //Add Apple sign-in button
-          ),
-
         ],
       ),
     );
