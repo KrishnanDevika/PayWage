@@ -95,7 +95,7 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Future insertPayment(String fName, String lName, String date, String payType,
-      int amount) async {
+      double amount) async {
     final response = await http.post(
         Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertPayment.php'),
         body: {
@@ -198,26 +198,6 @@ class _PaymentPageState extends State<PaymentPage> {
                   ],
                 ),
               ),
-              Container(
-                height: 50,
-                margin: const EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: searchController,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Color(0xff7C8362),
-                      prefixIcon: IconButton(
-                        icon: Icon(
-                          Icons.search,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {},
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      )),
-                ),
-              ),
               FutureBuilder(
                 future: getData(),
                 builder: (context, snapshot) {
@@ -244,29 +224,27 @@ class _PaymentPageState extends State<PaymentPage> {
                           int start = int.parse(list[index]['start_time']
                               .replaceAll(RegExp(r'[^0-9]'), ''));
                           int diff = end - start;
+                          print("Time Diff ${diff}");
                           int pay = list[index]['pay_rate'];
-                          double amount = ((diff / 100) *
-                              pay *
-                              list[index]['WorkedDays']);
-                          _totalAmount[index].text =
-                          '\u0024 ${amount.round()}';
+                          double amount = ((diff / 100) * pay * list[index]['WorkedDays']);
+                          print("AMount ${amount.round()}");
+                          _totalAmount[index].text = '\u0024 ${amount.round()}';
                         }
 
 
                        if (list[index]['salary_type'] == 2 && list[index]['payment_amount']!= null) {
-                          double remainingBalance = (double.parse(list[index]['payment_amount']));
-                          print(remainingBalance);
+                          int remainingBalance = (int.parse(list[index]['payment_amount'].replaceAll(RegExp(r'[^0-9/-]'), '')));
+                          print(" Remaining ${remainingBalance/100}");
                           int end = int.parse(list[index]['end_time']
                               .replaceAll(RegExp(r'[^0-9]'), ''));
                           int start = int.parse(list[index]['start_time']
                               .replaceAll(RegExp(r'[^0-9]'), ''));
                           int diff = end - start;
+                          print("Time Diff ${diff}");
                           int pay = list[index]['pay_rate'];
-                           double amount = ((diff / 100) *
-                              pay *
-                               (list[index]['WorkedDays'] - 1)) + remainingBalance;
-                          _totalAmount[index].text =
-                          '\u0024 ${amount.round()}';
+                           double amount = ((diff / 100) * pay * (list[index]['WorkedDays'] - 1)) + (remainingBalance)/100;
+                          print("AMount ${amount.round()}");
+                          _totalAmount[index].text = '\u0024 ${amount.round()}';
                         }
 
 
@@ -278,12 +256,12 @@ class _PaymentPageState extends State<PaymentPage> {
                           }
                         }
                       if(list[index]['salary_type'] == 1 && list[index]['payment_amount']!= null) {
-                          double remainingBalance = (double.parse(list[index]['payment_amount']));
-                          print(remainingBalance);
+                          int remainingBalance = (int.parse(list[index]['payment_amount'].replaceAll(RegExp(r'[^0-9/-]'), '')));
+                          print(" Remaining ${remainingBalance/100}");
                           _totalAmount[index].text =
                           '\u0024 ${((list[index]['WorkedDays'] - 1) *
 
-                              list[index]['pay_rate'] )+ remainingBalance}';
+                              list[index]['pay_rate'] )+ (remainingBalance)/100}';
                         }
 
                         _paidAmount.add(new TextEditingController());
@@ -528,22 +506,28 @@ class _PaymentPageState extends State<PaymentPage> {
                           index < employeeList.length;
                           index++) {
 
-                        int pendingAmount = 0;
+                        double pendingAmount = 0;
                         if (selectedPayType[index] == "Regular") {
-                          pendingAmount = int.parse(_totalAmount[index]
+                          print(double.parse(_totalAmount[index]
+                              .text
+                              .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
+                          pendingAmount = double.parse(_totalAmount[index]
                                   .text
-                                  .replaceAll(RegExp(r'[^0-9]'), '')) -
-                              int.parse(_paidAmount[index]
+                                  .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                              double.parse(_paidAmount[index]
                                   .text
-                                  .replaceAll(RegExp(r'[^0-9]'), ''));
+                                  .replaceAll(RegExp(r'[^0-9/./-]'), ''));
                         }
                         if (selectedPayType[index] == "Advance") {
-                          pendingAmount = int.parse(_totalAmount[index]
+                          print(double.parse(_totalAmount[index]
+                              .text
+                              .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
+                          pendingAmount = double.parse(_totalAmount[index]
                                   .text
-                                  .replaceAll(RegExp(r'[^0-9]'), '')) -
-                              int.parse(_paidAmount[index]
+                                  .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                              double.parse(_paidAmount[index]
                                   .text
-                                  .replaceAll(RegExp(r'[^0-9]'), ''));
+                                  .replaceAll(RegExp(r'[^0-9/./-]'), ''));
                         }
 
                         insertPayment(
