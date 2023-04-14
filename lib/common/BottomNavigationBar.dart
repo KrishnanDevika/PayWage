@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paywage/CustomTheme/CustomColors.dart';
+import 'package:paywage/views/attendance_page.dart';
+import 'package:paywage/views/payment_page.dart';
 
 // class BottomNavigation extends StatefulWidget {
 //   const BottomNavigation({super.key});
@@ -20,13 +22,19 @@ import 'package:paywage/CustomTheme/CustomColors.dart';
 //       _selectedIndex = index;
 //     });
 //   }
-Widget BottomNavigation(int index) {
+Widget BottomNavigation(int index, BuildContext context) {
 
   int _selectedIndex = index;
     return BottomNavigationBar(
       backgroundColor: CustomColors.paleGreenColour,
       currentIndex: _selectedIndex,
      onTap: (index){
+
+        // if(index == 0){
+        //   Navigator.push(context, MaterialPageRoute(builder: (context)=> AttendancePage(title: "Paywage")));
+        // }else if(index == 1){
+        //   Navigator.push(context, MaterialPageRoute(builder: (context)=> PaymentPage(title: "Paywage")));
+        // }
         setState(){
           _selectedIndex = index;
         }
@@ -34,7 +42,7 @@ Widget BottomNavigation(int index) {
       selectedFontSize: 20,
       selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
       selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-      items: <BottomNavigationBarItem>[
+      items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
             activeIcon: Icon(Icons.punch_clock_rounded),
             icon: Icon(Icons.calendar_month_outlined),
@@ -44,8 +52,8 @@ Widget BottomNavigation(int index) {
             icon: Icon(Icons.payments),
             label: 'Payment'),
       ],
-      unselectedItemColor: Colors.white,
-      selectedItemColor: Colors.white,
+      // unselectedItemColor: Colors.white,
+      selectedItemColor: Colors.yellow,
 
     );
   }

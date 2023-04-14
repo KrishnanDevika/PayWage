@@ -274,7 +274,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
       ),
 
-      bottomNavigationBar: BottomNavigation(0), /*BottomNavigationBar(
+      bottomNavigationBar: BottomNavigation(0, context), /*BottomNavigationBar(
         backgroundColor: Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

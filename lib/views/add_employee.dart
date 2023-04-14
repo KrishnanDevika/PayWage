@@ -662,7 +662,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigation(0),
+      bottomNavigationBar: BottomNavigation(0, context),
     );
   }
 }

@@ -159,10 +159,10 @@ class _SettingsPage extends State<SettingsPage> {
                             Text(_notificationTime, style: TextStyle(
                               fontSize: 18,
                             ),),
-                            const SizedBox(width: 13),
+                            const SizedBox(width: 15),
                             Container(
                                 alignment: Alignment.centerLeft,
-                                width: 245,
+                                width: 240,
                                 height: 50,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.0),

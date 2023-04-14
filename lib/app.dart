@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
               title: 'Pay Wage',
               theme: themeNotifier.isDark ? ThemeData.dark() : ThemeData.light(),
-              home: RegisterPage(title: "",)
+              home: RegisterPage(title: "Paywage",)
           );
         },
 

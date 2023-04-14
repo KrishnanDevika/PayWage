@@ -16,7 +16,7 @@ class _RegisterPage extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +56,7 @@ class _RegisterPage extends State<RegisterPage> {
                     children: const <Widget>[
                       Padding(
                         padding: EdgeInsets.only(bottom: 18),
-                        child: Text('New to PAYWAGE?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                        child: Text('Welcome to PAYWAGE?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                       ),
                       Text("Please register here.", textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
                     ],
