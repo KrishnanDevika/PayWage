@@ -98,22 +98,22 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                           textAlign: TextAlign.start,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        if (_userName != null && _userProfileImage != null) SizedBox(height: 8),
-                        if (_userName != null && _userProfileImage != null)
-                          Row(
-                            children: [
-                              CircleAvatar(
-
-                                backgroundImage: NetworkImage(_userProfileImage!),
-                                radius: 12,
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                _userName!,
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ],
-                          ),
+                        // if (_userName != null && _userProfileImage != null) SizedBox(height: 8),
+                        // if (_userName != null && _userProfileImage != null)
+                        //   Row(
+                        //     children: [
+                        //       CircleAvatar(
+                        //
+                        //         backgroundImage: NetworkImage(_userProfileImage!),
+                        //         radius: 12,
+                        //       ),
+                        //       SizedBox(width: 8),
+                        //       Text(
+                        //         _userName!,
+                        //         style: TextStyle(fontSize: 12),
+                        //       ),
+                        //     ],
+                        //   ),
                       ],
                     ),
                     )
