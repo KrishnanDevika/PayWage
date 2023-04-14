@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:paywage/3rd%20party%20Auth/google_sign_in_button.dart';
 import 'package:paywage/views/add_employee.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
@@ -38,6 +40,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
   bool isSwitch = false;
   var presentAbsent = 'Absent';
+
 
   void toggleSwitch(bool value){
     if(isSwitch == false){
