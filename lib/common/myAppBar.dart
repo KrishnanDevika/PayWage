@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:paywage/CustomTheme/CustomColors.dart';
 import 'package:paywage/views/settings_page.dart';
 
-PreferredSizeWidget myAppBar(String title) {
+PreferredSizeWidget myAppBar(String title, BuildContext context) {
   return AppBar(
     leadingWidth: 80,
     backgroundColor: Colors.transparent,
@@ -19,7 +19,7 @@ PreferredSizeWidget myAppBar(String title) {
       icon: Icon(Icons.settings, size:42,),
       color: CustomColors.paleGreenColour,
       onPressed: (){
-        //Navigator.push( context, MaterialPageRoute(builder: (context) => SettingsPage(title: "Paywage")));
+        Navigator.push( context, MaterialPageRoute(builder: (context) => SettingsPage(title: "Paywage")));
       },
     ),
     actions: [

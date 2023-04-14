@@ -39,7 +39,7 @@ class _SettingsPage extends State<SettingsPage> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
-                boxShadow: const [BoxShadow(color: Color.fromRGBO(124, 131, 98, 1))],
+                boxShadow: const [BoxShadow(color: CustomColors.paleGreenColour)],
               ),
               child: InkWell(
                 onTap: () {
@@ -65,7 +65,7 @@ class _SettingsPage extends State<SettingsPage> {
                         height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
-                          boxShadow: const [BoxShadow(color: Color.fromRGBO(49, 71, 58, 0.5))],
+                          boxShadow: const [BoxShadow(color: CustomColors.darkGreenColour)],
                         ),
                         child: Padding(
                           padding: EdgeInsets.all(15.0),
@@ -73,7 +73,7 @@ class _SettingsPage extends State<SettingsPage> {
                             onTap: (){
                               themeNotifier.isDark ? themeNotifier.isDark = false : themeNotifier.isDark = true;
                               setState(() {
-                                _theme = themeNotifier.isDark ? "Dark" : "Light"; // Update _theme variable
+                                _theme = themeNotifier.isDark ? "Light" : "Dark"; // Update _theme variable
                               });
                             },
                             child: Text(
