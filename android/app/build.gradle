@@ -54,7 +54,7 @@ android {
         //step 2 change to Avoid the 64 limit : minSdkVersion 16
 
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         //step 3 change to Avoid the 64 limit
@@ -90,11 +90,14 @@ flutter {
 }
 
 dependencies {
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //step 1 avoid the 64k limit
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"
     implementation "androidx.multidex:multidex:2.0.1"
+    implementation platform('com.google.firebase:firebase-bom:31.5.0')
+    implementation 'com.google.firebase:firebase-analytics'
 //    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 //    implementation 'androidx.window:window:1.0.0'
 //    implementation 'androidx.window:window-java:1.0.0'

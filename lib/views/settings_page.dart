@@ -1,9 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:paywage/main.dart';
 import 'package:provider/provider.dart';
 import 'package:paywage/CustomTheme/CustomColors.dart';
 import 'package:paywage/common/myAppBar.dart';
 import '../CustomTheme/theme_model.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key, required this.title});
@@ -14,43 +19,65 @@ class SettingsPage extends StatefulWidget {
   State<SettingsPage> createState() => _SettingsPage();
 }
 
+
 class _SettingsPage extends State<SettingsPage> {
 
   String _theme = "Dark";
   String _notificationTime = "10:00 AM"; // initial notification time, update as needed
 
-  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
   TimeOfDay _selectedTime = TimeOfDay(hour: 18, minute: 0);
 
   get onSelectNotification => null;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher'); // Initialize Android notification settings
-  //   var initializationSettingsIOS = IOSInitializationSettings(); // Initialize iOS notification settings
-  //   var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-  //   flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification); // Initialize the notification plugin
-  // }
-  //
-  // Future<void> scheduleNotification() async {
-  //   var time = _selectedTime; // Set the desired time for the notification (6 PM in this case)
-  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-  //       'reminder_channel_id', 'Reminder Channel', 'Channel for reminders',
-  //       importance: Importance.max, priority: Priority.high); // Set Android notification details
-  //   var iOSPlatformChannelSpecifics = IOSNotificationDetails(); // Set iOS notification details
-  //   var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
-  //
+  @override
+  void initState(){
+    super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message){
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if(notification != null && android != null){
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              color: Colors.blue,
+              playSound: true,
+              icon: '@mipmap/ic_launcher',
+            )
+          )
+        );
+      }
+    });
+    
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
+      print('A new onMessageOpenedApp event was published!');
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if(notification != null && android != null){
+        showDialog(
+            context: context,
+            builder: (_){
+              return AlertDialog(
+                title: Text(notification.title!),
+                content: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(notification.body!)
+                    ],
+                  ),
+                ),
+              );
+            });
+      }
+    });
+  }
 
-
-  //   await flutterLocalNotificationsPlugin.showDailyAtTime( // Schedule a daily notification at the specified time
-  //       0,
-  //       'Reminder',
-  //       'This is a reminder text',
-  //       time as Time,
-  //       platformChannelSpecifics);
-  // }
 
   Future<void> _showTimePickerDialog() async {
     final TimeOfDay? pickedTime = await showTimePicker(
@@ -63,7 +90,23 @@ class _SettingsPage extends State<SettingsPage> {
         _notificationTime = pickedTime.format(context);
       });
     }
+    // flutterLocalNotificationsPlugin.show(
+    //   0,
+    //   "Testing $_notificationTime",
+    //   "This is your custom time selected",
+    //   NotificationDetails(
+    //     android: AndroidNotificationDetails(
+    //       channel.id,
+    //       channel.name,
+    //       channel.description,
+    //       importance: Importance.high,
+    //       color: Colors.blue,
+    //       playSound: true,
+    //     )
+    //   )
+    // );
   }
+
 
 
   @override
@@ -139,53 +182,53 @@ class _SettingsPage extends State<SettingsPage> {
                     ),
 
                     SizedBox(height: 20),
-
-                    Container(
-                      width: 350,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.0),
-                        boxShadow: const [BoxShadow(color: CustomColors.paleGreenColour)],
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          // themeNotifier.isDark ? themeNotifier.isDark = false : themeNotifier.isDark = true;
-                          // setState(() {
-                          //   _theme = themeNotifier.isDark ? "Dark" : "Light"; // Update _theme variable
-                          // });
-                        },
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 15),
-                            Text(_notificationTime, style: TextStyle(
-                              fontSize: 18,
-                            ),),
-                            const SizedBox(width: 15),
-                            Container(
-                                alignment: Alignment.centerLeft,
-                                width: 240,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  boxShadow: const [BoxShadow(color: CustomColors.darkGreenColour)],
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(15.0),
-                                  child: InkWell(
-                                    onTap: (){
-                                      _showTimePickerDialog();
-                                    },
-                                    child: Text(
-                                      'Notification Time' ,
-                                      textAlign: TextAlign.start,
-                                      style: (TextStyle(fontSize: 18)),
-                                    ),
-                                  ),
-                                )
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    //
+                    // Container(
+                    //   width: 350,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(15.0),
+                    //     boxShadow: const [BoxShadow(color: CustomColors.paleGreenColour)],
+                    //   ),
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       // themeNotifier.isDark ? themeNotifier.isDark = false : themeNotifier.isDark = true;
+                    //       // setState(() {
+                    //       //   _theme = themeNotifier.isDark ? "Dark" : "Light"; // Update _theme variable
+                    //       // });
+                    //     },
+                    //     child: Row(
+                    //       children: [
+                    //         const SizedBox(width: 15),
+                    //         Text(_notificationTime, style: TextStyle(
+                    //           fontSize: 18,
+                    //         ),),
+                    //         const SizedBox(width: 15),
+                    //         Container(
+                    //             alignment: Alignment.centerLeft,
+                    //             width: 240,
+                    //             height: 50,
+                    //             decoration: BoxDecoration(
+                    //               borderRadius: BorderRadius.circular(15.0),
+                    //               boxShadow: const [BoxShadow(color: CustomColors.darkGreenColour)],
+                    //             ),
+                    //             child: Padding(
+                    //               padding: EdgeInsets.all(15.0),
+                    //               child: InkWell(
+                    //                 onTap: (){
+                    //                   _showTimePickerDialog();
+                    //                 },
+                    //                 child: Text(
+                    //                   'Notification Time' ,
+                    //                   textAlign: TextAlign.start,
+                    //                   style: (TextStyle(fontSize: 18)),
+                    //                 ),
+                    //               ),
+                    //             )
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
 
                     // Container(
                     //   height: 50,

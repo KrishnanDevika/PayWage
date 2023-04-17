@@ -52,8 +52,8 @@ Widget BottomNavigation(int index, BuildContext context) {
             icon: Icon(Icons.payments),
             label: 'Payment'),
       ],
-      // unselectedItemColor: Colors.white,
-      selectedItemColor: Colors.yellow,
+      unselectedItemColor: Colors.white,
+      selectedItemColor: Colors.white70,
 
     );
   }
