@@ -21,13 +21,13 @@ class SearchEmployeePage extends StatefulWidget {
 class _SearchEmployeePageState extends State<SearchEmployeePage> {
 
   TextEditingController dateinput = TextEditingController();
-  List<TextEditingController> _timeinput = [];
-  List<TextEditingController> _timeOut = [];
-  List<TextEditingController> _site = [];
-  List<TextEditingController> _occupation = [];
+  final List<TextEditingController> _timeinput = [];
+  final List<TextEditingController> _timeOut = [];
+  final List<TextEditingController> _site = [];
+  final List<TextEditingController> _occupation = [];
   int _selectedIndex = 0;
   List<String> textValue = <String>[];
-  List<bool> _isChecked = [];
+  final List<bool> _isChecked = [];
   TextEditingController searchController = TextEditingController();
 
 
@@ -52,14 +52,14 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
       case 0:
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => AttendancePage(title: 'PayWage'),
+            builder: (context) => const AttendancePage(title: 'PayWage'),
           ),
         );
         break;
       case 1:
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => PaymentPage(title: 'PayWage'),
+            builder: (context) => const PaymentPage(title: 'PayWage'),
           ),
         );
         break;
@@ -69,7 +69,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(widget.title),
+      appBar: myAppBar(widget.title, context),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20),
@@ -77,9 +77,9 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xff7C8362).withOpacity(0.5),
+                  color: const Color(0xff7C8362).withOpacity(0.5),
                 ),
-                margin: EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
+                margin: const EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

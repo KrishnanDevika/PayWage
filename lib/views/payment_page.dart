@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:paywage/models/employee.dart';
 import 'package:paywage/models/pay_type.dart';
 import 'package:paywage/models/attendance.dart';
 
@@ -52,7 +51,7 @@ class _PaymentPageState extends State<PaymentPage> {
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
 
       final List<PayType> type =
-          parsed.map<PayType>((json) => PayType.fromJson(json)).toList();
+      parsed.map<PayType>((json) => PayType.fromJson(json)).toList();
       setState(() {
         for (var i = 0; i < type.length; i++) {
           pay_type.add(type[i].type);
@@ -71,7 +70,7 @@ class _PaymentPageState extends State<PaymentPage> {
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
 
       final List<Attendance> list =
-          parsed.map<Attendance>((json) => Attendance.fromJson(json)).toList();
+      parsed.map<Attendance>((json) => Attendance.fromJson(json)).toList();
       setState(() {
         for (var i = 0; i < list.length; i++) {
           employeeList.add(list[i].empId);
@@ -134,10 +133,10 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(widget.title),
+      appBar: myAppBar(widget.title, context),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               Container(
@@ -161,7 +160,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           DateTime pastDate = date.subtract(Duration(days: 1));
                           if (pastDate != null) {
                             String formattedDate =
-                                DateFormat('yyyy-MM-dd').format(pastDate!);
+                            DateFormat('yyyy-MM-dd').format(pastDate!);
                             dateinput.text = formattedDate;
                           }
                         });
@@ -183,13 +182,13 @@ class _PaymentPageState extends State<PaymentPage> {
                             initialDate: DateTime.now(),
                             firstDate: DateTime.now(),
                             lastDate:
-                                DateTime.now().add(const Duration(days: 365)),
+                            DateTime.now().add(const Duration(days: 365)),
                             initialEntryMode: DatePickerEntryMode.calendarOnly,
                           );
 
                           if (date != null) {
                             String formattedDate =
-                                DateFormat('yyyy-MM-dd').format(date!);
+                            DateFormat('yyyy-MM-dd').format(date!);
                             dateinput.text = formattedDate;
                           }
                         },
@@ -202,10 +201,10 @@ class _PaymentPageState extends State<PaymentPage> {
                 future: getData(),
                 builder: (context, snapshot) {
                   if(snapshot.hasError) print(snapshot.error);
-              /*  if(!snapshot.hasData){
+                  /*  if(!snapshot.hasData){
                 return Center(child: Text('No Employee data Found', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),);
                 }*/
-              //  else {
+                  //  else {
                   return snapshot.hasData
                       ? ListView.builder(
                       scrollDirection: Axis.vertical,
@@ -232,7 +231,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         }
 
 
-                       if (list[index]['salary_type'] == 2 && list[index]['payment_amount']!= null) {
+                        if (list[index]['salary_type'] == 2 && list[index]['payment_amount']!= null) {
                           int remainingBalance = (int.parse(list[index]['payment_amount'].replaceAll(RegExp(r'[^0-9/-]'), '')));
                           print(" Remaining ${remainingBalance/100}");
                           int end = int.parse(list[index]['end_time']
@@ -242,7 +241,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           int diff = end - start;
                           print("Time Diff ${diff}");
                           int pay = list[index]['pay_rate'];
-                           double amount = ((diff / 100) * pay * (list[index]['WorkedDays'] - 1)) + (remainingBalance)/100;
+                          double amount = ((diff / 100) * pay * (list[index]['WorkedDays'] - 1)) + (remainingBalance)/100;
                           print("AMount ${amount.round()}");
                           _totalAmount[index].text = '\u0024 ${amount.round()}';
                         }
@@ -255,7 +254,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                 list[index]['pay_rate'] )}';
                           }
                         }
-                      if(list[index]['salary_type'] == 1 && list[index]['payment_amount']!= null) {
+                        if(list[index]['salary_type'] == 1 && list[index]['payment_amount']!= null) {
                           int remainingBalance = (int.parse(list[index]['payment_amount'].replaceAll(RegExp(r'[^0-9/-]'), '')));
                           print(" Remaining ${remainingBalance/100}");
                           _totalAmount[index].text =
@@ -490,7 +489,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         );
                       })
                       : CircularProgressIndicator();
-              //  }
+                  //  }
                 },
               ),
               Container(
@@ -503,8 +502,8 @@ class _PaymentPageState extends State<PaymentPage> {
                         foregroundColor: Colors.white),
                     onPressed: () {
                       for (int index = 0;
-                          index < employeeList.length;
-                          index++) {
+                      index < employeeList.length;
+                      index++) {
 
                         double pendingAmount = 0;
                         if (selectedPayType[index] == "Regular") {
@@ -512,8 +511,8 @@ class _PaymentPageState extends State<PaymentPage> {
                               .text
                               .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
                           pendingAmount = double.parse(_totalAmount[index]
-                                  .text
-                                  .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                              .text
+                              .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
                               double.parse(_paidAmount[index]
                                   .text
                                   .replaceAll(RegExp(r'[^0-9/./-]'), ''));
@@ -523,8 +522,8 @@ class _PaymentPageState extends State<PaymentPage> {
                               .text
                               .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
                           pendingAmount = double.parse(_totalAmount[index]
-                                  .text
-                                  .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                              .text
+                              .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
                               double.parse(_paidAmount[index]
                                   .text
                                   .replaceAll(RegExp(r'[^0-9/./-]'), ''));
@@ -575,7 +574,7 @@ class _PaymentPageState extends State<PaymentPage> {
         selectedFontSize: 20,
         selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
         selectedLabelStyle:
-            TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               activeIcon: Icon(Icons.punch_clock_rounded),

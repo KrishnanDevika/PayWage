@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
-import 'package:paywage/common/BottomNavigationBar.dart';
 import 'package:paywage/views/payment_page.dart';
 import 'package:paywage/views/attendance_page.dart';
 import 'package:paywage/models/salary_type.dart';
@@ -17,7 +16,7 @@ class UpdateEmployeePage extends StatefulWidget {
   final int index;
   final List list;
 
-  UpdateEmployeePage(
+  const UpdateEmployeePage(
       {
         super.key,
         required this.title,
@@ -72,23 +71,21 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
 
   @override
   void initState() {
-    this.fetchSalaryType();
-    this.fetchCities();
-    this.fetchStates();
-    this.fetchOccupation();
-    if(widget.index != null){
-      editMode = true;
-      firstName.text = widget.list[widget.index]['first_name'];
-      lastName.text = widget.list[widget.index]['last_name'];
-      startDate.text = widget.list[widget.index]['start_date'];
-      contact.text = widget.list[widget.index]['phone'];
-      street.text = widget.list[widget.index]['street'];
-      baseRate.text = '${widget.list[widget.index]['pay_rate']}';
-      city_value = widget.list[widget.index]['city'];
-      state_value = widget.list[widget.index]['state'];
-      salaryType_value = widget.list[widget.index]['salary_type'];
-      occupation_value = widget.list[widget.index]['occupation_type'];
-    }
+    fetchSalaryType();
+    fetchCities();
+    fetchStates();
+    fetchOccupation();
+    editMode = true;
+    firstName.text = widget.list[widget.index]['first_name'];
+    lastName.text = widget.list[widget.index]['last_name'];
+    startDate.text = widget.list[widget.index]['start_date'];
+    contact.text = widget.list[widget.index]['phone'];
+    street.text = widget.list[widget.index]['street'];
+    baseRate.text = '${widget.list[widget.index]['pay_rate']}';
+    city_value = widget.list[widget.index]['city'];
+    state_value = widget.list[widget.index]['state'];
+    salaryType_value = widget.list[widget.index]['salary_type'];
+    occupation_value = widget.list[widget.index]['occupation_type'];
 
     super.initState();
   }
@@ -181,10 +178,10 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
     });
     switch(index){
       case 0:
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AttendancePage(title: 'PayWage'),),);
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AttendancePage(title: 'PayWage'),),);
         break;
       case 1:
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PaymentPage(title: 'PayWage'),),);
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const PaymentPage(title: 'PayWage'),),);
 
         break;
     }
@@ -193,13 +190,13 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(widget.title),
+      appBar: myAppBar(widget.title, context),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: <Widget>[
-              Padding(
+              const Padding(
                 padding:
                 EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 15),
                 child: Text(
@@ -210,16 +207,16 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 15, bottom: 10),
                       child: Text(
@@ -227,11 +224,11 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -242,16 +239,16 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 15, bottom: 10),
                       child: Text(
@@ -259,11 +256,11 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -274,16 +271,16 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 20, bottom: 10),
                       child: Text(
@@ -291,15 +288,15 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
+                    Expanded(
                         child: TextField(
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.calendar_month_sharp,
                               color: Colors.white,
                             ),
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -326,30 +323,30 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.all(10),
                       child: Text(
                         'Contact No',
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             hintText: '###-###-####',
-                            hintStyle: TextStyle(color: Colors.white),
-                            fillColor: Color(0xff57654E),
+                            hintStyle: const TextStyle(color: Colors.white),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -360,16 +357,16 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 55, bottom: 10),
                       child: Text(
@@ -377,11 +374,11 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -392,16 +389,16 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 70, bottom: 10),
                       child: Text(
@@ -409,10 +406,10 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                      child: new DecoratedBox(
+                    Expanded(
+                      child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: Color(0xff57654E),
+                          color: const Color(0xff57654E),
                           //background color of dropdown button
                           border: Border.all(color: Colors.black),
                           //border of dropdown button
@@ -420,9 +417,9 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                               10), //border radius of dropdown button
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 30),
+                          padding: const EdgeInsets.only(left: 20, right: 30),
                           child: DropdownButton(
-                            dropdownColor: Color(0xff57654E),
+                            dropdownColor: const Color(0xff57654E),
                             underline: Container(),
                             value: city_value,
                             style: const TextStyle(
@@ -454,16 +451,16 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 60, bottom: 10),
                       child: Text(
@@ -471,10 +468,10 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
+                    Expanded(
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: Color(0xff57654E),
+                          color: const Color(0xff57654E),
                           //background color of dropdown button
                           border: Border.all(color: Colors.black),
                           //border of dropdown button
@@ -482,9 +479,9 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                               10), //border radius of dropdown button
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 30),
-                          child: new DropdownButton(
-                            dropdownColor: Color(0xff57654E),
+                          padding: const EdgeInsets.only(left: 20, right: 30),
+                          child: DropdownButton(
+                            dropdownColor: const Color(0xff57654E),
                             underline: Container(),
                             value: state_value,
                             style: const TextStyle(
@@ -515,16 +512,16 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 10, bottom: 10),
                       child: Text(
@@ -532,10 +529,10 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                      child: new DecoratedBox(
+                    Expanded(
+                      child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: Color(0xff57654E),
+                          color: const Color(0xff57654E),
                           //background color of dropdown button
                           border: Border.all(color: Colors.black),
                           //border of dropdown button
@@ -544,9 +541,9 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                         ),
 
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.only(left: 20),
                           child: DropdownButton(
-                            dropdownColor: Color(0xff57654E),
+                            dropdownColor: const Color(0xff57654E),
                             underline: Container(),
                             value: occupation_value,
                             style: const TextStyle(
@@ -578,16 +575,16 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 15, bottom: 10),
                       child: Text(
@@ -595,10 +592,10 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
+                    Expanded(
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: Color(0xff57654E),
+                          color: const Color(0xff57654E),
                           //background color of dropdown button
                           border: Border.all(color: Colors.black),
                           //border of dropdown button
@@ -606,9 +603,9 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                               10), //border radius of dropdown button
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 30),
+                          padding: const EdgeInsets.only(left: 20, right: 30),
                           child:  DropdownButton(
-                            dropdownColor: Color(0xff57654E),
+                            dropdownColor: const Color(0xff57654E),
                             underline: Container(),
                             value: salaryType_value,
                             style: const TextStyle(
@@ -639,16 +636,16 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 30, bottom: 10),
                       child: Text(
@@ -656,11 +653,11 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -671,24 +668,24 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                   ],
                 ),
               ),
-              new Padding(
-                padding: new EdgeInsets.all(64.0),
+              Padding(
+                padding: const EdgeInsets.all(64.0),
                 //onPressed will show login with the username typed on terminal
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff31473A),
+                      backgroundColor: const Color(0xff31473A),
                       foregroundColor: Colors.white),
                   onPressed: () {
                     updateEmployee();
                     final snackBar = SnackBar(
-                      content:  Text('Employee Updated', style: TextStyle(color: Colors.white),),
-                      backgroundColor:  Color(0xff31473A),
+                      content:  const Text('Employee Updated', style: TextStyle(color: Colors.white),),
+                      backgroundColor:  const Color(0xff31473A),
                       action: SnackBarAction(
                         label: 'dismiss',
                         onPressed: () {
                           Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => AttendancePage(title: 'PayWage'),
+                                builder: (context) => const AttendancePage(title: 'PayWage'),
                               ),
                           );
                           //Navigator.pop(context);
@@ -697,7 +694,7 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
-                  child: new Text('UPDATE EMPLOYEE'),
+                  child: const Text('UPDATE EMPLOYEE'),
                 ),
               ),
             ],
@@ -705,13 +702,13 @@ class _UpdateEmployeePageState extends State<UpdateEmployeePage> {
         ),
       ),
       bottomNavigationBar:  BottomNavigationBar(
-        backgroundColor: Color(0xff7C8362),
+        backgroundColor: const Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedFontSize: 20,
-        selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        items: <BottomNavigationBarItem>[
+        selectedIconTheme: const IconThemeData(color: Colors.white, size: 25),
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               activeIcon: Icon(Icons.punch_clock_rounded),
               icon: Icon(Icons.calendar_month_outlined),

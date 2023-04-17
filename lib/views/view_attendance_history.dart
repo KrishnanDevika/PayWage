@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
-import 'package:paywage/common/BottomNavigationBar.dart';
 import 'package:paywage/views/attendance_page.dart';
 import 'package:paywage/views/payment_page.dart';
 import 'package:http/http.dart' as http;
@@ -21,13 +20,13 @@ class ViewAttendanceHistory extends StatefulWidget {
 class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
 
   TextEditingController dateinput = TextEditingController();
-  List<TextEditingController> _timeinput = [];
-  List<TextEditingController> _timeOut = [];
-  List<TextEditingController> _site = [];
-  List<TextEditingController> _occupation = [];
+  final List<TextEditingController> _timeinput = [];
+  final List<TextEditingController> _timeOut = [];
+  final List<TextEditingController> _site = [];
+  final List<TextEditingController> _occupation = [];
   int _selectedIndex = 0;
   List<String> textValue = <String>[];
-  List<bool> _isChecked = [];
+  final List<bool> _isChecked = [];
 
   Future fetchAttendance() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchAttendance.php';
@@ -51,14 +50,14 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
       case 0:
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => AttendancePage(title: 'PayWage'),
+            builder: (context) => const AttendancePage(title: 'PayWage'),
           ),
         );
         break;
       case 1:
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => PaymentPage(title: 'PayWage'),
+            builder: (context) => const PaymentPage(title: 'PayWage'),
           ),
         );
         break;
@@ -68,41 +67,39 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(widget.title),
+      appBar: myAppBar(widget.title, context),
 
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xff7C8362).withOpacity(0.5),
+                  color: const Color(0xff7C8362).withOpacity(0.5),
                 ),
-                margin: EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
+                margin: const EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    new IconButton(
+                    IconButton(
                       // padding: EdgeInsets.only(left: 130, top: 0, right: 30, bottom: 0),
-                      icon: Icon(Icons.arrow_back_ios_new),
+                      icon: const Icon(Icons.arrow_back_ios_new),
                       iconSize: 20,
                       color: Colors.white,
                       onPressed: () {
                         setState(() {
                           DateFormat inputFormat = DateFormat('yyyy-MM-dd');
                           DateTime date = inputFormat.parse(dateinput.text);
-                          DateTime pastDate = date.subtract(Duration(days: 1));
-                          if (pastDate != null) {
-                            String formattedDate =
-                                DateFormat('yyyy-MM-dd').format(pastDate!);
-                            dateinput.text = formattedDate;
-                          }
+                          DateTime pastDate = date.subtract(const Duration(days: 1));
+                          String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(pastDate!);
+                          dateinput.text = formattedDate;
 
                           if(dateinput.text.compareTo('2023-04-11') < 0){
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewAttendanceHistory(
+                                builder: (context) => const ViewAttendanceHistory(
                                     title: 'Pay Wage', date: '2023-04-11')));
                           }else{
                             Navigator.of(context).push(MaterialPageRoute(
@@ -113,11 +110,11 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                         
                       },
                     ),
-                    new SizedBox(
+                    SizedBox(
                       width: 120,
                       child: TextField(
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         controller: dateinput,
 
                         //editing controller of this TextField
@@ -142,25 +139,23 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                       ),
                     ),
 
-                    new IconButton(
+                    IconButton(
                       // padding: EdgeInsets.only(left: 130, top: 0, right: 30, bottom: 0),
-                      icon: Icon(Icons.arrow_forward_ios),
+                      icon: const Icon(Icons.arrow_forward_ios),
                       iconSize: 20,
                       color: Colors.white,
                       onPressed: () {
                         setState(() {
                           DateFormat inputFormat = DateFormat('yyyy-MM-dd');
                           DateTime date = inputFormat.parse(dateinput.text);
-                          DateTime pastDate = date.add(Duration(days: 1));
-                          if (pastDate != null) {
-                            String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pastDate!);
-                            dateinput.text = formattedDate;
-                          }
+                          DateTime pastDate = date.add(const Duration(days: 1));
+                          String formattedDate =
+                          DateFormat('yyyy-MM-dd').format(pastDate!);
+                          dateinput.text = formattedDate;
 
                           if(((DateFormat('yyyy-MM-dd').format(pastDate)).compareTo(DateFormat('yyyy-MM-dd').format(DateTime.now()))  == 0) || pastDate.isAfter(DateTime.now())){
                             String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: 1)));
+                            DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(const Duration(days: 1)));
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ViewAttendanceHistory(
                                     title: 'Pay Wage', date: formattedDate)));
@@ -189,10 +184,10 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                             String name = list[index]['first_name'] +
                                 ' ' +
                                 list[index]['last_name'];
-                            _timeOut.add(new TextEditingController());
-                            _timeinput.add(new TextEditingController());
-                            _site.add(new TextEditingController());
-                            _occupation.add(new TextEditingController());
+                            _timeOut.add(TextEditingController());
+                            _timeinput.add(TextEditingController());
+                            _site.add(TextEditingController());
+                            _occupation.add(TextEditingController());
 
                             _timeinput[index].text = list[index]['start_time'];
                             _timeOut[index].text =list[index]['end_time'];
@@ -213,21 +208,21 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25),
                               ),
-                              color: Color(0xff31473A),
+                              color: const Color(0xff31473A),
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.all(10),
+                                    padding: const EdgeInsets.all(10),
                                     child: Text(
                                       name,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20),
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                         left: 10,
                                         top: 0,
                                         right: 10,
@@ -238,18 +233,18 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                       children: <Widget>[
                                         Switch(
                                           value: _isChecked[index],
-                                          activeColor: Color(0xff7C8362),
+                                          activeColor: const Color(0xff7C8362),
                                           activeTrackColor: Colors.white,
                                           inactiveThumbColor:
-                                          Color(0xff7C8362),
+                                          const Color(0xff7C8362),
                                           inactiveTrackColor:
-                                          Color(0xff7C8362)
+                                          const Color(0xff7C8362)
                                               .withOpacity(0.5),
                                           onChanged: (val) {
                                           },
                                         ),
                                         Text(textValue[index],
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 20,
                                                 color: Colors.white,
                                                 fontWeight:
@@ -258,7 +253,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                         left: 30,
                                         top: 0,
                                         right: 30,
@@ -268,7 +263,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                       MainAxisAlignment.spaceEvenly,
                                       mainAxisSize: MainAxisSize.max,
                                       children: <Widget>[
-                                        Text(
+                                        const Text(
                                           "In",
                                           style: TextStyle(
                                               color: Colors.white,
@@ -282,7 +277,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                           child: TextField(
                                             decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Color(0xff7C8362),
+                                              fillColor: const Color(0xff7C8362),
                                               border: OutlineInputBorder(
                                                 borderRadius:
                                                 BorderRadius.circular(
@@ -291,7 +286,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                             ),
 
 
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: Colors.white),
                                             textAlign: TextAlign.center,
                                             controller: _timeinput[index],
@@ -299,9 +294,9 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                             readOnly: true,
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        const SizedBox(width: 10),
 
-                                        Text(
+                                        const Text(
                                           "Out",
                                           style: TextStyle(
                                               color: Colors.white,
@@ -314,7 +309,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                           child: TextField(
                                             decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Color(0xff7C8362),
+                                              fillColor: const Color(0xff7C8362),
                                               border: OutlineInputBorder(
                                                 borderRadius:
                                                 BorderRadius.circular(
@@ -322,7 +317,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                               ),
                                             ),
 
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: Colors.white),
                                             textAlign: TextAlign.center,
                                             controller: _timeOut[index],
@@ -335,7 +330,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                         left: 10,
                                         top: 10,
                                         right: 10,
@@ -350,7 +345,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                           child: TextField(
                                             decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Color(0xff7C8362),
+                                              fillColor: const Color(0xff7C8362),
                                               border: OutlineInputBorder(
                                                 borderRadius:
                                                 BorderRadius.circular(
@@ -358,7 +353,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                               ),
                                             ),
 
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: Colors.white),
                                             textAlign: TextAlign.center,
                                             controller: _site[index],
@@ -366,14 +361,14 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                             readOnly: true,
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        const SizedBox(width: 10),
                                         SizedBox(
                                           width: 150,
                                           height: 40,
                                           child: TextField(
                                             decoration: InputDecoration(
                                               filled: true,
-                                              fillColor: Color(0xff7C8362),
+                                              fillColor: const Color(0xff7C8362),
                                               border: OutlineInputBorder(
                                                 borderRadius:
                                                 BorderRadius.circular(
@@ -381,7 +376,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                                               ),
                                             ),
 
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: Colors.white),
                                             textAlign: TextAlign.center,
                                             controller: _occupation[index],
@@ -399,14 +394,14 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                           });
                          // : CircularProgressIndicator();
                     } else{
-                      return Text("No widget to build");
+                      return const Text("No widget to build");
                     }
 
 
                   }
                  else
                  {
-                    return Center(
+                    return const Center(
                       child: Text(
                         'No Data Found',
                         style: TextStyle(
@@ -424,14 +419,14 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
       ),
 
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xff7C8362),
+        backgroundColor: const Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedFontSize: 20,
-        selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
+        selectedIconTheme: const IconThemeData(color: Colors.white, size: 25),
         selectedLabelStyle:
-            TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        items: <BottomNavigationBarItem>[
+            const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               activeIcon: Icon(Icons.punch_clock_rounded),
               icon: Icon(Icons.calendar_month_outlined),

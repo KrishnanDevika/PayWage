@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
-import 'package:paywage/common/BottomNavigationBar.dart';
 import 'package:paywage/views/payment_page.dart';
 import 'package:paywage/views/attendance_page.dart';
 import 'package:paywage/views/update_employee.dart';
-import 'package:paywage/models/salary_type.dart';
-import 'package:paywage/models/occupation.dart';
-import 'package:paywage/models/city.dart';
-import 'package:paywage/models/states.dart';
 import 'package:paywage/models/employee.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -19,7 +13,7 @@ class ViewEmployeePage extends StatefulWidget {
   final int index;
   final List list;
 
-  ViewEmployeePage(
+  const ViewEmployeePage(
       {
         super.key,
         required this.title,
@@ -49,20 +43,18 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
 
   @override
   void initState() {
-    this.getData();
+    getData();
     super.initState();
-    if(widget.index != null){
-      firstName.text = widget.list[widget.index]['first_name'];
-      lastName.text = widget.list[widget.index]['last_name'];
-      startDate.text = widget.list[widget.index]['start_date'];
-      contact.text = widget.list[widget.index]['phone'];
-      street.text = widget.list[widget.index]['street'];
-      baseRate.text = '${widget.list[widget.index]['pay_rate']}';
-      city.text = widget.list[widget.index]['city'];
-      state.text = widget.list[widget.index]['state'];
-      wageType.text = widget.list[widget.index]['salary_type'];
-     occupation.text = widget.list[widget.index]['occupation_type'];
-    }
+    firstName.text = widget.list[widget.index]['first_name'];
+    lastName.text = widget.list[widget.index]['last_name'];
+    startDate.text = widget.list[widget.index]['start_date'];
+    contact.text = widget.list[widget.index]['phone'];
+    street.text = widget.list[widget.index]['street'];
+    baseRate.text = '${widget.list[widget.index]['pay_rate']}';
+    city.text = widget.list[widget.index]['city'];
+    state.text = widget.list[widget.index]['state'];
+    wageType.text = widget.list[widget.index]['salary_type'];
+   occupation.text = widget.list[widget.index]['occupation_type'];
   }
 
   Future getData() async {
@@ -86,7 +78,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
       parsed.map<Employee>((json) => Employee.fromJson(json)).toList();
       setState(() {
         for (var i = 0; i < employee.length; i++) {
-          employeeList.add(employee[i].firstName + " " + employee[i].lastName);
+          employeeList.add("${employee[i].firstName} ${employee[i].lastName}");
         }
 
       });
@@ -113,13 +105,13 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: myAppBar(widget.title),
+        appBar: myAppBar(widget.title, context),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20),
           child: Column(
             children: <Widget>[
-              Padding(
+              const Padding(
                 padding:
                 EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 15),
                 child: Text(
@@ -130,7 +122,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
                 margin: EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
@@ -139,7 +131,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 15, bottom: 10),
                       child: Text(
@@ -147,11 +139,11 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -163,16 +155,16 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 15, bottom: 10),
                       child: Text(
@@ -180,11 +172,11 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -196,16 +188,16 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 20, bottom: 10),
                       child: Text(
@@ -213,7 +205,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
+                    Expanded(
                         child: TextField(
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
@@ -224,50 +216,34 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                        /*  onTap: () async {
-                            final DateTime? date = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate:
-                              DateTime.now().add(const Duration(days: 365)),
-                              initialEntryMode: DatePickerEntryMode.calendarOnly,
-                            );
-
-                            if (date != null) {
-                              String formattedDate =
-                              DateFormat('yyyy-MM-dd').format(date!);
-                              startDate.text = formattedDate;
-                            }
-                          },*/
                           controller: startDate,
                           readOnly: true,
                         ))
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.all(10),
                       child: Text(
                         'Contact No',
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -279,16 +255,16 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 55, bottom: 10),
                       child: Text(
@@ -296,11 +272,11 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -312,16 +288,16 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 70, bottom: 10),
                       child: Text(
@@ -329,11 +305,11 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -345,16 +321,16 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 60, bottom: 10),
                       child: Text(
@@ -362,9 +338,9 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -378,16 +354,16 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
                 margin: EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 10, bottom: 10),
                       child: Text(
@@ -395,11 +371,11 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -411,16 +387,16 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 15, bottom: 10),
                       child: Text(
@@ -428,9 +404,9 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             fillColor: Color(0xff57654E),
                             filled: true,
@@ -444,16 +420,16 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                   ],
                 ),
               ),
-              new Container(
+              Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color(0xff7C8362),
+                  color: const Color(0xff7C8362),
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 30, bottom: 10),
                       child: Text(
@@ -461,11 +437,11 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
-                    new Expanded(
-                        child: new TextField(
-                          style: TextStyle(color: Colors.white),
+                    Expanded(
+                        child: TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            fillColor: Color(0xff57654E),
+                            fillColor: const Color(0xff57654E),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -484,7 +460,7 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff7C8362),
+        backgroundColor: const Color(0xff7C8362),
         onPressed: () {
           Navigator.of(context)
               .push(MaterialPageRoute(
@@ -507,9 +483,9 @@ class _ViewEmployeePageState extends State<ViewEmployeePage> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedFontSize: 20,
-        selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        items: <BottomNavigationBarItem>[
+        selectedIconTheme: const IconThemeData(color: Colors.white, size: 25),
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               activeIcon: Icon(Icons.punch_clock_rounded),
               icon: Icon(Icons.calendar_month_outlined),

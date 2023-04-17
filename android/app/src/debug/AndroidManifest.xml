@@ -5,4 +5,11 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="16" />
+
 </manifest>
+
+<!--<intent-filter>-->
+<!--    <action android:name="com.example.app.START_BACKGROUND" />-->
+<!--</intent-filter>-->
