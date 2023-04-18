@@ -1,15 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:paywage/CustomTheme/CustomColors.dart';
-import 'package:paywage/views/add_employee.dart';
+import 'package:paywage/views/attendance_page.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
-import 'package:paywage/common/BottomNavigationBar.dart';
-import 'package:paywage/models/employee.dart';
-import 'package:paywage/models/job_site.dart';
-import 'package:paywage/models/occupation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:toggle_switch/toggle_switch.dart';
+import 'package:paywage/models/pay_type.dart';
+import 'package:paywage/models/attendance.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key, required this.title});
@@ -17,70 +14,135 @@ class PaymentPage extends StatefulWidget {
   final String title;
 
   @override
-  _PaymentPageState createState() => _PaymentPageState();
+  State<PaymentPage> createState() => _PaymentPageState();
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  List<String> employeeList = <String>[];
-
-  int? groupValue;
-
-  bool isSwitched = false;
-
+  List<int> employeeList = <int>[];
+  int _selectedIndex = 1;
   TextEditingController dateinput = TextEditingController();
   TextEditingController searchController = TextEditingController();
+  final List<TextEditingController> _totalAmount = [];
+  final List<TextEditingController> _paidAmount = [];
+  List<String> pay_type = <String>[];
+  List<String> selectedPayType = <String>[];
+  List<int> daysWorked = <int>[];
+  List<int> payAmount = <int>[];
+  List<String> firstname = <String>[];
+  List<String> lastName = <String>[];
 
-  int _selectedIndex = 0;
+  @override
+  void initState() {
+    DateTime now = DateTime.now();
+    String formattedDate =
+    DateFormat('yyyy-MM-dd').format(now);
+    dateinput.text = formattedDate;
+    fetchEmployee();
+    fetchPayType();
+    super.initState();
+  }
 
-
-
-  Future fetchEmployee() async {
-    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployee.php';
+  void fetchPayType() async {
+    var url = 'https://dkrishnan.scweb.ca/Paywage/fetchPayType.php';
     try {
       http.Response response = await http.get(Uri.parse(url));
       var data = response.body;
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
 
-      final List<Employee> employee =
-      parsed.map<Employee>((json) => Employee.fromJson(json)).toList();
-      for (var i = 0; i < employee.length; i++) {
-        employeeList.add(employee[i].firstName +" "+ employee[i].lastName);
-        print(employee[i].firstName +" "+ employee[i].lastName);
+      final List<PayType> type =
+      parsed.map<PayType>((json) => PayType.fromJson(json)).toList();
+      setState(() {
+        for (var i = 0; i < type.length; i++) {
+          pay_type.add(type[i].type);
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void fetchEmployee() async {
+    var url = 'https://dkrishnan.scweb.ca/Paywage/calculatePay.php';
+    try {
+      http.Response response = await http.get(Uri.parse(url));
+      var data = response.body;
+      final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
+
+      final List<Attendance> list =
+      parsed.map<Attendance>((json) => Attendance.fromJson(json)).toList();
+      setState(() {
+        for (var i = 0; i < list.length; i++) {
+          employeeList.add(list[i].empId);
+        }
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
       }
+    }
+  }
+
+  Future getData() async {
+
+    var url = 'https://dkrishnan.scweb.ca/Paywage/calculatePay.php';
+    try {
+      var response = await http.get(Uri.parse(url));
+      return json.decode(response.body);
     }
     catch(e){
       print(e);
     }
   }
 
+  Future insertPayment(String fName, String lName, String date, String payType,
+      double amount) async {
+    final response = await http.post(
+        Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertPayment.php'),
+        body: {
+          "first_name": fName,
+          "last_name": lName,
+          "date": date,
+          "pay_type": payType,
+          "payment_amount": amount.toString(),
+        });
 
-  @override
-  void initState() {
-    dateinput.text = "";
-    super.initState();
-    this.fetchEmployee();
-
+    print((response.body));
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    switch (index) {
+      case 0:
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const AttendancePage(title: 'PayWage'),
+          ),
+        );
+        break;
+      case 1:
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const PaymentPage(title: 'PayWage'),
+          ),
+        );
+        break;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: myAppBar(widget.title, context),
-
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(20),
-          child :Column(
+          padding: const EdgeInsets.all(20),
+          child: Column(
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xff7C8362).withOpacity(0.5),
+                  color: const Color(0xff7C8362).withOpacity(0.5),
                 ),
                 margin: const EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
                 child: Row(
@@ -89,19 +151,17 @@ class _PaymentPageState extends State<PaymentPage> {
                   children: <Widget>[
                     IconButton(
                       // padding: EdgeInsets.only(left: 130, top: 0, right: 30, bottom: 0),
-                      icon: Icon(Icons.arrow_back_ios_new),
+                      icon: const Icon(Icons.arrow_back_ios_new),
                       iconSize: 20,
                       color: Colors.white,
                       onPressed: () {
                         setState(() {
-                          DateFormat inputFormat = DateFormat('dd-MM-yyyy');
+                          DateFormat inputFormat = DateFormat('yyyy-MM-dd');
                           DateTime date = inputFormat.parse(dateinput.text);
-                          DateTime pastDate = date.subtract(Duration(days: 1));
-                          if (pastDate != null) {
-                            String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(pastDate!);
-                            dateinput.text = formattedDate;
-                          }
+                          DateTime pastDate = date.subtract(const Duration(days: 1));
+                          String formattedDate =
+                          DateFormat('yyyy-MM-dd').format(pastDate!);
+                          dateinput.text = formattedDate;
                         });
                       },
                     ),
@@ -109,7 +169,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       width: 120,
                       child: TextField(
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         controller: dateinput,
 
                         //editing controller of this TextField
@@ -127,7 +187,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
                           if (date != null) {
                             String formattedDate =
-                            DateFormat('dd-MM-yyyy').format(date!);
+                            DateFormat('yyyy-MM-dd').format(date!);
                             dateinput.text = formattedDate;
                           }
                         },
@@ -136,152 +196,383 @@ class _PaymentPageState extends State<PaymentPage> {
                   ],
                 ),
               ),
-              Container(
-                height: 50,
-                margin: const EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: searchController,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: CustomColors.paleGreenColour,
-                      prefixIcon: IconButton(
-                        icon: const Icon(
-                          Icons.search,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {},
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      )),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(10.0),
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: employeeList.length,
-                  itemBuilder: (context, index) {
+              FutureBuilder(
+                future: getData(),
+                builder: (context, snapshot) {
+                  if(snapshot.hasError) print(snapshot.error);
+                  /*  if(!snapshot.hasData){
+                return Center(child: Text('No Employee data Found', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),);
+                }*/
+                  //  else {
+                  return snapshot.hasData
+                      ? ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        List list = snapshot.data;
+                        String name = list[index]['first_name'] +
+                            ' ' +
+                            list[index]['last_name'];
+                        _totalAmount.add(TextEditingController());
 
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      color: Color(0xff31473A),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 10, top: 4, right: 10, bottom: 2),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  employeeList[index],
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                SizedBox(width: 40),
-                                SizedBox(
-                                  width: 80,
-                                  height: 40,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: CustomColors.paleGreenColour,
-                                      border: Border.all(
-                                        width: 2
+                        if(list[index]['salary_type'] == 2 ){
+                          int end = int.parse(list[index]['end_time']
+                              .replaceAll(RegExp(r'[^0-9]'), ''));
+                          int start = int.parse(list[index]['start_time']
+                              .replaceAll(RegExp(r'[^0-9]'), ''));
+                          int diff = end - start;
+                          print("Time Diff $diff");
+                          int pay = list[index]['pay_rate'];
+                          double amount = ((diff / 100) * pay * list[index]['WorkedDays']);
+                          print("AMount ${amount.round()}");
+                          _totalAmount[index].text = '\u0024 ${amount.round()}';
+                        }
+
+
+                        if (list[index]['salary_type'] == 2 && list[index]['payment_amount']!= null) {
+                          int remainingBalance = (int.parse(list[index]['payment_amount'].replaceAll(RegExp(r'[^0-9/-]'), '')));
+                          print(" Remaining ${remainingBalance/100}");
+                          int end = int.parse(list[index]['end_time']
+                              .replaceAll(RegExp(r'[^0-9]'), ''));
+                          int start = int.parse(list[index]['start_time']
+                              .replaceAll(RegExp(r'[^0-9]'), ''));
+                          int diff = end - start;
+                          print("Time Diff ${diff}");
+                          int pay = list[index]['pay_rate'];
+                          double amount = ((diff / 100) * pay * (list[index]['WorkedDays'] - 1)) + (remainingBalance)/100;
+                          print("AMount ${amount.round()}");
+                          _totalAmount[index].text = '\u0024 ${amount.round()}';
+                        }
+
+
+                        if(list[index]['salary_type'] == 1){
+                          {
+                            _totalAmount[index].text =
+                            '\u0024 ${(list[index]['WorkedDays'] *
+                                list[index]['pay_rate'] )}';
+                          }
+                        }
+                        if(list[index]['salary_type'] == 1 && list[index]['payment_amount']!= null) {
+                          int remainingBalance = (int.parse(list[index]['payment_amount'].replaceAll(RegExp(r'[^0-9/-]'), '')));
+                          print(" Remaining ${remainingBalance/100}");
+                          _totalAmount[index].text =
+                          '\u0024 ${((list[index]['WorkedDays'] - 1) *
+
+                              list[index]['pay_rate'] )+ (remainingBalance)/100}';
+                        }
+
+                        _paidAmount.add(TextEditingController());
+                        for (int i = 0; i < list.length; i++) {
+                          firstname.add(list[i]['first_name']);
+                          lastName.add(list[i]['last_name']);
+                          selectedPayType.add("Regular");
+                        }
+
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          color: const Color(0xff31473A),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 0,
+                                          top: 0,
+                                          right: 15,
+                                          bottom: 0),
+                                      child: Text(
+                                        name,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
                                       ),
-                                      borderRadius: BorderRadius.circular(13)
                                     ),
-                                    child: Center(
-                                      child: Text('\$ 100', style: TextStyle(
-                                        fontWeight: FontWeight.bold
-                                      ),),
-                                  ),
-                                )
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 30, top: 5, right: 30, bottom: 4),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
+                                    SizedBox(
+                                      width: 100,
+                                      height: 35,
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: const Color(0xff7C8362),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(12.0),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(12.0),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(15.0),
+                                          ),
+                                        ),
 
-                                ToggleSwitch(
-                                  minHeight: 30,
-                                  minWidth: 50,
-                                  labels: ['adv', 'reg'],
-                                  onToggle: (index){
-                                    print('$index');
-                                  }
-                                ),
-
-                                Container(
-                                  width: 150,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                      color: CustomColors.paleGreenColour,
-                                      border: Border.all(
-                                          width: 2
+                                        style:
+                                        const TextStyle(color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                        controller: _totalAmount[index],
+                                        //editing controller of this TextField
+                                        readOnly: true,
                                       ),
-                                      borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: TextField(
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 0, top: 0, right: 0, bottom: 15),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    /*  new Expanded(
+                                          child:*/
+                                    DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xff7C8362),
+                                        //background color of dropdown button
+                                        border:
+                                        Border.all(color: Colors.white),
+                                        //border of dropdown button
+                                        borderRadius: BorderRadius.circular(
+                                            10), //border radius of dropdown button
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 15, right: 15),
+                                        child: DropdownButton(
+                                          dropdownColor: const Color(0xff7C8362),
+                                          underline: Container(),
+                                          value: selectedPayType[index],
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                          icon: const Icon(
+                                            Icons.keyboard_arrow_down,
+                                            color: Colors.white,
+                                          ),
+                                          items:
+                                          pay_type.map((String type) {
+                                            return DropdownMenuItem(
+                                              value: type,
+                                              child: Text(
+                                                type,
+                                              ),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              selectedPayType[index] =
+                                              newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    //  ),
 
-                    style: TextStyle(color: CustomColors.lightModeTextColor, fontSize: 20),
-                    decoration: InputDecoration(
-                    filled: true,
-                    fillColor: CustomColors.paleGreenColour,
-                    enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    )
+                                    /*   Container(
+                                          padding: EdgeInsets.zero,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xff7C8362),
+                                            border: Border.all(
+                                                color: Colors.white,
+                                                width: 1.0),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12.0)),
+                                          ),
 
-                    ),
-                    ),
-                                )
+                                          child: ToggleButtons(
 
-                                // TextField()
-                              ],
-                            ),
+                                            isSelected: _isToggle[index],
+                                            onPressed: (int pos) {
+                                              setState(() {
+                                                print(_isToggle.length);
+                                                print(index);
+                                                print(pos);
+                                             for (int i = 0; i < _isToggle[index].length; i++) {
+                                                  _isToggle[index][i] = i == pos;
+                                                }
+                                              });
+                                            },
+                                            color: Colors.white,
+                                            selectedColor: Colors.black,
+                                            fillColor: Colors.white,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: EdgeInsets.all(8),
+                                                child: Text(
+                                                  "Advance",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8),
+                                                child: Text(
+                                                  "Regular",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          // ) ,
+                                        ),*/
+                                    SizedBox(
+                                      width: 180,
+                                      height: 50,
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: const Color(0xff7C8362),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(12.0),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(12.0),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 2.0,
+                                                color: Colors.white),
+                                            borderRadius:
+                                            BorderRadius.circular(15.0),
+                                          ),
+                                        ),
+
+                                        style:
+                                        const TextStyle(color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                        controller: _paidAmount[index],
+                                        //editing controller of this TextField
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        );
+                      })
+                      : const CircularProgressIndicator();
+                  //  }
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.all(64.0),
+                //onPressed will show login with the username typed on terminal
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff31473A),
+                      foregroundColor: Colors.white),
+                  onPressed: () {
+                    for (int index = 0;
+                    index < employeeList.length;
+                    index++) {
+
+                      double pendingAmount = 0;
+                      if (selectedPayType[index] == "Regular") {
+                        print(double.parse(_totalAmount[index]
+                            .text
+                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
+                        pendingAmount = double.parse(_totalAmount[index]
+                            .text
+                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                            double.parse(_paidAmount[index]
+                                .text
+                                .replaceAll(RegExp(r'[^0-9/./-]'), ''));
+                      }
+                      if (selectedPayType[index] == "Advance") {
+                        print(double.parse(_totalAmount[index]
+                            .text
+                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
+                        pendingAmount = double.parse(_totalAmount[index]
+                            .text
+                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                            double.parse(_paidAmount[index]
+                                .text
+                                .replaceAll(RegExp(r'[^0-9/./-]'), ''));
+                      }
+
+                      insertPayment(
+                          firstname[index],
+                          lastName[index],
+                          dateinput.text,
+                          selectedPayType[index],
+                          pendingAmount);
+
+                    }
+                    final snackBar = SnackBar(
+                      content: const Text(
+                        'Payment Updated',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: const Color(0xff31473A),
+                      action: SnackBarAction(
+                        label: 'dismiss',
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                              builder: (context) => const PaymentPage(title: 'Pay Wage')))
+                              .then((value) => setState(() {
+                            getData();
+                            employeeList = [];
+                            fetchEmployee();
+                          }));
+                        },
                       ),
                     );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
+                  child: const Text('MAKE PAYMENT'),
                 ),
               ),
             ],
           ),
         ),
       ),
-
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: CustomColors.paleGreenColour,
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AddEmployeePage(title: 'Pay Wage')));
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
-
-      bottomNavigationBar: BottomNavigation(0), /*BottomNavigationBar(
-        backgroundColor: Color(0xff7C8362),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedFontSize: 20,
-        selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        items: <BottomNavigationBarItem>[
+        selectedIconTheme: const IconThemeData(color: Colors.white, size: 25),
+        selectedLabelStyle:
+        const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               activeIcon: Icon(Icons.punch_clock_rounded),
               icon: Icon(Icons.calendar_month_outlined),
@@ -293,7 +584,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ],
         unselectedItemColor: Colors.white,
         selectedItemColor: Colors.white,
-      ), */ // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }

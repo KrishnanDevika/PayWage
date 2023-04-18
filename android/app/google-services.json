@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "787057375396",
-    "project_id": "paywage2023",
-    "storage_bucket": "paywage2023.appspot.com"
+    "project_number": "292259263660",
+    "project_id": "myfinalproject-a5420",
+    "storage_bucket": "myfinalproject-a5420.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:787057375396:android:bb7a2ebe08a580d4b50e31",
+        "mobilesdk_app_id": "1:292259263660:android:5014ab7a0d51d167d1db09",
         "android_client_info": {
           "package_name": "com.example.paywage"
         }
       },
       "oauth_client": [
         {
-          "client_id": "787057375396-v3q324q5a3obccg93go6v16ak09esnsm.apps.googleusercontent.com",
+          "client_id": "292259263660-qqia2vvndatmkviaoa8qqq3ssm7tvi8o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.paywage",
+            "certificate_hash": "16a238813ddd1c3675bae193b113b8bad528c93e"
+          }
+        },
+        {
+          "client_id": "292259263660-8aol217qfq02s7ffc6oa6cegpkcm72ra.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBpEz6qJYMnWhUiJZwnIlomk3VZ9HFpHDQ"
+          "current_key": "AIzaSyCD_IpuEFFgIdqqv-pyDA6xk-FoThU5iXQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "787057375396-i6v9j53r65pbi3qlt11jcbpcmisveb8u.apps.googleusercontent.com",
+              "client_id": "292259263660-8aol217qfq02s7ffc6oa6cegpkcm72ra.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

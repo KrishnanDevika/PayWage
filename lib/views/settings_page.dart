@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:paywage/CustomTheme/CustomColors.dart';
-import 'package:paywage/common/myAppBar.dart';
 import '../CustomTheme/theme_model.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -19,38 +17,10 @@ class _SettingsPage extends State<SettingsPage> {
   String _theme = "Dark";
   String _notificationTime = "10:00 AM"; // initial notification time, update as needed
 
-  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  TimeOfDay _selectedTime = TimeOfDay(hour: 18, minute: 0);
+  TimeOfDay _selectedTime = const TimeOfDay(hour: 18, minute: 0);
 
   get onSelectNotification => null;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher'); // Initialize Android notification settings
-  //   var initializationSettingsIOS = IOSInitializationSettings(); // Initialize iOS notification settings
-  //   var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-  //   flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification); // Initialize the notification plugin
-  // }
-  //
-  // Future<void> scheduleNotification() async {
-  //   var time = _selectedTime; // Set the desired time for the notification (6 PM in this case)
-  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-  //       'reminder_channel_id', 'Reminder Channel', 'Channel for reminders',
-  //       importance: Importance.max, priority: Priority.high); // Set Android notification details
-  //   var iOSPlatformChannelSpecifics = IOSNotificationDetails(); // Set iOS notification details
-  //   var platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
-  //
-
-
-  //   await flutterLocalNotificationsPlugin.showDailyAtTime( // Schedule a daily notification at the specified time
-  //       0,
-  //       'Reminder',
-  //       'This is a reminder text',
-  //       time as Time,
-  //       platformChannelSpecifics);
-  // }
 
   Future<void> _showTimePickerDialog() async {
     final TimeOfDay? pickedTime = await showTimePicker(
@@ -76,8 +46,8 @@ class _SettingsPage extends State<SettingsPage> {
                 alignment: Alignment.center,
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
+                    const Padding(
+                      padding: EdgeInsets.all(10.0),
                       child: Text("Settings",
                         style: TextStyle(
                             fontSize: 30,
@@ -103,7 +73,7 @@ class _SettingsPage extends State<SettingsPage> {
                           child: Row(
                             children: [
                               const SizedBox(width: 15),
-                              Text("Theme", style: TextStyle(
+                              const Text("Theme", style: TextStyle(
                                 fontSize: 18,
                               ),),
                               const SizedBox(width: 30),
@@ -116,7 +86,7 @@ class _SettingsPage extends State<SettingsPage> {
                                     boxShadow: const [BoxShadow(color: CustomColors.darkGreenColour)],
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.all(15.0),
+                                    padding: const EdgeInsets.all(15.0),
                                     child: InkWell(
                                       onTap: (){
                                         themeNotifier.isDark ? themeNotifier.isDark = false : themeNotifier.isDark = true;
@@ -127,7 +97,7 @@ class _SettingsPage extends State<SettingsPage> {
                                       child: Text(
                                         _theme ,
                                         textAlign: TextAlign.start,
-                                        style: (TextStyle(fontSize: 18)),
+                                        style: (const TextStyle(fontSize: 18)),
                                       ),
                                     ),
                                   )
@@ -138,7 +108,7 @@ class _SettingsPage extends State<SettingsPage> {
                       ),
                     ),
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     Container(
                       width: 350,
@@ -156,7 +126,7 @@ class _SettingsPage extends State<SettingsPage> {
                         child: Row(
                           children: [
                             const SizedBox(width: 15),
-                            Text(_notificationTime, style: TextStyle(
+                            Text(_notificationTime, style: const TextStyle(
                               fontSize: 18,
                             ),),
                             const SizedBox(width: 13),
@@ -169,12 +139,12 @@ class _SettingsPage extends State<SettingsPage> {
                                   boxShadow: const [BoxShadow(color: CustomColors.darkGreenColour)],
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.all(15.0),
+                                  padding: const EdgeInsets.all(15.0),
                                   child: InkWell(
                                     onTap: (){
                                       _showTimePickerDialog();
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'Notification Time' ,
                                       textAlign: TextAlign.start,
                                       style: (TextStyle(fontSize: 18)),
@@ -187,36 +157,6 @@ class _SettingsPage extends State<SettingsPage> {
                       ),
                     ),
 
-                    // Container(
-                    //   height: 50,
-                    //   width: 350,
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(15.0),
-                    //     boxShadow: const [BoxShadow(color: CustomColors.paleGreenColour)],
-                    //   ),
-                    //   child: InkWell(
-                    //     onTap: () {
-                    //       // Add your code here to handle the custom time notification reminder
-                    //     },
-                    //     child: InkWell(
-                    //       onTap: _showTimePickerDialog,
-                    //       child: Row(
-                    //         children: [
-                    //           const SizedBox(width: 15),
-                    //           Text("Notification Time", style: TextStyle(
-                    //             fontSize: 18,
-                    //           ),),
-                    //           const SizedBox(width: 10),
-                    //           Text(
-                    //             _notificationTime,
-                    //             style: TextStyle(fontSize: 18),
-                    //           ),
-                    //           const SizedBox(width: 10),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               )
