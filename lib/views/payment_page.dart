@@ -228,6 +228,9 @@ class _PaymentPageState extends State<PaymentPage> {
                           print("AMount ${amount.round()}");
                           _totalAmount[index].text = '\u0024 ${amount.round()}';
                         }
+                        DateTime now = DateTime.now();
+                        String formattedDate =
+                        DateFormat('yyyy-MM-dd').format(now);
 
 
                         if (list[index]['salary_type'] == 2 && list[index]['payment_amount']!= null) {
@@ -240,9 +243,19 @@ class _PaymentPageState extends State<PaymentPage> {
                           int diff = end - start;
                           print("Time Diff ${diff}");
                           int pay = list[index]['pay_rate'];
-                          double amount = ((diff / 100) * pay * (list[index]['WorkedDays'] - 1)) + (remainingBalance)/100;
-                          print("AMount ${amount.round()}");
-                          _totalAmount[index].text = '\u0024 ${amount.round()}';
+
+                          if(list[index]['date'].toString().compareTo(formattedDate) == 0) {
+                            double amount = ((diff / 100) * pay * (list[index]['WorkedDays'] - 1)) +
+                                (remainingBalance) / 100;
+                            print("AMount ${amount.round()}");
+                            _totalAmount[index].text = '\u0024 ${amount.round()}';
+                          }else{
+                            double amount = ((diff / 100) * pay * (list[index]['WorkedDays'])) +
+                                (remainingBalance) / 100;
+                            print("AMount ${amount.round()}");
+                            _totalAmount[index].text = '\u0024 ${amount.round()}';
+                          }
+
                         }
 
 
@@ -253,16 +266,27 @@ class _PaymentPageState extends State<PaymentPage> {
                                 list[index]['pay_rate'] )}';
                           }
                         }
+
                         if(list[index]['salary_type'] == 1 && list[index]['payment_amount']!= null) {
                           int remainingBalance = (int.parse(list[index]['payment_amount'].replaceAll(RegExp(r'[^0-9/-]'), '')));
                           print(" Remaining ${remainingBalance/100}");
-                          _totalAmount[index].text =
-                          '\u0024 ${((list[index]['WorkedDays'] - 1) *
+                          if(list[index]['date'].toString().compareTo(formattedDate) == 0) {
+                            _totalAmount[index].text =
+                            '\u0024 ${((list[index]['WorkedDays'] - 1) *
 
-                              list[index]['pay_rate'] )+ (remainingBalance)/100}';
+                                list[index]['pay_rate']) +
+                                (remainingBalance) / 100}';
+                          }else{
+                            _totalAmount[index].text =
+                            '\u0024 ${((list[index]['WorkedDays']) *
+
+                                list[index]['pay_rate']) +
+                                (remainingBalance) / 100}';
+                          }
                         }
 
                         _paidAmount.add(TextEditingController());
+                        _paidAmount[index].text = '0';
                         for (int i = 0; i < list.length; i++) {
                           firstname.add(list[i]['first_name']);
                           lastName.add(list[i]['last_name']);
