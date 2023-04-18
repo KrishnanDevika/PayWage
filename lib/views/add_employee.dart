@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paywage/common/myAppBar.dart';
-import 'package:paywage/common/BottomNavigationBar.dart';
 import 'package:paywage/views/payment_page.dart';
 import 'package:paywage/views/attendance_page.dart';
 import 'package:paywage/models/salary_type.dart';
@@ -17,7 +16,7 @@ class AddEmployeePage extends StatefulWidget {
 
   final String title;
 
-  AddEmployeePage({
+  const AddEmployeePage({
         super.key,
         required this.title,
       });
@@ -69,10 +68,10 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
 
   @override
   void initState() {
-    this.fetchSalaryType();
-    this.fetchCities();
-    this.fetchStates();
-    this.fetchOccupation();
+    fetchSalaryType();
+    fetchCities();
+    fetchStates();
+    fetchOccupation();
     super.initState();
   }
 
@@ -180,10 +179,10 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
     });
     switch(index){
       case 0:
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AttendancePage(title: 'PayWage'),),);
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AttendancePage(title: 'PayWage'),),);
         break;
       case 1:
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PaymentPage(title: 'PayWage'),),);
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const PaymentPage(title: 'PayWage'),),);
 
         break;
     }
@@ -196,7 +195,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
       appBar: myAppBar(widget.title, context),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: <Widget>[
               const Padding(
@@ -212,7 +211,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               ),
                Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: CustomColors.paleGreenColour,
@@ -229,7 +228,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     ),
                      Expanded(
                         child: TextField(
-                      style: TextStyle(color: CustomColors.lightModeTextColor),
+                      style: const TextStyle(color: CustomColors.lightModeTextColor),
                       decoration: InputDecoration(
                         fillColor: CustomColors.darkGreenColour,
                         filled: true,
@@ -244,14 +243,14 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               ),
                Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: CustomColors.paleGreenColour,
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 15, bottom: 10),
                       child: Text(
@@ -261,7 +260,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     ),
                      Expanded(
                         child:  TextField(
-                      style: TextStyle(color: CustomColors.lightModeTextColor),
+                      style: const TextStyle(color: CustomColors.lightModeTextColor),
                       decoration: InputDecoration(
                         fillColor: CustomColors.darkGreenColour,
                         filled: true,
@@ -276,7 +275,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               ),
                Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: CustomColors.paleGreenColour,
@@ -293,9 +292,9 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     ),
                      Expanded(
                         child: TextField(
-                      style: TextStyle(color: CustomColors.lightModeTextColor),
+                      style: const TextStyle(color: CustomColors.lightModeTextColor),
                       decoration: InputDecoration(
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.calendar_month_sharp,
                           color: CustomColors.lightModeTextColor,
                         ),
@@ -328,14 +327,14 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               ),
                Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: CustomColors.paleGreenColour,
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.all(10),
                       child: Text(
                         'Contact No',
@@ -344,11 +343,11 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     ),
                      Expanded(
                         child:  TextField(
-                      style: TextStyle(color: CustomColors.lightModeTextColor),
+                      style: const TextStyle(color: CustomColors.lightModeTextColor),
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         hintText: '###-###-####',
-                        hintStyle: TextStyle(color: CustomColors.lightModeTextColor),
+                        hintStyle: const TextStyle(color: CustomColors.lightModeTextColor),
                         fillColor: CustomColors.darkGreenColour,
                         filled: true,
                         border: OutlineInputBorder(
@@ -362,14 +361,14 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               ),
                Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: CustomColors.paleGreenColour,
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 55, bottom: 10),
                       child: Text(
@@ -379,7 +378,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     ),
                      Expanded(
                         child:  TextField(
-                      style: TextStyle(color: CustomColors.lightModeTextColor),
+                      style: const TextStyle(color: CustomColors.lightModeTextColor),
                       decoration: InputDecoration(
                         fillColor: CustomColors.darkGreenColour,
                         filled: true,
@@ -394,14 +393,14 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               ),
               Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: CustomColors.paleGreenColour,
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 70, bottom: 10),
                       child: Text(
@@ -420,7 +419,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                               10), //border radius of dropdown button
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 30),
+                          padding: const EdgeInsets.only(left: 20, right: 30),
                           child: DropdownButton(
                             dropdownColor: CustomColors.darkGreenColour,
                             underline: Container(),
@@ -456,14 +455,14 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               ),
                Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: CustomColors.paleGreenColour,
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 60, bottom: 10),
                       child: Text(
@@ -482,7 +481,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                               10), //border radius of dropdown button
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 30),
+                          padding: const EdgeInsets.only(left: 20, right: 30),
                           child:  DropdownButton(
                             dropdownColor: CustomColors.darkGreenColour,
                             underline: Container(),
@@ -517,14 +516,14 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               ),
                Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: CustomColors.paleGreenColour,
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 10, bottom: 10),
                       child: Text(
@@ -544,7 +543,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                         ),
 
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.only(left: 20),
                           child: DropdownButton(
                             dropdownColor: CustomColors.darkGreenColour,
                             underline: Container(),
@@ -580,14 +579,14 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               ),
                Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: CustomColors.paleGreenColour,
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 15, bottom: 10),
                       child: Text(
@@ -606,7 +605,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                               10), //border radius of dropdown button
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 30),
+                          padding: const EdgeInsets.only(left: 20, right: 30),
                           child:  DropdownButton(
                             dropdownColor: CustomColors.darkGreenColour,
                             underline: Container(),
@@ -641,14 +640,14 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               ),
                Container(
                 height: 45,
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: CustomColors.paleGreenColour,
                 ),
                 child: Row(
                   children: <Widget>[
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(
                           left: 10, top: 10, right: 30, bottom: 10),
                       child: Text(
@@ -658,7 +657,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     ),
                      Expanded(
                         child:  TextField(
-                      style: TextStyle(color: CustomColors.lightModeTextColor),
+                      style: const TextStyle(color: CustomColors.lightModeTextColor),
                       decoration: InputDecoration(
                         fillColor: CustomColors.darkGreenColour,
                         filled: true,
@@ -672,17 +671,17 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                 ),
               ),
                Padding(
-                padding: EdgeInsets.all(64.0),
+                padding: const EdgeInsets.all(64.0),
                 //onPressed will show login with the username typed on terminal
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff31473A),
+                      backgroundColor: const Color(0xff31473A),
                       foregroundColor: CustomColors.lightModeTextColor),
                   onPressed: () {
                     createEmployee();
                     final snackBar = SnackBar(
-                        content:  Text('Employee Created', style: TextStyle(color: CustomColors.lightModeTextColor),),
-                    backgroundColor:  Color(0xff31473A),
+                        content:  const Text('Employee Created', style: TextStyle(color: CustomColors.lightModeTextColor),),
+                    backgroundColor:  const Color(0xff31473A),
                     action: SnackBarAction(
                     label: 'dismiss',
                     onPressed: () {
@@ -695,7 +694,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                    reset();
                   },
-                  child: new Text('CREATE EMPLOYEE'),
+                  child: const Text('CREATE EMPLOYEE'),
 
                 ),
               ),
@@ -705,13 +704,13 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
       ),
 
       bottomNavigationBar:  BottomNavigationBar(
-        backgroundColor: Color(0xff7C8362),
+        backgroundColor: const Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedFontSize: 20,
-        selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        items: <BottomNavigationBarItem>[
+        selectedIconTheme: const IconThemeData(color: Colors.white, size: 25),
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               activeIcon: Icon(Icons.punch_clock_rounded),
               icon: Icon(Icons.calendar_month_outlined),

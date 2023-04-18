@@ -72,7 +72,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
       appBar: myAppBar(widget.title, context),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               Container(
@@ -84,9 +84,9 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    new IconButton(
+                    IconButton(
                       // padding: EdgeInsets.only(left: 130, top: 0, right: 30, bottom: 0),
-                      icon: Icon(Icons.arrow_back_ios_new),
+                      icon: const Icon(Icons.arrow_back_ios_new),
                       iconSize: 20,
                       color: Colors.white,
                       onPressed: () {
@@ -94,11 +94,9 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                           DateFormat inputFormat = DateFormat('yyyy-MM-dd');
                           DateTime date = inputFormat.parse(dateinput.text);
                           DateTime pastDate = date.subtract(Duration(days: 1));
-                          if (pastDate != null) {
-                            String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pastDate!);
-                            dateinput.text = formattedDate;
-                          }
+                          String formattedDate =
+                          DateFormat('yyyy-MM-dd').format(pastDate!);
+                          dateinput.text = formattedDate;
                         });
 
                         Navigator.of(context)
@@ -106,11 +104,11 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                             builder: (context) => ViewAttendanceHistory(title: 'Pay Wage', date: dateinput.text)));
                       },
                     ),
-                    new SizedBox(
+                    SizedBox(
                       width: 120,
                       child: TextField(
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         controller: dateinput,
 
                         //editing controller of this TextField
@@ -142,12 +140,12 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                 margin: const EdgeInsets.all(10.0),
                 child: TextField(
                   controller: searchController,
-                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color(0xff7C8362),
+                      fillColor: const Color(0xff7C8362),
                       prefixIcon: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.search,
                           color: Colors.white,
                         ),
@@ -176,10 +174,10 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                           String name = list[index]['first_name'] +
                               ' ' +
                               list[index]['last_name'];
-                          _timeOut.add(new TextEditingController());
-                          _timeinput.add(new TextEditingController());
-                          _site.add(new TextEditingController());
-                          _occupation.add(new TextEditingController());
+                          _timeOut.add(TextEditingController());
+                          _timeinput.add(TextEditingController());
+                          _site.add(TextEditingController());
+                          _occupation.add(TextEditingController());
 
                           _timeinput[index].text = list[index]['start_time'];
                           _timeOut[index].text =list[index]['end_time'];
@@ -198,31 +196,31 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25),
                             ),
-                            color: Color(0xff31473A),
+                            color: const Color(0xff31473A),
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: Text(
                                     name,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: Text(
                                     list[index]['date'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 0,
                                       right: 10,
@@ -233,18 +231,18 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                     children: <Widget>[
                                       Switch(
                                         value: _isChecked[index],
-                                        activeColor: Color(0xff7C8362),
+                                        activeColor: const Color(0xff7C8362),
                                         activeTrackColor: Colors.white,
                                         inactiveThumbColor:
-                                        Color(0xff7C8362),
+                                        const Color(0xff7C8362),
                                         inactiveTrackColor:
-                                        Color(0xff7C8362)
+                                        const Color(0xff7C8362)
                                             .withOpacity(0.5),
                                         onChanged: (val) {
                                         },
                                       ),
                                       Text(textValue[index],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 20,
                                               color: Colors.white,
                                               fontWeight:
@@ -253,7 +251,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                       left: 30,
                                       top: 0,
                                       right: 30,
@@ -263,7 +261,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                     MainAxisAlignment.spaceEvenly,
                                     mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
-                                      Text(
+                                      const Text(
                                         "In",
                                         style: TextStyle(
                                             color: Colors.white,
@@ -277,7 +275,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                         child: TextField(
                                           decoration: InputDecoration(
                                             filled: true,
-                                            fillColor: Color(0xff7C8362),
+                                            fillColor: const Color(0xff7C8362),
                                             border: OutlineInputBorder(
                                               borderRadius:
                                               BorderRadius.circular(
@@ -286,7 +284,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                           ),
 
 
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Colors.white),
                                           textAlign: TextAlign.center,
                                           controller: _timeinput[index],
@@ -294,9 +292,9 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                           readOnly: true,
                                         ),
                                       ),
-                                      SizedBox(width: 10),
+                                      const SizedBox(width: 10),
 
-                                      Text(
+                                      const Text(
                                         "Out",
                                         style: TextStyle(
                                             color: Colors.white,
@@ -309,7 +307,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                         child: TextField(
                                           decoration: InputDecoration(
                                             filled: true,
-                                            fillColor: Color(0xff7C8362),
+                                            fillColor: const Color(0xff7C8362),
                                             border: OutlineInputBorder(
                                               borderRadius:
                                               BorderRadius.circular(
@@ -317,7 +315,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                             ),
                                           ),
 
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Colors.white),
                                           textAlign: TextAlign.center,
                                           controller: _timeOut[index],
@@ -330,7 +328,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                       left: 10,
                                       top: 10,
                                       right: 10,
@@ -345,7 +343,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                         child: TextField(
                                           decoration: InputDecoration(
                                             filled: true,
-                                            fillColor: Color(0xff7C8362),
+                                            fillColor: const Color(0xff7C8362),
                                             border: OutlineInputBorder(
                                               borderRadius:
                                               BorderRadius.circular(
@@ -353,7 +351,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                             ),
                                           ),
 
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Colors.white),
                                           textAlign: TextAlign.center,
                                           controller: _site[index],
@@ -361,14 +359,14 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                           readOnly: true,
                                         ),
                                       ),
-                                      SizedBox(width: 10),
+                                      const SizedBox(width: 10),
                                       SizedBox(
                                         width: 150,
                                         height: 40,
                                         child: TextField(
                                           decoration: InputDecoration(
                                             filled: true,
-                                            fillColor: Color(0xff7C8362),
+                                            fillColor: const Color(0xff7C8362),
                                             border: OutlineInputBorder(
                                               borderRadius:
                                               BorderRadius.circular(
@@ -376,7 +374,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                             ),
                                           ),
 
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Colors.white),
                                           textAlign: TextAlign.center,
                                           controller: _occupation[index],
@@ -392,7 +390,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
 
                           );
                         })
-                        : CircularProgressIndicator();
+                        : const CircularProgressIndicator();
                 },
               ),
 
@@ -401,14 +399,14 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xff7C8362),
+        backgroundColor: const Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedFontSize: 20,
-        selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
+        selectedIconTheme: const IconThemeData(color: Colors.white, size: 25),
         selectedLabelStyle:
-            TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        items: <BottomNavigationBarItem>[
+            const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               activeIcon: Icon(Icons.punch_clock_rounded),
               icon: Icon(Icons.calendar_month_outlined),

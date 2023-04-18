@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:paywage/views/attendance_page.dart';
 import 'package:intl/intl.dart';
@@ -21,10 +22,8 @@ class _PaymentPageState extends State<PaymentPage> {
   int _selectedIndex = 1;
   TextEditingController dateinput = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  List<TextEditingController> _totalAmount = [];
-  List<TextEditingController> _paidAmount = [];
-  List<bool> _isSelected = [false, false];
-  List<List<bool>> _isToggle = <List<bool>>[];
+  final List<TextEditingController> _totalAmount = [];
+  final List<TextEditingController> _paidAmount = [];
   List<String> pay_type = <String>[];
   List<String> selectedPayType = <String>[];
   List<int> daysWorked = <int>[];
@@ -38,8 +37,8 @@ class _PaymentPageState extends State<PaymentPage> {
     String formattedDate =
     DateFormat('yyyy-MM-dd').format(now);
     dateinput.text = formattedDate;
-    this.fetchEmployee();
-    this.fetchPayType();
+    fetchEmployee();
+    fetchPayType();
     super.initState();
   }
 
@@ -58,7 +57,7 @@ class _PaymentPageState extends State<PaymentPage> {
         }
       });
     } catch (e) {
-
+      print(e);
     }
   }
 
@@ -77,7 +76,9 @@ class _PaymentPageState extends State<PaymentPage> {
         }
       });
     } catch (e) {
-
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -116,14 +117,14 @@ class _PaymentPageState extends State<PaymentPage> {
       case 0:
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => AttendancePage(title: 'PayWage'),
+            builder: (context) => const AttendancePage(title: 'PayWage'),
           ),
         );
         break;
       case 1:
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => PaymentPage(title: 'PayWage'),
+            builder: (context) => const PaymentPage(title: 'PayWage'),
           ),
         );
         break;
@@ -141,36 +142,34 @@ class _PaymentPageState extends State<PaymentPage> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xff7C8362).withOpacity(0.5),
+                  color: const Color(0xff7C8362).withOpacity(0.5),
                 ),
-                margin: EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
+                margin: const EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    new IconButton(
+                    IconButton(
                       // padding: EdgeInsets.only(left: 130, top: 0, right: 30, bottom: 0),
-                      icon: Icon(Icons.arrow_back_ios_new),
+                      icon: const Icon(Icons.arrow_back_ios_new),
                       iconSize: 20,
                       color: Colors.white,
                       onPressed: () {
                         setState(() {
                           DateFormat inputFormat = DateFormat('yyyy-MM-dd');
                           DateTime date = inputFormat.parse(dateinput.text);
-                          DateTime pastDate = date.subtract(Duration(days: 1));
-                          if (pastDate != null) {
-                            String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pastDate!);
-                            dateinput.text = formattedDate;
-                          }
+                          DateTime pastDate = date.subtract(const Duration(days: 1));
+                          String formattedDate =
+                          DateFormat('yyyy-MM-dd').format(pastDate!);
+                          dateinput.text = formattedDate;
                         });
                       },
                     ),
-                    new SizedBox(
+                    SizedBox(
                       width: 120,
                       child: TextField(
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         controller: dateinput,
 
                         //editing controller of this TextField
@@ -215,7 +214,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         String name = list[index]['first_name'] +
                             ' ' +
                             list[index]['last_name'];
-                        _totalAmount.add(new TextEditingController());
+                        _totalAmount.add(TextEditingController());
 
                         if(list[index]['salary_type'] == 2 ){
                           int end = int.parse(list[index]['end_time']
@@ -223,7 +222,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           int start = int.parse(list[index]['start_time']
                               .replaceAll(RegExp(r'[^0-9]'), ''));
                           int diff = end - start;
-                          print("Time Diff ${diff}");
+                          print("Time Diff $diff");
                           int pay = list[index]['pay_rate'];
                           double amount = ((diff / 100) * pay * list[index]['WorkedDays']);
                           print("AMount ${amount.round()}");
@@ -263,7 +262,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               list[index]['pay_rate'] )+ (remainingBalance)/100}';
                         }
 
-                        _paidAmount.add(new TextEditingController());
+                        _paidAmount.add(TextEditingController());
                         for (int i = 0; i < list.length; i++) {
                           firstname.add(list[i]['first_name']);
                           lastName.add(list[i]['last_name']);
@@ -274,24 +273,24 @@ class _PaymentPageState extends State<PaymentPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          color: Color(0xff31473A),
+                          color: const Color(0xff31473A),
                           child: Column(
                             children: [
                               Padding(
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 child: Row(
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Padding(
-                                      padding: EdgeInsets.only(
+                                      padding: const EdgeInsets.only(
                                           left: 0,
                                           top: 0,
                                           right: 15,
                                           bottom: 0),
                                       child: Text(
                                         name,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
@@ -303,23 +302,23 @@ class _PaymentPageState extends State<PaymentPage> {
                                       child: TextField(
                                         decoration: InputDecoration(
                                           filled: true,
-                                          fillColor: Color(0xff7C8362),
+                                          fillColor: const Color(0xff7C8362),
                                           focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                                 width: 2.0,
                                                 color: Colors.white),
                                             borderRadius:
                                             BorderRadius.circular(12.0),
                                           ),
                                           enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                                 width: 2.0,
                                                 color: Colors.white),
                                             borderRadius:
                                             BorderRadius.circular(12.0),
                                           ),
                                           border: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                                 width: 2.0,
                                                 color: Colors.white),
                                             borderRadius:
@@ -328,7 +327,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                         ),
 
                                         style:
-                                        TextStyle(color: Colors.white),
+                                        const TextStyle(color: Colors.white),
                                         textAlign: TextAlign.center,
                                         controller: _totalAmount[index],
                                         //editing controller of this TextField
@@ -339,7 +338,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                     left: 0, top: 0, right: 0, bottom: 15),
                                 child: Row(
                                   mainAxisAlignment:
@@ -347,9 +346,9 @@ class _PaymentPageState extends State<PaymentPage> {
                                   children: <Widget>[
                                     /*  new Expanded(
                                           child:*/
-                                    new DecoratedBox(
+                                    DecoratedBox(
                                       decoration: BoxDecoration(
-                                        color: Color(0xff7C8362),
+                                        color: const Color(0xff7C8362),
                                         //background color of dropdown button
                                         border:
                                         Border.all(color: Colors.white),
@@ -358,10 +357,10 @@ class _PaymentPageState extends State<PaymentPage> {
                                             10), //border radius of dropdown button
                                       ),
                                       child: Padding(
-                                        padding: EdgeInsets.only(
+                                        padding: const EdgeInsets.only(
                                             left: 15, right: 15),
                                         child: DropdownButton(
-                                          dropdownColor: Color(0xff7C8362),
+                                          dropdownColor: const Color(0xff7C8362),
                                           underline: Container(),
                                           value: selectedPayType[index],
                                           style: const TextStyle(
@@ -450,23 +449,23 @@ class _PaymentPageState extends State<PaymentPage> {
                                       child: TextField(
                                         decoration: InputDecoration(
                                           filled: true,
-                                          fillColor: Color(0xff7C8362),
+                                          fillColor: const Color(0xff7C8362),
                                           focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                                 width: 2.0,
                                                 color: Colors.white),
                                             borderRadius:
                                             BorderRadius.circular(12.0),
                                           ),
                                           enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                                 width: 2.0,
                                                 color: Colors.white),
                                             borderRadius:
                                             BorderRadius.circular(12.0),
                                           ),
                                           border: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                                 width: 2.0,
                                                 color: Colors.white),
                                             borderRadius:
@@ -475,7 +474,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                         ),
 
                                         style:
-                                        TextStyle(color: Colors.white),
+                                        const TextStyle(color: Colors.white),
                                         textAlign: TextAlign.center,
                                         controller: _paidAmount[index],
                                         //editing controller of this TextField
@@ -488,79 +487,77 @@ class _PaymentPageState extends State<PaymentPage> {
                           ),
                         );
                       })
-                      : CircularProgressIndicator();
+                      : const CircularProgressIndicator();
                   //  }
                 },
               ),
-              Container(
-                child: Padding(
-                  padding: new EdgeInsets.all(64.0),
-                  //onPressed will show login with the username typed on terminal
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff31473A),
-                        foregroundColor: Colors.white),
-                    onPressed: () {
-                      for (int index = 0;
-                      index < employeeList.length;
-                      index++) {
+              Padding(
+                padding: const EdgeInsets.all(64.0),
+                //onPressed will show login with the username typed on terminal
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff31473A),
+                      foregroundColor: Colors.white),
+                  onPressed: () {
+                    for (int index = 0;
+                    index < employeeList.length;
+                    index++) {
 
-                        double pendingAmount = 0;
-                        if (selectedPayType[index] == "Regular") {
-                          print(double.parse(_totalAmount[index]
-                              .text
-                              .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
-                          pendingAmount = double.parse(_totalAmount[index]
-                              .text
-                              .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
-                              double.parse(_paidAmount[index]
-                                  .text
-                                  .replaceAll(RegExp(r'[^0-9/./-]'), ''));
-                        }
-                        if (selectedPayType[index] == "Advance") {
-                          print(double.parse(_totalAmount[index]
-                              .text
-                              .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
-                          pendingAmount = double.parse(_totalAmount[index]
-                              .text
-                              .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
-                              double.parse(_paidAmount[index]
-                                  .text
-                                  .replaceAll(RegExp(r'[^0-9/./-]'), ''));
-                        }
-
-                        insertPayment(
-                            firstname[index],
-                            lastName[index],
-                            dateinput.text,
-                            selectedPayType[index],
-                            pendingAmount);
-
+                      double pendingAmount = 0;
+                      if (selectedPayType[index] == "Regular") {
+                        print(double.parse(_totalAmount[index]
+                            .text
+                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
+                        pendingAmount = double.parse(_totalAmount[index]
+                            .text
+                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                            double.parse(_paidAmount[index]
+                                .text
+                                .replaceAll(RegExp(r'[^0-9/./-]'), ''));
                       }
-                      final snackBar = SnackBar(
-                        content: Text(
-                          'Payment Updated',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        backgroundColor: Color(0xff31473A),
-                        action: SnackBarAction(
-                          label: 'dismiss',
-                          onPressed: () {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(
-                                builder: (context) => PaymentPage(title: 'Pay Wage')))
-                                .then((value) => setState(() {
-                              getData();
-                              employeeList = [];
-                              fetchEmployee();
-                            }));
-                          },
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    },
-                    child: new Text('MAKE PAYMENT'),
-                  ),
+                      if (selectedPayType[index] == "Advance") {
+                        print(double.parse(_totalAmount[index]
+                            .text
+                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
+                        pendingAmount = double.parse(_totalAmount[index]
+                            .text
+                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                            double.parse(_paidAmount[index]
+                                .text
+                                .replaceAll(RegExp(r'[^0-9/./-]'), ''));
+                      }
+
+                      insertPayment(
+                          firstname[index],
+                          lastName[index],
+                          dateinput.text,
+                          selectedPayType[index],
+                          pendingAmount);
+
+                    }
+                    final snackBar = SnackBar(
+                      content: const Text(
+                        'Payment Updated',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: const Color(0xff31473A),
+                      action: SnackBarAction(
+                        label: 'dismiss',
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                              builder: (context) => const PaymentPage(title: 'Pay Wage')))
+                              .then((value) => setState(() {
+                            getData();
+                            employeeList = [];
+                            fetchEmployee();
+                          }));
+                        },
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  },
+                  child: const Text('MAKE PAYMENT'),
                 ),
               ),
             ],
@@ -568,14 +565,14 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xff7C8362),
+        backgroundColor: const Color(0xff7C8362),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedFontSize: 20,
-        selectedIconTheme: IconThemeData(color: Colors.white, size: 25),
+        selectedIconTheme: const IconThemeData(color: Colors.white, size: 25),
         selectedLabelStyle:
-        TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        items: <BottomNavigationBarItem>[
+        const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               activeIcon: Icon(Icons.punch_clock_rounded),
               icon: Icon(Icons.calendar_month_outlined),

@@ -124,7 +124,7 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                           final DateTime? date = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
+                            firstDate: DateTime(2023),
                             lastDate:
                                 DateTime.now().add(const Duration(days: 365)),
                             initialEntryMode: DatePickerEntryMode.calendarOnly,
@@ -134,7 +134,34 @@ class _ViewAttendanceHistoryState extends State<ViewAttendanceHistory> {
                             String formattedDate =
                                 DateFormat('yyyy-MM-dd').format(date!);
                             dateinput.text = formattedDate;
+
+                            if(date.isAfter(DateTime.now())) {
+                              String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(const Duration(days: 1)));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      ViewAttendanceHistory(
+                                          title: 'Pay Wage',
+                                          date: formattedDate)));
+                            }
+                            else if (formattedDate.compareTo('2023-04-11') < 0){
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ViewAttendanceHistory(
+                                          title: 'Pay Wage',
+                                          date: '2023-04-11')));
+                            }
+                            else{
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      ViewAttendanceHistory(
+                                          title: 'Pay Wage',
+                                          date: dateinput.text)));
+                            }
+
                           }
+
+
                         },
                       ),
                     ),
