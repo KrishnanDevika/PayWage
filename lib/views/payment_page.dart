@@ -34,10 +34,9 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   void initState() {
     DateTime now = DateTime.now();
-    String formattedDate =
-    DateFormat('yyyy-MM-dd').format(now);
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
     dateinput.text = formattedDate;
-    fetchEmployee();
+   // fetchEmployee();
     fetchPayType();
     super.initState();
   }
@@ -50,7 +49,7 @@ class _PaymentPageState extends State<PaymentPage> {
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
 
       final List<PayType> type =
-      parsed.map<PayType>((json) => PayType.fromJson(json)).toList();
+          parsed.map<PayType>((json) => PayType.fromJson(json)).toList();
       setState(() {
         for (var i = 0; i < type.length; i++) {
           pay_type.add(type[i].type);
@@ -62,14 +61,21 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   void fetchEmployee() async {
+    String name = "Null";
+    print(searchController.text.toString());
+    if (searchController.text.isEmpty) {
+      name = "Null";
+    } else {
+      name = searchController.text.toString();
+    }
     var url = 'https://dkrishnan.scweb.ca/Paywage/calculatePay.php';
     try {
-      http.Response response = await http.get(Uri.parse(url));
+      http.Response response =
+          await http.post(Uri.parse(url), body: {'first_name': name});
       var data = response.body;
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
-
       final List<Attendance> list =
-      parsed.map<Attendance>((json) => Attendance.fromJson(json)).toList();
+          parsed.map<Attendance>((json) => Attendance.fromJson(json)).toList();
       setState(() {
         for (var i = 0; i < list.length; i++) {
           employeeList.add(list[i].empId);
@@ -84,20 +90,37 @@ class _PaymentPageState extends State<PaymentPage> {
 
   Future getData() async {
 
+    String name = "Null";
+
+    if (searchController.text.isEmpty) {
+      name = "Null";
+    } else {
+      name = searchController.text.toString();
+    }
     var url = 'https://dkrishnan.scweb.ca/Paywage/calculatePay.php';
-    try {
-      var response = await http.get(Uri.parse(url));
-      return json.decode(response.body);
-    }
-    catch(e){
-      print(e);
-    }
+    final res = await http.post(Uri.parse(url), body: {'first_name': name});
+    return json.decode(res.body);
   }
 
   Future insertPayment(String fName, String lName, String date, String payType,
       double amount) async {
     final response = await http.post(
         Uri.parse('https://dkrishnan.scweb.ca/Paywage/insertPayment.php'),
+        body: {
+          "first_name": fName,
+          "last_name": lName,
+          "date": date,
+          "pay_type": payType,
+          "payment_amount": amount.toString(),
+        });
+
+    print((response.body));
+  }
+
+  Future updatePayment(String fName, String lName, String date, String payType,
+      double amount) async {
+    final response = await http.post(
+        Uri.parse('https://dkrishnan.scweb.ca/Paywage/updatePayment.php'),
         body: {
           "first_name": fName,
           "last_name": lName,
@@ -144,7 +167,8 @@ class _PaymentPageState extends State<PaymentPage> {
                 decoration: BoxDecoration(
                   color: const Color(0xff7C8362).withOpacity(0.5),
                 ),
-                margin: const EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
+                margin: const EdgeInsets.only(
+                    left: 0, top: 10, right: 0, bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -158,9 +182,10 @@ class _PaymentPageState extends State<PaymentPage> {
                         setState(() {
                           DateFormat inputFormat = DateFormat('yyyy-MM-dd');
                           DateTime date = inputFormat.parse(dateinput.text);
-                          DateTime pastDate = date.subtract(const Duration(days: 1));
+                          DateTime pastDate =
+                              date.subtract(const Duration(days: 1));
                           String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(pastDate!);
+                              DateFormat('yyyy-MM-dd').format(pastDate!);
                           dateinput.text = formattedDate;
                         });
                       },
@@ -181,13 +206,13 @@ class _PaymentPageState extends State<PaymentPage> {
                             initialDate: DateTime.now(),
                             firstDate: DateTime.now(),
                             lastDate:
-                            DateTime.now().add(const Duration(days: 365)),
+                                DateTime.now().add(const Duration(days: 365)),
                             initialEntryMode: DatePickerEntryMode.calendarOnly,
                           );
 
                           if (date != null) {
                             String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(date!);
+                                DateFormat('yyyy-MM-dd').format(date!);
                             dateinput.text = formattedDate;
                           }
                         },
@@ -196,232 +221,279 @@ class _PaymentPageState extends State<PaymentPage> {
                   ],
                 ),
               ),
+              Container(
+                height: 50,
+                margin: const EdgeInsets.all(10.0),
+                child: TextField(
+                  controller: searchController,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color(0xff7C8362),
+                      prefixIcon: IconButton(
+                        icon: const Icon(
+                          Icons.search,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            getData();
+                          });
+                        },
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      )),
+                ),
+              ),
               FutureBuilder(
                 future: getData(),
                 builder: (context, snapshot) {
-                  if(snapshot.hasError) print(snapshot.error);
+                  if (snapshot.hasError) print(snapshot.error);
                   /*  if(!snapshot.hasData){
                 return Center(child: Text('No Employee data Found', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),);
                 }*/
                   //  else {
                   return snapshot.hasData
                       ? ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        List list = snapshot.data;
-                        String name = list[index]['first_name'] +
-                            ' ' +
-                            list[index]['last_name'];
-                        _totalAmount.add(TextEditingController());
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            List list = snapshot.data;
+                            String name = list[index]['first_name'] +
+                                ' ' +
+                                list[index]['last_name'];
+                            _totalAmount.add(TextEditingController());
 
-                        if(list[index]['salary_type'] == 2 ){
-                          int end = int.parse(list[index]['end_time']
-                              .replaceAll(RegExp(r'[^0-9]'), ''));
-                          int start = int.parse(list[index]['start_time']
-                              .replaceAll(RegExp(r'[^0-9]'), ''));
-                          int diff = end - start;
-                          print("Time Diff $diff");
-                          int pay = list[index]['pay_rate'];
-                          double amount = ((diff / 100) * pay * list[index]['WorkedDays']);
-                          print("AMount ${amount.round()}");
-                          _totalAmount[index].text = '\u0024 ${amount.round()}';
-                        }
-                        DateTime now = DateTime.now();
-                        String formattedDate =
-                        DateFormat('yyyy-MM-dd').format(now);
+                            if (list[index]['salary_type'] == 2) {
+                              int end = int.parse(list[index]['end_time']
+                                  .replaceAll(RegExp(r'[^0-9]'), ''));
+                              int start = int.parse(list[index]['start_time']
+                                  .replaceAll(RegExp(r'[^0-9]'), ''));
+                              int diff = end - start;
+                              print("Time Diff $diff");
+                              int pay = list[index]['pay_rate'];
+                              double amount = ((diff / 100) *
+                                  pay *
+                                  list[index]['WorkedDays']);
+                              print("AMount ${amount.round()}");
+                              _totalAmount[index].text =
+                                  '\u0024 ${amount.round()}';
+                            }
+                            DateTime now = DateTime.now();
+                            String formattedDate =
+                                DateFormat('yyyy-MM-dd').format(now);
 
-                        print(formattedDate);
-                        print(list[index]['start_date'].toString());
+                            print(formattedDate);
+                            print(list[index]['start_date'].toString());
 
+                            if (list[index]['salary_type'] == 2 &&
+                                list[index]['payment_amount'] != null) {
+                              int remainingBalance = (int.parse(list[index]
+                                      ['payment_amount']
+                                  .replaceAll(RegExp(r'[^0-9/-]'), '')));
+                              print(" Remaining ${remainingBalance / 100}");
+                              int end = int.parse(list[index]['end_time']
+                                  .replaceAll(RegExp(r'[^0-9]'), ''));
+                              int start = int.parse(list[index]['start_time']
+                                  .replaceAll(RegExp(r'[^0-9]'), ''));
+                              int diff = end - start;
+                              print("Time Diff ${diff}");
+                              int pay = list[index]['pay_rate'];
 
-                        if (list[index]['salary_type'] == 2 && list[index]['payment_amount']!= null) {
-                          int remainingBalance = (int.parse(list[index]['payment_amount'].replaceAll(RegExp(r'[^0-9/-]'), '')));
-                          print(" Remaining ${remainingBalance/100}");
-                          int end = int.parse(list[index]['end_time']
-                              .replaceAll(RegExp(r'[^0-9]'), ''));
-                          int start = int.parse(list[index]['start_time']
-                              .replaceAll(RegExp(r'[^0-9]'), ''));
-                          int diff = end - start;
-                          print("Time Diff ${diff}");
-                          int pay = list[index]['pay_rate'];
+                              if (list[index]['start_date']
+                                          .toString()
+                                          .compareTo(formattedDate) ==
+                                      0 &&
+                                  list[index]['date']
+                                          .toString()
+                                          .compareTo(formattedDate) !=
+                                      0) {
+                                double amount = ((diff / 100) *
+                                        pay *
+                                        (list[index]['WorkedDays'])) +
+                                    (remainingBalance) / 100;
+                                print("AMount ${amount.round()}");
+                                _totalAmount[index].text =
+                                    '\u0024 ${amount.round()}';
+                              } else {
+                                double amount = ((diff / 100) *
+                                        pay *
+                                        (list[index]['WorkedDays'] - 1)) +
+                                    (remainingBalance) / 100;
+                                print("AMount ${amount.round()}");
+                                _totalAmount[index].text =
+                                    '\u0024 ${amount.round()}';
+                              }
+                            }
 
-                           if(list[index]['start_date'].toString().compareTo(formattedDate) == 0) {
-                             double amount = ((diff / 100) * pay * (list[index]['WorkedDays'])) +
-                                 (remainingBalance) / 100;
-                             print("AMount ${amount.round()}");
-                             _totalAmount[index].text = '\u0024 ${amount.round()}';
-                           }else {
-                             double amount = ((diff / 100) * pay *
-                                 (list[index]['WorkedDays'] - 1)) +
-                                 (remainingBalance) / 100;
-                             print("AMount ${amount.round()}");
-                             _totalAmount[index].text =
-                             '\u0024 ${amount.round()}';
-                           }
-                        }
+                            if (list[index]['salary_type'] == 1) {
+                              {
+                                _totalAmount[index].text =
+                                    '\u0024 ${(list[index]['WorkedDays'] * list[index]['pay_rate'])}';
+                              }
+                            }
 
+                            if (list[index]['salary_type'] == 1 &&
+                                list[index]['payment_amount'] != null) {
+                              int remainingBalance = (int.parse(list[index]
+                                      ['payment_amount']
+                                  .replaceAll(RegExp(r'[^0-9/-]'), '')));
+                              print(" Remaining ${remainingBalance / 100}");
 
-                        if(list[index]['salary_type'] == 1){
-                          {
-                            _totalAmount[index].text =
-                            '\u0024 ${(list[index]['WorkedDays'] *
-                                list[index]['pay_rate'] )}';
-                          }
-                        }
+                              if (list[index]['start_date']
+                                          .toString()
+                                          .compareTo(formattedDate) ==
+                                      0 &&
+                                  list[index]['date']
+                                          .toString()
+                                          .compareTo(formattedDate) !=
+                                      0) {
+                                _totalAmount[index].text =
+                                    '\u0024 ${((list[index]['WorkedDays']) * list[index]['pay_rate']) + (remainingBalance) / 100}';
+                              } else {
+                                _totalAmount[index].text =
+                                    '\u0024 ${((list[index]['WorkedDays'] - 1) * list[index]['pay_rate']) + (remainingBalance) / 100}';
+                              }
+                            }
 
-                        if(list[index]['salary_type'] == 1 && list[index]['payment_amount']!= null) {
-                          int remainingBalance = (int.parse(list[index]['payment_amount'].replaceAll(RegExp(r'[^0-9/-]'), '')));
-                          print(" Remaining ${remainingBalance/100}");
+                            _paidAmount.add(TextEditingController());
+                            _paidAmount[index].text = '0';
+                            for (int i = 0; i < list.length; i++) {
+                              firstname.add(list[i]['first_name']);
+                              lastName.add(list[i]['last_name']);
+                              selectedPayType.add("Regular");
+                            }
 
-                          if(list[index]['start_date'].toString().compareTo(formattedDate) == 0){
-                            _totalAmount[index].text =
-                            '\u0024 ${((list[index]['WorkedDays']) *
-
-                                list[index]['pay_rate']) +
-                                (remainingBalance) / 100}';
-                          }else {
-                            _totalAmount[index].text =
-                            '\u0024 ${((list[index]['WorkedDays'] - 1) *
-
-                                list[index]['pay_rate']) +
-                                (remainingBalance) / 100}';
-                          }
-
-                        }
-
-                        _paidAmount.add(TextEditingController());
-                        _paidAmount[index].text = '0';
-                        for (int i = 0; i < list.length; i++) {
-                          firstname.add(list[i]['first_name']);
-                          lastName.add(list[i]['last_name']);
-                          selectedPayType.add("Regular");
-                        }
-
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          color: const Color(0xff31473A),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 0,
-                                          top: 0,
-                                          right: 15,
-                                          bottom: 0),
-                                      child: Text(
-                                        name,
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 100,
-                                      height: 35,
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          filled: true,
-                                          fillColor: const Color(0xff7C8362),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                width: 2.0,
-                                                color: Colors.white),
-                                            borderRadius:
-                                            BorderRadius.circular(12.0),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                width: 2.0,
-                                                color: Colors.white),
-                                            borderRadius:
-                                            BorderRadius.circular(12.0),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                width: 2.0,
-                                                color: Colors.white),
-                                            borderRadius:
-                                            BorderRadius.circular(15.0),
-                                          ),
-                                        ),
-
-                                        style:
-                                        const TextStyle(color: Colors.white),
-                                        textAlign: TextAlign.center,
-                                        controller: _totalAmount[index],
-                                        //editing controller of this TextField
-                                        readOnly: true,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 0, top: 0, right: 0, bottom: 15),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    /*  new Expanded(
-                                          child:*/
-                                    DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xff7C8362),
-                                        //background color of dropdown button
-                                        border:
-                                        Border.all(color: Colors.white),
-                                        //border of dropdown button
-                                        borderRadius: BorderRadius.circular(
-                                            10), //border radius of dropdown button
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15, right: 15),
-                                        child: DropdownButton(
-                                          dropdownColor: const Color(0xff7C8362),
-                                          underline: Container(),
-                                          value: selectedPayType[index],
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                          icon: const Icon(
-                                            Icons.keyboard_arrow_down,
-                                            color: Colors.white,
+                              color: const Color(0xff31473A),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 0,
+                                              top: 0,
+                                              right: 15,
+                                              bottom: 0),
+                                          child: Text(
+                                            name,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
                                           ),
-                                          items:
-                                          pay_type.map((String type) {
-                                            return DropdownMenuItem(
-                                              value: type,
-                                              child: Text(
-                                                type,
-                                              ),
-                                            );
-                                          }).toList(),
-                                          onChanged: (String? newValue) {
-                                            setState(() {
-                                              selectedPayType[index] =
-                                              newValue!;
-                                            });
-                                          },
                                         ),
-                                      ),
-                                    ),
-                                    //  ),
+                                        SizedBox(
+                                          width: 100,
+                                          height: 35,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor:
+                                                  const Color(0xff7C8362),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                              ),
+                                            ),
 
-                                    /*   Container(
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                            controller: _totalAmount[index],
+                                            //editing controller of this TextField
+                                            readOnly: true,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, top: 0, right: 0, bottom: 15),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        /*  new Expanded(
+                                          child:*/
+                                        DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xff7C8362),
+                                            //background color of dropdown button
+                                            border:
+                                                Border.all(color: Colors.white),
+                                            //border of dropdown button
+                                            borderRadius: BorderRadius.circular(
+                                                10), //border radius of dropdown button
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 15, right: 15),
+                                            child: DropdownButton(
+                                              dropdownColor:
+                                                  const Color(0xff7C8362),
+                                              underline: Container(),
+                                              value: selectedPayType[index],
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                              icon: const Icon(
+                                                Icons.keyboard_arrow_down,
+                                                color: Colors.white,
+                                              ),
+                                              items:
+                                                  pay_type.map((String type) {
+                                                return DropdownMenuItem(
+                                                  value: type,
+                                                  child: Text(
+                                                    type,
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              onChanged: (String? newValue) {
+                                                setState(() {
+                                                  selectedPayType[index] =
+                                                      newValue!;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        //  ),
+
+                                        /*   Container(
                                           padding: EdgeInsets.zero,
                                           decoration: BoxDecoration(
                                             color: Color(0xff7C8362),
@@ -473,50 +545,51 @@ class _PaymentPageState extends State<PaymentPage> {
                                           ),
                                           // ) ,
                                         ),*/
-                                    SizedBox(
-                                      width: 180,
-                                      height: 50,
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          filled: true,
-                                          fillColor: const Color(0xff7C8362),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                width: 2.0,
+                                        SizedBox(
+                                          width: 180,
+                                          height: 50,
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor:
+                                                  const Color(0xff7C8362),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                              ),
+                                            ),
+
+                                            style: const TextStyle(
                                                 color: Colors.white),
-                                            borderRadius:
-                                            BorderRadius.circular(12.0),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                width: 2.0,
-                                                color: Colors.white),
-                                            borderRadius:
-                                            BorderRadius.circular(12.0),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                width: 2.0,
-                                                color: Colors.white),
-                                            borderRadius:
-                                            BorderRadius.circular(15.0),
+                                            textAlign: TextAlign.center,
+                                            controller: _paidAmount[index],
+                                            //editing controller of this TextField
                                           ),
                                         ),
-
-                                        style:
-                                        const TextStyle(color: Colors.white),
-                                        textAlign: TextAlign.center,
-                                        controller: _paidAmount[index],
-                                        //editing controller of this TextField
-                                      ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        );
-                      })
+                            );
+                          })
                       : const CircularProgressIndicator();
                   //  }
                 },
@@ -529,42 +602,56 @@ class _PaymentPageState extends State<PaymentPage> {
                       backgroundColor: const Color(0xff31473A),
                       foregroundColor: Colors.white),
                   onPressed: () {
-                    for (int index = 0;
-                    index < employeeList.length;
-                    index++) {
+                    fetchEmployee();
+                    if (searchController.text.isEmpty) {
+                      for (int index = 0;
+                          index < employeeList.length;
+                          index++) {
+                        double pendingAmount = 0;
+                        if (selectedPayType[index] == "Regular") {
+                          print(double.parse(_totalAmount[index]
+                              .text
+                              .replaceAll(RegExp(r'[^0-9/./-]'), '')));
+                          pendingAmount = double.parse(_totalAmount[index]
+                                  .text
+                                  .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                              double.parse(_paidAmount[index]
+                                  .text
+                                  .replaceAll(RegExp(r'[^0-9/./-]'), ''));
+                        }
+                        if (selectedPayType[index] == "Advance") {
+                          print(double.parse(_totalAmount[index]
+                              .text
+                              .replaceAll(RegExp(r'[^0-9/./-]'), '')));
+                          pendingAmount = double.parse(_totalAmount[index]
+                                  .text
+                                  .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                              double.parse(_paidAmount[index]
+                                  .text
+                                  .replaceAll(RegExp(r'[^0-9/./-]'), ''));
+                        }
 
-                      double pendingAmount = 0;
-                      if (selectedPayType[index] == "Regular") {
-                        print(double.parse(_totalAmount[index]
-                            .text
-                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
-                        pendingAmount = double.parse(_totalAmount[index]
-                            .text
-                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
-                            double.parse(_paidAmount[index]
-                                .text
-                                .replaceAll(RegExp(r'[^0-9/./-]'), ''));
+                        insertPayment(
+                            firstname[index],
+                            lastName[index],
+                            dateinput.text,
+                            selectedPayType[index],
+                            pendingAmount);
                       }
-                      if (selectedPayType[index] == "Advance") {
-                        print(double.parse(_totalAmount[index]
-                            .text
-                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) );
-                        pendingAmount = double.parse(_totalAmount[index]
-                            .text
-                            .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
-                            double.parse(_paidAmount[index]
-                                .text
-                                .replaceAll(RegExp(r'[^0-9/./-]'), ''));
+                    } else {
+                      for (int index = 0;
+                          index < employeeList.length;
+                          index++) {
+                        double pendingAmount = 0;
+                        updatePayment(
+                            firstname[index],
+                            lastName[index],
+                            dateinput.text,
+                            selectedPayType[index],
+                            pendingAmount);
                       }
-
-                      insertPayment(
-                          firstname[index],
-                          lastName[index],
-                          dateinput.text,
-                          selectedPayType[index],
-                          pendingAmount);
-
                     }
+
                     final snackBar = SnackBar(
                       content: const Text(
                         'Payment Updated',
@@ -574,14 +661,19 @@ class _PaymentPageState extends State<PaymentPage> {
                       action: SnackBarAction(
                         label: 'dismiss',
                         onPressed: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(
-                              builder: (context) => const PaymentPage(title: 'Pay Wage')))
-                              .then((value) => setState(() {
+                          setState(() {
+                            searchController.text = "";
                             getData();
-                            employeeList = [];
-                            fetchEmployee();
-                          }));
+                          });
+                       /*   Navigator.of(context)
+                              .push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PaymentPage(title: 'Pay Wage')))
+                              .then((value) => setState(() {
+                                    getData();
+                                    employeeList = [];
+                                    fetchEmployee();
+                                  }));*/
                         },
                       ),
                     );
@@ -601,7 +693,7 @@ class _PaymentPageState extends State<PaymentPage> {
         selectedFontSize: 20,
         selectedIconTheme: const IconThemeData(color: Colors.white, size: 25),
         selectedLabelStyle:
-        const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               activeIcon: Icon(Icons.punch_clock_rounded),
