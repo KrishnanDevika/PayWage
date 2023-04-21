@@ -175,13 +175,13 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                     ),
                     );
 
-                  } else {
+                  } /*else {
                     var dataLength = data.length;
                     if (dataLength == 0) {
                       return const Center(
                         child: Text('No data found'),
                       );
-                    } else {
+                    }*/ else {
                       return snapshot.hasData
                           ? ListView.builder(
                               scrollDirection: Axis.vertical,
@@ -412,7 +412,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                                 );
                               })
                           : const CircularProgressIndicator();
-                    }
+                  //  }
                   }
                 },
               ),

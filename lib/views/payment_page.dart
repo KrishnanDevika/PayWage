@@ -62,7 +62,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   void fetchEmployee() async {
     String name = "Null";
-    print(searchController.text.toString());
+    print("FetchEmployee :${searchController.text.toString()}");
     if (searchController.text.isEmpty) {
       name = "Null";
     } else {
@@ -76,11 +76,12 @@ class _PaymentPageState extends State<PaymentPage> {
       final parsed = jsonDecode(data).cast<Map<String, dynamic>>();
       final List<Attendance> list =
           parsed.map<Attendance>((json) => Attendance.fromJson(json)).toList();
-      setState(() {
+
         for (var i = 0; i < list.length; i++) {
           employeeList.add(list[i].empId);
         }
-      });
+        print("FetchEmployee : ${employeeList.length}");
+
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -258,13 +259,13 @@ class _PaymentPageState extends State<PaymentPage> {
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),)
                     );
                   }
-                  else{
+              /*    else{
                     var dataLength = data.length;
                     if(dataLength == 0){
                       return const Center(
                         child: Text('No data found'),
                       );
-                    }
+                    }*/
                     else{
                       return snapshot.hasData
                           ? ListView.builder(
@@ -601,7 +602,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           })
                           : const CircularProgressIndicator();
                     }
-                  }
+                //  }
                 },
               ),
               Padding(
@@ -612,7 +613,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       backgroundColor: const Color(0xff31473A),
                       foregroundColor: Colors.white),
                   onPressed: () {
-                    fetchEmployee();
+
                     if (searchController.text.isEmpty) {
                       for (int index = 0;
                           index < employeeList.length;
@@ -648,11 +649,41 @@ class _PaymentPageState extends State<PaymentPage> {
                             selectedPayType[index],
                             pendingAmount);
                       }
+                      setState(() {
+                        getData();
+                      });
                     } else {
+                      print("Update Length ${employeeList.length}");
+
                       for (int index = 0;
                           index < employeeList.length;
                           index++) {
                         double pendingAmount = 0;
+                        if (selectedPayType[index] == "Regular") {
+                          print(double.parse(_totalAmount[index]
+                              .text
+                              .replaceAll(RegExp(r'[^0-9/./-]'), '')));
+                          pendingAmount = double.parse(_totalAmount[index]
+                              .text
+                              .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                              double.parse(_paidAmount[index]
+                                  .text
+                                  .replaceAll(RegExp(r'[^0-9/./-]'), ''));
+                        }
+                        if (selectedPayType[index] == "Advance") {
+                          print(double.parse(_totalAmount[index]
+                              .text
+                              .replaceAll(RegExp(r'[^0-9/./-]'), '')));
+                          pendingAmount = double.parse(_totalAmount[index]
+                              .text
+                              .replaceAll(RegExp(r'[^0-9/./-]'), '')) -
+                              double.parse(_paidAmount[index]
+                                  .text
+                                  .replaceAll(RegExp(r'[^0-9/./-]'), ''));
+
+                        }
+                        print("Update ${pendingAmount}");
+                        print("Update ${firstname[index]}");
                         updatePayment(
                             firstname[index],
                             lastName[index],
@@ -660,6 +691,10 @@ class _PaymentPageState extends State<PaymentPage> {
                             selectedPayType[index],
                             pendingAmount);
                       }
+                      setState(() {
+                        getData();
+                      });
+
                     }
 
                     final snackBar = SnackBar(

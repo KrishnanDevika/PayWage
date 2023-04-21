@@ -331,21 +331,15 @@ class _AttendancePageState extends State<AttendancePage> {
               FutureBuilder(
                 future: getData(),
                 builder: (context, snapshot) {
-                  var data = snapshot.data;
+              var data = snapshot.data;
                   if (data == false) {
-                    return const Center(
+                   return const Center(
                         child: Text(
                       'Employee with that Name is not found',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ));
-                  } else {
-                    var dataLength = data.length;
-                    if (dataLength == 0) {
-                      return const Center(
-                        child: Text('No data found'),
-                      );
-                    } else {
+                  }  else {
                       return snapshot.hasData
                           ? ListView.builder(
                               scrollDirection: Axis.vertical,
@@ -721,7 +715,7 @@ class _AttendancePageState extends State<AttendancePage> {
                               })
                           : const CircularProgressIndicator();
                     }
-                  }
+                //  }
                 },
               ),
 
