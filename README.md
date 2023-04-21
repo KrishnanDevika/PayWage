@@ -15,6 +15,10 @@ And at the day of payroll, this application keep track all the attendance and ca
 
 ### Screenshots
 
+![paywage](https://github.com/KrishnanDevika/PayWage/blob/development/screenshots/attendance_all.png)
+![paywage](https://github.com/KrishnanDevika/PayWage/blob/development/screenshots/create_all.png)
+![paywage](https://github.com/KrishnanDevika/PayWage/blob/development/screenshots/payment_all.png)
+![paywage](https://github.com/KrishnanDevika/PayWage/blob/development/screenshots/login_all.png)
 
 
 ### Features
@@ -33,13 +37,14 @@ And at the day of payroll, this application keep track all the attendance and ca
 * User Profile
 
 
-#### Database:
+### Database:
 The Entity-Relationship Diagram for PayWage application includes
 employee, address, job sites, employee occupation, payment, attendance, pay rate, salary type 
 and pay type tables. Employee, Attendance. 
 Payment, Pay Rate are the primary entities of this application.
 
-##### Database Schema
+#### Database Schema
+![Paywage](https://github.com/KrishnanDevika/PayWage/blob/development/screenshots/img.png)
 
 
 
