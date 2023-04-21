@@ -36,7 +36,7 @@ class _PaymentPageState extends State<PaymentPage> {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd').format(now);
     dateinput.text = formattedDate;
-   // fetchEmployee();
+    fetchEmployee();
     fetchPayType();
     super.initState();
   }
@@ -649,9 +649,6 @@ class _PaymentPageState extends State<PaymentPage> {
                             selectedPayType[index],
                             pendingAmount);
                       }
-                      setState(() {
-                        getData();
-                      });
                     } else {
                       print("Update Length ${employeeList.length}");
 
@@ -691,9 +688,6 @@ class _PaymentPageState extends State<PaymentPage> {
                             selectedPayType[index],
                             pendingAmount);
                       }
-                      setState(() {
-                        getData();
-                      });
 
                     }
 
