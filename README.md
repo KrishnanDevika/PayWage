@@ -44,7 +44,7 @@ and pay type tables. Employee, Attendance.
 Payment, Pay Rate are the primary entities of this application.
 
 #### Database Schema
-![Paywage](https://github.com/KrishnanDevika/PayWage/blob/development/screenshots/img.png)
+![Paywage](https://github.com/KrishnanDevika/PayWage/blob/development/screenshots/dbSchema.png)
 
 
 
