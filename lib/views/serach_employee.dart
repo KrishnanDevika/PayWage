@@ -19,7 +19,6 @@ class SearchEmployeePage extends StatefulWidget {
 }
 
 class _SearchEmployeePageState extends State<SearchEmployeePage> {
-
   TextEditingController dateinput = TextEditingController();
   final List<TextEditingController> _timeinput = [];
   final List<TextEditingController> _timeOut = [];
@@ -30,7 +29,6 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
   final List<bool> _isChecked = [];
   TextEditingController searchController = TextEditingController();
 
-
   Future fetchEmployeeByName() async {
     var url = 'https://dkrishnan.scweb.ca/Paywage/fetchEmployeebySearch.php';
 
@@ -39,10 +37,7 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
     });
 
     return json.decode(res.body);
-
   }
-
-
 
   void _onItemTapped(int index) {
     setState(() {
@@ -79,7 +74,8 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                 decoration: BoxDecoration(
                   color: const Color(0xff7C8362).withOpacity(0.5),
                 ),
-                margin: const EdgeInsets.only(left: 0, top: 10, right: 0, bottom: 10),
+                margin: const EdgeInsets.only(
+                    left: 0, top: 10, right: 0, bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -95,13 +91,13 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                           DateTime date = inputFormat.parse(dateinput.text);
                           DateTime pastDate = date.subtract(Duration(days: 1));
                           String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(pastDate!);
+                              DateFormat('yyyy-MM-dd').format(pastDate!);
                           dateinput.text = formattedDate;
                         });
 
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(
-                            builder: (context) => ViewAttendanceHistory(title: 'Pay Wage', date: dateinput.text)));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ViewAttendanceHistory(
+                                title: 'Pay Wage', date: dateinput.text)));
                       },
                     ),
                     SizedBox(
@@ -120,13 +116,13 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                             initialDate: DateTime.now(),
                             firstDate: DateTime.now(),
                             lastDate:
-                            DateTime.now().add(const Duration(days: 365)),
+                                DateTime.now().add(const Duration(days: 365)),
                             initialEntryMode: DatePickerEntryMode.calendarOnly,
                           );
 
                           if (date != null) {
                             String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(date!);
+                                DateFormat('yyyy-MM-dd').format(date!);
                             dateinput.text = formattedDate;
                           }
                         },
@@ -140,7 +136,10 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                 margin: const EdgeInsets.all(10.0),
                 child: TextField(
                   controller: searchController,
-                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xff7C8362),
@@ -150,10 +149,10 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
                           color: Colors.white,
                         ),
                         onPressed: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(
-                              builder: (context) => SearchEmployeePage(title: 'Pay Wage', name: searchController.text)));
-
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => SearchEmployeePage(
+                                  title: 'Pay Wage',
+                                  name: searchController.text)));
                         },
                       ),
                       border: OutlineInputBorder(
@@ -164,236 +163,259 @@ class _SearchEmployeePageState extends State<SearchEmployeePage> {
               FutureBuilder(
                 future: fetchEmployeeByName(),
                 builder: (context, snapshot) {
-                    return snapshot.hasData
-                        ? ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, index) {
-                          List list = snapshot.data;
-                          String name = list[index]['first_name'] +
-                              ' ' +
-                              list[index]['last_name'];
-                          _timeOut.add(TextEditingController());
-                          _timeinput.add(TextEditingController());
-                          _site.add(TextEditingController());
-                          _occupation.add(TextEditingController());
+                  var data = snapshot.data;
+                  if (data == false) {
+                    return const Center(
 
-                          _timeinput[index].text = list[index]['start_time'];
-                          _timeOut[index].text =list[index]['end_time'];
-                          _site[index].text = list[index]['site_name'];
-                          _occupation[index].text = list[index]['occupation_type'];
+                        child: Text(
+                      'Employee with that Name is not found',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
 
+                    ),
+                    );
 
-                          if(list[index]['present'] == 'true') {
-                            _isChecked.add(true);
-                            textValue.add('Present');
-                          }else{
-                            _isChecked.add(false);
-                            textValue.add('Absent');
-                          }
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            color: const Color(0xff31473A),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text(
-                                    name,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
+                  } else {
+                    var dataLength = data.length;
+                    if (dataLength == 0) {
+                      return const Center(
+                        child: Text('No data found'),
+                      );
+                    } else {
+                      return snapshot.hasData
+                          ? ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index) {
+                                List list = snapshot.data;
+                                String name = list[index]['first_name'] +
+                                    ' ' +
+                                    list[index]['last_name'];
+                                _timeOut.add(TextEditingController());
+                                _timeinput.add(TextEditingController());
+                                _site.add(TextEditingController());
+                                _occupation.add(TextEditingController());
+
+                                _timeinput[index].text =
+                                    list[index]['start_time'];
+                                _timeOut[index].text = list[index]['end_time'];
+                                _site[index].text = list[index]['site_name'];
+                                _occupation[index].text =
+                                    list[index]['occupation_type'];
+
+                                if (list[index]['present'] == 'true') {
+                                  _isChecked.add(true);
+                                  textValue.add('Present');
+                                } else {
+                                  _isChecked.add(false);
+                                  textValue.add('Absent');
+                                }
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text(
-                                    list[index]['date'],
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10,
-                                      top: 0,
-                                      right: 10,
-                                      bottom: 2),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Switch(
-                                        value: _isChecked[index],
-                                        activeColor: const Color(0xff7C8362),
-                                        activeTrackColor: Colors.white,
-                                        inactiveThumbColor:
-                                        const Color(0xff7C8362),
-                                        inactiveTrackColor:
-                                        const Color(0xff7C8362)
-                                            .withOpacity(0.5),
-                                        onChanged: (val) {
-                                        },
-                                      ),
-                                      Text(textValue[index],
+                                  color: const Color(0xff31473A),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Text(
+                                          name,
                                           style: const TextStyle(
-                                              fontSize: 20,
                                               color: Colors.white,
-                                              fontWeight:
-                                              FontWeight.bold)),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Text(
+                                          list[index]['date'],
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 10,
+                                            top: 0,
+                                            right: 10,
+                                            bottom: 2),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Switch(
+                                              value: _isChecked[index],
+                                              activeColor:
+                                                  const Color(0xff7C8362),
+                                              activeTrackColor: Colors.white,
+                                              inactiveThumbColor:
+                                                  const Color(0xff7C8362),
+                                              inactiveTrackColor:
+                                                  const Color(0xff7C8362)
+                                                      .withOpacity(0.5),
+                                              onChanged: (val) {},
+                                            ),
+                                            Text(textValue[index],
+                                                style: const TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 30,
+                                            top: 0,
+                                            right: 30,
+                                            bottom: 4),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            const Text(
+                                              "In",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
+                                            ),
+
+                                            SizedBox(
+                                              width: 100,
+                                              height: 40,
+                                              child: TextField(
+                                                decoration: InputDecoration(
+                                                  filled: true,
+                                                  fillColor:
+                                                      const Color(0xff7C8362),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0),
+                                                  ),
+                                                ),
+
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                                controller: _timeinput[index],
+                                                //editing controller of this TextField
+                                                readOnly: true,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+
+                                            const Text(
+                                              "Out",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16),
+                                            ),
+                                            SizedBox(
+                                              width: 100,
+                                              height: 40,
+                                              child: TextField(
+                                                decoration: InputDecoration(
+                                                  filled: true,
+                                                  fillColor:
+                                                      const Color(0xff7C8362),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0),
+                                                  ),
+                                                ),
+
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                                controller: _timeOut[index],
+                                                //editing controller of this TextField
+                                                readOnly: true,
+                                              ),
+                                            ),
+                                            // TextField()
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 10,
+                                            top: 10,
+                                            right: 10,
+                                            bottom: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: <Widget>[
+                                            SizedBox(
+                                              width: 150,
+                                              height: 40,
+                                              child: TextField(
+                                                decoration: InputDecoration(
+                                                  filled: true,
+                                                  fillColor:
+                                                      const Color(0xff7C8362),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.0),
+                                                  ),
+                                                ),
+
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                                controller: _site[index],
+                                                //editing controller of this TextField
+                                                readOnly: true,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            SizedBox(
+                                              width: 150,
+                                              height: 40,
+                                              child: TextField(
+                                                decoration: InputDecoration(
+                                                  filled: true,
+                                                  fillColor:
+                                                      const Color(0xff7C8362),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.0),
+                                                  ),
+                                                ),
+
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                                controller: _occupation[index],
+                                                //editing controller of this TextField
+                                                readOnly: true,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 30,
-                                      top: 0,
-                                      right: 30,
-                                      bottom: 4),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      const Text(
-                                        "In",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      ),
-
-                                      SizedBox(
-                                        width: 100,
-                                        height: 40,
-                                        child: TextField(
-                                          decoration: InputDecoration(
-                                            filled: true,
-                                            fillColor: const Color(0xff7C8362),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  20.0),
-                                            ),
-                                          ),
-
-
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                          controller: _timeinput[index],
-                                          //editing controller of this TextField
-                                          readOnly: true,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-
-                                      const Text(
-                                        "Out",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      ),
-                                      SizedBox(
-                                        width: 100,
-                                        height: 40,
-                                        child: TextField(
-                                          decoration: InputDecoration(
-                                            filled: true,
-                                            fillColor: const Color(0xff7C8362),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  20.0),
-                                            ),
-                                          ),
-
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                          controller: _timeOut[index],
-                                          //editing controller of this TextField
-                                          readOnly: true,
-                                        ),
-                                      ),
-                                      // TextField()
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10,
-                                      top: 10,
-                                      right: 10,
-                                      bottom: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      SizedBox(
-                                        width: 150,
-                                        height: 40,
-                                        child: TextField(
-                                          decoration: InputDecoration(
-                                            filled: true,
-                                            fillColor: const Color(0xff7C8362),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  15.0),
-                                            ),
-                                          ),
-
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                          controller: _site[index],
-                                          //editing controller of this TextField
-                                          readOnly: true,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      SizedBox(
-                                        width: 150,
-                                        height: 40,
-                                        child: TextField(
-                                          decoration: InputDecoration(
-                                            filled: true,
-                                            fillColor: const Color(0xff7C8362),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  15.0),
-                                            ),
-                                          ),
-
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                          controller: _occupation[index],
-                                          //editing controller of this TextField
-                                          readOnly: true,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-
-                          );
-                        })
-                        : const CircularProgressIndicator();
+                                );
+                              })
+                          : const CircularProgressIndicator();
+                    }
+                  }
                 },
               ),
-
             ],
           ),
         ),

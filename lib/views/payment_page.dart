@@ -252,13 +252,22 @@ class _PaymentPageState extends State<PaymentPage> {
               FutureBuilder(
                 future: getData(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasError) print(snapshot.error);
-                  /*  if(!snapshot.hasData){
-                return Center(child: Text('No Employee data Found', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),);
-                }*/
-                  //  else {
-                  return snapshot.hasData
-                      ? ListView.builder(
+                  var data = snapshot.data;
+                  if(data == false){
+                    return const Center(child : Text('Employee with that Name is not found',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),)
+                    );
+                  }
+                  else{
+                    var dataLength = data.length;
+                    if(dataLength == 0){
+                      return const Center(
+                        child: Text('No data found'),
+                      );
+                    }
+                    else{
+                      return snapshot.hasData
+                          ? ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           itemCount: snapshot.data.length,
@@ -282,11 +291,11 @@ class _PaymentPageState extends State<PaymentPage> {
                                   list[index]['WorkedDays']);
                               print("AMount ${amount.round()}");
                               _totalAmount[index].text =
-                                  '\u0024 ${amount.round()}';
+                              '\u0024 ${amount.round()}';
                             }
                             DateTime now = DateTime.now();
                             String formattedDate =
-                                DateFormat('yyyy-MM-dd').format(now);
+                            DateFormat('yyyy-MM-dd').format(now);
 
                             print(formattedDate);
                             print(list[index]['start_date'].toString());
@@ -294,7 +303,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             if (list[index]['salary_type'] == 2 &&
                                 list[index]['payment_amount'] != null) {
                               int remainingBalance = (int.parse(list[index]
-                                      ['payment_amount']
+                              ['payment_amount']
                                   .replaceAll(RegExp(r'[^0-9/-]'), '')));
                               print(" Remaining ${remainingBalance / 100}");
                               int end = int.parse(list[index]['end_time']
@@ -306,58 +315,58 @@ class _PaymentPageState extends State<PaymentPage> {
                               int pay = list[index]['pay_rate'];
 
                               if (list[index]['start_date']
-                                          .toString()
-                                          .compareTo(formattedDate) ==
-                                      0 &&
+                                  .toString()
+                                  .compareTo(formattedDate) ==
+                                  0 &&
                                   list[index]['date']
-                                          .toString()
-                                          .compareTo(formattedDate) !=
+                                      .toString()
+                                      .compareTo(formattedDate) !=
                                       0) {
                                 double amount = ((diff / 100) *
-                                        pay *
-                                        (list[index]['WorkedDays'])) +
+                                    pay *
+                                    (list[index]['WorkedDays'])) +
                                     (remainingBalance) / 100;
                                 print("AMount ${amount.round()}");
                                 _totalAmount[index].text =
-                                    '\u0024 ${amount.round()}';
+                                '\u0024 ${amount.round()}';
                               } else {
                                 double amount = ((diff / 100) *
-                                        pay *
-                                        (list[index]['WorkedDays'] - 1)) +
+                                    pay *
+                                    (list[index]['WorkedDays'] - 1)) +
                                     (remainingBalance) / 100;
                                 print("AMount ${amount.round()}");
                                 _totalAmount[index].text =
-                                    '\u0024 ${amount.round()}';
+                                '\u0024 ${amount.round()}';
                               }
                             }
 
                             if (list[index]['salary_type'] == 1) {
                               {
                                 _totalAmount[index].text =
-                                    '\u0024 ${(list[index]['WorkedDays'] * list[index]['pay_rate'])}';
+                                '\u0024 ${(list[index]['WorkedDays'] * list[index]['pay_rate'])}';
                               }
                             }
 
                             if (list[index]['salary_type'] == 1 &&
                                 list[index]['payment_amount'] != null) {
                               int remainingBalance = (int.parse(list[index]
-                                      ['payment_amount']
+                              ['payment_amount']
                                   .replaceAll(RegExp(r'[^0-9/-]'), '')));
                               print(" Remaining ${remainingBalance / 100}");
 
                               if (list[index]['start_date']
-                                          .toString()
-                                          .compareTo(formattedDate) ==
-                                      0 &&
+                                  .toString()
+                                  .compareTo(formattedDate) ==
+                                  0 &&
                                   list[index]['date']
-                                          .toString()
-                                          .compareTo(formattedDate) !=
+                                      .toString()
+                                      .compareTo(formattedDate) !=
                                       0) {
                                 _totalAmount[index].text =
-                                    '\u0024 ${((list[index]['WorkedDays']) * list[index]['pay_rate']) + (remainingBalance) / 100}';
+                                '\u0024 ${((list[index]['WorkedDays']) * list[index]['pay_rate']) + (remainingBalance) / 100}';
                               } else {
                                 _totalAmount[index].text =
-                                    '\u0024 ${((list[index]['WorkedDays'] - 1) * list[index]['pay_rate']) + (remainingBalance) / 100}';
+                                '\u0024 ${((list[index]['WorkedDays'] - 1) * list[index]['pay_rate']) + (remainingBalance) / 100}';
                               }
                             }
 
@@ -380,7 +389,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                     padding: const EdgeInsets.all(10),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -403,27 +412,27 @@ class _PaymentPageState extends State<PaymentPage> {
                                             decoration: InputDecoration(
                                               filled: true,
                                               fillColor:
-                                                  const Color(0xff7C8362),
+                                              const Color(0xff7C8362),
                                               focusedBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
                                                     width: 2.0,
                                                     color: Colors.white),
                                                 borderRadius:
-                                                    BorderRadius.circular(12.0),
+                                                BorderRadius.circular(12.0),
                                               ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
                                                     width: 2.0,
                                                     color: Colors.white),
                                                 borderRadius:
-                                                    BorderRadius.circular(12.0),
+                                                BorderRadius.circular(12.0),
                                               ),
                                               border: OutlineInputBorder(
                                                 borderSide: const BorderSide(
                                                     width: 2.0,
                                                     color: Colors.white),
                                                 borderRadius:
-                                                    BorderRadius.circular(15.0),
+                                                BorderRadius.circular(15.0),
                                               ),
                                             ),
 
@@ -443,7 +452,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                         left: 0, top: 0, right: 0, bottom: 15),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
                                         /*  new Expanded(
                                           child:*/
@@ -452,7 +461,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                             color: const Color(0xff7C8362),
                                             //background color of dropdown button
                                             border:
-                                                Border.all(color: Colors.white),
+                                            Border.all(color: Colors.white),
                                             //border of dropdown button
                                             borderRadius: BorderRadius.circular(
                                                 10), //border radius of dropdown button
@@ -462,7 +471,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                                 left: 15, right: 15),
                                             child: DropdownButton(
                                               dropdownColor:
-                                                  const Color(0xff7C8362),
+                                              const Color(0xff7C8362),
                                               underline: Container(),
                                               value: selectedPayType[index],
                                               style: const TextStyle(
@@ -474,7 +483,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                                 color: Colors.white,
                                               ),
                                               items:
-                                                  pay_type.map((String type) {
+                                              pay_type.map((String type) {
                                                 return DropdownMenuItem(
                                                   value: type,
                                                   child: Text(
@@ -485,7 +494,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                               onChanged: (String? newValue) {
                                                 setState(() {
                                                   selectedPayType[index] =
-                                                      newValue!;
+                                                  newValue!;
                                                 });
                                               },
                                             ),
@@ -552,27 +561,27 @@ class _PaymentPageState extends State<PaymentPage> {
                                             decoration: InputDecoration(
                                               filled: true,
                                               fillColor:
-                                                  const Color(0xff7C8362),
+                                              const Color(0xff7C8362),
                                               focusedBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
                                                     width: 2.0,
                                                     color: Colors.white),
                                                 borderRadius:
-                                                    BorderRadius.circular(12.0),
+                                                BorderRadius.circular(12.0),
                                               ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
                                                     width: 2.0,
                                                     color: Colors.white),
                                                 borderRadius:
-                                                    BorderRadius.circular(12.0),
+                                                BorderRadius.circular(12.0),
                                               ),
                                               border: OutlineInputBorder(
                                                 borderSide: const BorderSide(
                                                     width: 2.0,
                                                     color: Colors.white),
                                                 borderRadius:
-                                                    BorderRadius.circular(15.0),
+                                                BorderRadius.circular(15.0),
                                               ),
                                             ),
 
@@ -590,8 +599,9 @@ class _PaymentPageState extends State<PaymentPage> {
                               ),
                             );
                           })
-                      : const CircularProgressIndicator();
-                  //  }
+                          : const CircularProgressIndicator();
+                    }
+                  }
                 },
               ),
               Padding(
