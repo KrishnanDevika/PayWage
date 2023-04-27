@@ -77,15 +77,11 @@ class _SettingsPage extends State<SettingsPage> {
                                 fontSize: 18,
                               ),),
                               const SizedBox(width: 30),
-                              Container(
-                                  alignment: Alignment.centerLeft,
-                                  width: 249,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    boxShadow: const [BoxShadow(color: CustomColors.darkGreenColour)],
-                                  ),
-                                  child: Padding(
+                             Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        boxShadow: const [BoxShadow(color: CustomColors.darkGreenColour)],),
                                     padding: const EdgeInsets.all(15.0),
                                     child: InkWell(
                                       onTap: (){
@@ -129,17 +125,13 @@ class _SettingsPage extends State<SettingsPage> {
                             Text(_notificationTime, style: const TextStyle(
                               fontSize: 18,
                             ),),
-                            const SizedBox(width: 13),
-                            Container(
-                                alignment: Alignment.centerLeft,
-                                width: 245,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  boxShadow: const [BoxShadow(color: CustomColors.darkGreenColour)],
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
+                            const SizedBox(width: 15),
+                        Expanded(
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                boxShadow: const [BoxShadow(color: CustomColors.darkGreenColour)],),
+                              padding: const EdgeInsets.all(15.0),
                                   child: InkWell(
                                     onTap: (){
                                       _showTimePickerDialog();

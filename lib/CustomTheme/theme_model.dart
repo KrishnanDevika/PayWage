@@ -2,9 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:paywage/CustomTheme/theme_preferences.dart';
 
 class ThemeModel extends ChangeNotifier{
-  bool _isDark = false;
+  bool? _isDark;
   ThemePreferences _preferences = ThemePreferences();
-  bool get isDark => _isDark;
+  bool get isDark {
+    if(_isDark != null) {
+      return _isDark!;
+    }
+    return false;
+
+  }
 
   ThemeModel(){
     _isDark = false;

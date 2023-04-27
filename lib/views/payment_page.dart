@@ -7,11 +7,21 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:paywage/models/pay_type.dart';
 import 'package:paywage/models/attendance.dart';
+import 'package:paywage/views/viewPaymentHistory.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key, required this.title});
 
   final String title;
+
+  static double value = 0;
+  static void setValue(double newValue) {
+    value += newValue;
+  }
+
+  static double getValue() {
+    return value;
+  }
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -155,6 +165,7 @@ class _PaymentPageState extends State<PaymentPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,6 +200,10 @@ class _PaymentPageState extends State<PaymentPage> {
                               DateFormat('yyyy-MM-dd').format(pastDate!);
                           dateinput.text = formattedDate;
                         });
+
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ViewPaymentHistory(
+                                title: 'Pay Wage', date: dateinput.text)));
                       },
                     ),
                     SizedBox(
@@ -205,7 +220,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           final DateTime? date = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
+                            firstDate: DateTime(2020),
                             lastDate:
                                 DateTime.now().add(const Duration(days: 365)),
                             initialEntryMode: DatePickerEntryMode.calendarOnly,
@@ -315,14 +330,10 @@ class _PaymentPageState extends State<PaymentPage> {
                               print("Time Diff ${diff}");
                               int pay = list[index]['pay_rate'];
 
-                              if (list[index]['start_date']
+                         /*     if (list[index]['start_date']
                                   .toString()
                                   .compareTo(formattedDate) ==
-                                  0 &&
-                                  list[index]['date']
-                                      .toString()
-                                      .compareTo(formattedDate) !=
-                                      0) {
+                                  0 ) {*/
                                 double amount = ((diff / 100) *
                                     pay *
                                     (list[index]['WorkedDays'])) +
@@ -330,7 +341,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                 print("AMount ${amount.round()}");
                                 _totalAmount[index].text =
                                 '\u0024 ${amount.round()}';
-                              } else {
+                            /*  } else {
                                 double amount = ((diff / 100) *
                                     pay *
                                     (list[index]['WorkedDays'] - 1)) +
@@ -338,7 +349,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                 print("AMount ${amount.round()}");
                                 _totalAmount[index].text =
                                 '\u0024 ${amount.round()}';
-                              }
+                              }*/
                             }
 
                             if (list[index]['salary_type'] == 1) {
@@ -355,22 +366,21 @@ class _PaymentPageState extends State<PaymentPage> {
                                   .replaceAll(RegExp(r'[^0-9/-]'), '')));
                               print(" Remaining ${remainingBalance / 100}");
 
-                              if (list[index]['start_date']
+                           /*   if (list[index]['start_date']
                                   .toString()
                                   .compareTo(formattedDate) ==
-                                  0 &&
-                                  list[index]['date']
-                                      .toString()
-                                      .compareTo(formattedDate) !=
-                                      0) {
+                                  0) {*/
                                 _totalAmount[index].text =
                                 '\u0024 ${((list[index]['WorkedDays']) * list[index]['pay_rate']) + (remainingBalance) / 100}';
-                              } else {
+                             /* } else {
                                 _totalAmount[index].text =
                                 '\u0024 ${((list[index]['WorkedDays'] - 1) * list[index]['pay_rate']) + (remainingBalance) / 100}';
-                              }
+                              }*/
                             }
 
+                            PaymentPage.setValue(double.parse(_totalAmount[index]
+                                .text
+                                .replaceAll(RegExp(r'[^0-9/./-]'), '')));
                             _paidAmount.add(TextEditingController());
                             _paidAmount[index].text = '0';
                             for (int i = 0; i < list.length; i++) {

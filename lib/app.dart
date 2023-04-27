@@ -17,10 +17,15 @@ class MyApp extends StatelessWidget {
       child: Consumer(
 
         builder: (context, ThemeModel themeNotifier, child){
+           ThemeData light = ThemeData(primarySwatch: Colors.lightGreen,
+           brightness: Brightness.light);
+           ThemeData dark = ThemeData(primarySwatch: Colors.lightGreen,
+             brightness: Brightness.dark,
+            );
 
           return MaterialApp(
               title: 'Pay Wage',
-              theme: themeNotifier.isDark ? ThemeData.dark() : ThemeData.light(),
+              theme: themeNotifier.isDark ? dark : light,
               home: const RegisterPage(title: "PayWage")
           );
         },

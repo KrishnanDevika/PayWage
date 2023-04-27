@@ -1028,6 +1028,10 @@ class _AttendancePageState extends State<AttendancePage> {
                     fetchEmployee();
                     print(employeeList.length);
                     for (int index = 0; index < employeeList.length; index++) {
+                      if(_timeinput[index].text.isEmpty|| _timeOut[index].text.isEmpty){
+                        _timeOut[index].text = '00:00';
+                        _timeinput[index].text = '00:00';
+                      }
                       createAttendance(
                           firstname[index],
                           lastName[index],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paywage/3rd%20party%20Auth/google_sign_in_button.dart';
 import 'package:paywage/CustomTheme/CustomColors.dart';
+import 'package:paywage/views/payment_page.dart';
 import 'package:provider/provider.dart';
 
 import '../CustomTheme/theme_model.dart';
@@ -15,6 +16,7 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfile extends State<UserProfile> {
+  double v = PaymentPage.getValue();
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ThemeModel themeNotifier, child) {
@@ -162,11 +164,11 @@ class _UserProfile extends State<UserProfile> {
                               child: Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
+                                  children: [
                                     Text(
-                                      "3000",
+                                      "\u0024  ${v.toString()}",
                                       textAlign: TextAlign.start,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ],
